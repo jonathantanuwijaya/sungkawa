@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sung_user/pages/about.dart';
+import 'package:sung_user/pages/introslider.dart';
 import 'package:sung_user/pages/user_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
             TargetPlatform.android: CupertinoPageTransitionsBuilder(),
             TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
           })),
-      home: DashboardScreen(),
+      home: Opening(),
     );
   }
 }
@@ -137,109 +138,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ))));
             },
           )
-//          PopupMenuButton(
-//              onSelected: selectedAction,
-//              itemBuilder: (BuildContext context) => <PopupMenuEntry<Pilihan>>[
-//                    const PopupMenuItem(
-//                      child: Text('Tentang Kami'),
-//                      value: Pilihan.about,
-//                    ),
-//                    const PopupMenuItem(
-//                      child: Text('SignOut'),
-//                      value: Pilihan.signOut,
-//                    ),
-//                    const PopupMenuItem(
-//                      child: Text('Profil'),
-//                      value: Pilihan.profil,
-//                    )
-//                  ])
-//          CupertinoActionSheet(
-//              title: const Text('Pilihan menu'),
-//              actions: <Widget>[
-//                CupertinoActionSheetAction(
-//                    onPressed: () {
-//                      Navigator.push(context,
-//                          MaterialPageRoute(builder: (context) => About()));
-//                    },
-//                    child: Text('Tentang Kami')),
-//                CupertinoActionSheetAction(
-//                    onPressed: signOut, child: Text('SignOut')),
-//                CupertinoActionSheetAction(
-//                  onPressed: () {
-//                    Navigator.push(context,
-//                        MaterialPageRoute(builder: (context) => Profil()));
-//                  },
-//                  child: Text('Profil'),
-//                )
-//              ],
-//              cancelButton: CupertinoActionSheetAction(
-//                  onPressed: () {
-//                    Navigator.pop(context);
-//                  },
-//                  child: Text('Cancel')))
         ],
         backgroundColor: Colors.lightBlue,
       ),
       body: HomePage(),
-//      bottomNavigationBar: SwipeDetector(
-//        onSwipeRight: () {
-//          showCupertinoModalPopup(
-//              context: context,
-//              builder: (context) => CupertinoActionSheet(
-//                  title: const Text('Pilihan menu'),
-//                  actions: <Widget>[
-//                    CupertinoActionSheetAction(
-//                      onPressed: () {
-//                        switch (_authStatus) {
-//                          case AuthStatus.notSignedIn:
-//                            Navigator.push(
-//                                context,
-//                                MaterialPageRoute(
-//                                    builder: (context) => Login()));
-//                            break;
-//                          case AuthStatus.signedIn:
-//                            print('Profil dibuka');
-//                            Navigator.push(
-//                                context,
-//                                MaterialPageRoute(
-//                                    builder: (BuildContext context) =>
-//                                        Profil()));
-//                            break;
-//                        }
-//                      },
-//                      child: Text('Profil'),
-//                    ),
-//                    CupertinoActionSheetAction(
-//                        onPressed: () {
-//                          Navigator.push(context,
-//                              MaterialPageRoute(builder: (context) => About()));
-//                        },
-//                        child: Text('Tentang Kami')),
-//                    CupertinoActionSheetAction(
-//                        onPressed: signOut, child: Text('SignOut')),
-//                  ],
-//                  cancelButton: CupertinoActionSheetAction(
-//                      onPressed: () {
-//                        Navigator.pop(context);
-//                      },
-//                      child: Text(
-//                        'Cancel',
-//                        style: TextStyle(color: Colors.red),
-//                      ))));
-//        },
-//        child: BottomAppBar(
-//          color: Colors.white,
-//          child: Row(
-//            mainAxisAlignment: MainAxisAlignment.center,
-//            children: <Widget>[
-//              Text(
-//                'Info Aplikasi',
-//                style: TextStyle(fontSize: 28.0),
-//              )
-//            ],
-//          ),
-//        ),
-//      ),
     );
   }
 
