@@ -1,0 +1,30 @@
+<application>
+  <component name="DartCodeInsightSettings">
+    <option name="SHOW_CLOSING_LABELS" value="false" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="AndroidInitConfigurator.V1" value="true" />
+    <property name="AndroidInitConfigurator.V3" value="true" />
+    <property name="AndroidInitConfigurator.V5" value="true" />
+    <property name="CommitChangeListDialog.DETAILS_SPLITTER_PROPORTION_2" value="0.67147434" />
+    <property name="CommitChangeListDialog.SPLITTER_PROPORTION_2" value="0.6145833" />
+    <property name="Copy.OpenInEditor" value="true" />
+    <property name="DART_CHECK_SDK_UPDATE_KEY" value="DoNotCheck" />
+    <property name="Default.SavedEditorTheme" value="_@user_Default" />
+    <property name="ExpandRunDashboardTypesPanel" value="false" />
+    <property name="FLUTTER_SDK_KNOWN_PATHS" value="$USER_HOME$/Documents/flutter" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="PluginConfigurable.selectionTab" value="1" />
+    <property name="TrendingPluginsSearchHistory" value="kotlin&#10;flutter" />
+    <property name="android-component-compatibility-check" value="1555648980870" />
+    <property name="build.toolwindow.Build Output.selection.state" value="com.intellij.build.BuildTreeConsoleView" />
+    <property name="build.toolwindow.Sync.selection.state" value="com.intellij.build.BuildTreeConsoleView" />
+    <property name="file.chooser.recent.files" value="/mnt/702E89772E89375E/AndroidStudioProjects/Sungkawa/sung&#10;/mnt/702E89772E89375E/AndroidStudioProjects/DroidCafeInput&#10;/mnt/702E89772E89375E/Flutter Project/kucingnya_flutter&#10;/mnt/702E89772E89375E/Flutter Project/flutter_list&#10;/mnt/702E89772E89375E/Flutter Project&#10;/mnt/702E89772E89375E/Flutter Project/fluttergram-update_dependencies&#10;/mnt/702E89772E89375E/Flutter Project/fluttergram-master&#10;/mnt/702E89772E89375E/Flutter Project/Instagram-Clone-master&#10;/home/jonathan/Documents/flutter&#10;/home/jonathan/Documents/flutter/bin&#10;/mnt/702E89772E89375E/Flutter Project/flutter-chat-demo-master&#10;/mnt/702E89772E89375E/AndroidStudioProjects/Sungkawa&#10;/home/jonathan/NetBeansProjects&#10;/mnt/702E89772E89375E/Flutter Project/sungkawa/sungkawa&#10;/mnt/702E89772E89375E/Flutter Project/sungkawa-master&#10;/mnt/702E89772E89375E/AndroidStudioProjects/Sungkawa/sung_user&#10;/mnt/702E89772E89375E/AndroidStudioProjects/sung_user&#10;/mnt/702E89772E89375E/AndroidStudioProjects/CRUDRetrofit" />
+    <property name="file.gist.reindex.count" value="43" />
+    <property name="installed.kotlin.plugin.version" value="1.3.21-release-Studio3.4-1" />
+    <property name="io.flutter.analytics.clientId" value="c53efed3-cb3b-4b68-af3c-a93712bade9b" />
+    <property name="io.flutter.analytics.toastShown" value="true" />
+    <property name="lastTip" value="41" />
+  </component>
+</application>
