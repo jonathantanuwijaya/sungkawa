@@ -1,8 +1,9 @@
 import 'dart:async';
-import 'package:sungkawa/model/posting.dart';
-import 'package:sungkawa/pages/detail.dart';
-import 'package:sungkawa/utilities/crud.dart';
-import 'package:sungkawa/utilities/utilities.dart';
+
+import 'package:sung_user/model/posting.dart';
+import 'package:sung_user/pages/detail.dart';
+import 'package:sung_user/utilities/crud.dart';
+import 'package:sung_user/utilities/utilities.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -86,7 +87,7 @@ class _HomePageState extends State<HomePage> {
             },
             child: Card(
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0)),
+                  borderRadius: BorderRadius.circular(15.0)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -110,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                           child: SizedBox(),
                         ),
                         Text(
-                          util.convertPostTimestamp(
+                          util.convertTimestamp(
                             _postList[index].timestamp,
                           ),
                           style: TextStyle(fontSize: 14.0, color: Colors.grey),
@@ -159,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                           child: SizedBox(),
                         ),
                         Text(
-                          "Agama :  ${_postList[index].agama}",
+                          "Agama : " + _postList[index].agama,
                           style: TextStyle(fontSize: 14.0, color: Colors.grey),
                         )
                       ],
@@ -199,12 +200,12 @@ class _HomePageState extends State<HomePage> {
 
     if (now.isAfter(tanggalMeninggal))
       return Text(
-        'Akan ${data.prosesi}',
-        style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+        data.prosesi,
+        style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
       );
     else
       return Text(
-        'Telah ${data.prosesi}',
+        ' Telah Disemayamkan',
         style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
       );
   }

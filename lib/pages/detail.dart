@@ -1,12 +1,11 @@
 import 'dart:async';
-
-import 'package:sungkawa/model/comment.dart';
-import 'package:sungkawa/model/posting.dart';
-import 'package:sungkawa/pages/comment_page.dart';
-import 'package:sungkawa/utilities/utilities.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:sung_user/model/posting.dart';
+import 'package:sung_user/pages/comment_page.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:sung_user/model/comment.dart';
+import 'package:sung_user/utilities/utilities.dart';
 
 class Detail extends StatefulWidget {
   final Posting post;
@@ -20,7 +19,7 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> {
   List<Comment> _commentList = new List();
   var _commentRef;
-  TextEditingController keterangancontroller;
+
   Utilities util = new Utilities();
   StreamSubscription<Event> _onCommentAddedSubscription;
   StreamSubscription<Event> _onCommentChangedSubscription;
@@ -53,6 +52,56 @@ class _DetailState extends State<Detail> {
     });
   }
 
+//  Widget buildCommentPage() {
+//    if (_commentList.length != 0) {
+//      return ListView.builder(
+//          itemCount: _commentList.length,
+//          itemBuilder: (context, index) {
+//            Column(
+//              children: <Widget>[
+//                ListTile(
+//                  title: Text(
+//                    _commentList[0].fullName,
+//                    style: TextStyle(fontWeight: FontWeight.bold),
+//                  ),
+//                  trailing:
+//                      Text(util.convertTimestamp(_commentList[0].timestamp)),
+//                  subtitle: Text(_commentList[0].comment),
+//                ),
+//                ListTile(
+//                  title: Text(
+//                    _commentList[1].fullName,
+//                    style: TextStyle(fontWeight: FontWeight.bold),
+//                  ),
+//                  trailing:
+//                      Text(util.convertTimestamp(_commentList[1].timestamp)),
+//                  subtitle: Text(_commentList[1].comment),
+//                ),
+//                ListTile(
+//                  title: Text(
+//                    _commentList[2].fullName,
+//                    style: TextStyle(fontWeight: FontWeight.bold),
+//                  ),
+//                  trailing:
+//                      Text(util.convertTimestamp(_commentList[2].timestamp)),
+//                  subtitle: Text(_commentList[2].comment),
+//                ),
+//              ],
+//            );
+////            return ListTile(
+////              title: Text(
+////                _commentList[0-1].fullName,
+////                style: TextStyle(fontWeight: FontWeight.bold),
+////              ),
+////              trailing:
+////              Text(util.convertTimestamp(_commentList[0-1].timestamp)),
+////              subtitle: Text(_commentList[0-1].comment),
+////            );
+//          });
+//    }
+////    return Center(child: CircularProgressIndicator());
+//  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -71,15 +120,6 @@ class _DetailState extends State<Detail> {
         _commentRef.onChildRemoved.listen(_onCommentRemoved);
     _onCommentRemovedSubscription =
         _commentRef.onChildRemoved.listen(_onCommentRemoved);
-//    keterangancontroller = widget.post.keterangan;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _onCommentAddedSubscription.cancel();
-    _onCommentChangedSubscription.cancel();
-    _onCommentRemovedSubscription.cancel();
   }
 
   @override
@@ -118,7 +158,7 @@ class _DetailState extends State<Detail> {
                     'Telah Meninggal Dunia',
                     textAlign: TextAlign.center,
                     style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     height: 30,
@@ -136,7 +176,7 @@ class _DetailState extends State<Detail> {
                     style: TextStyle(fontSize: 16.0),
                   ),
                   Text(
-                    "Agama : ${widget.post.agama}",
+                    "Agama : " + widget.post.agama,
                     style: TextStyle(fontSize: 16.0),
                   ),
                   Divider(
@@ -165,15 +205,14 @@ class _DetailState extends State<Detail> {
                         ' di ' +
                         widget.post.tempatMakam +
                         ' pada ' +
-                        widget.post.tanggalDimakamkan +
+                        widget.post.tanggalSemayam +
                         ' pukul ' +
-                        widget.post.waktuDimakamkan,
+                        widget.post.waktuSemayam,
                     style: TextStyle(fontSize: 16.0),
                   ),
                   Divider(
                     color: Colors.green,
                   ),
-                  buildKeluarga(),
                   SizedBox(height: 10.0),
                   Text(
                     'Ucapan Belasungkawa (' +
@@ -219,23 +258,11 @@ class _DetailState extends State<Detail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(_commentList[0].userName,
+            Text(_commentList[0].fullName,
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
             Text(_commentList[0].comment, style: TextStyle(fontSize: 16.0)),
           ],
         ),
-      );
-    }
-  }
-
-  buildKeluarga() {
-    if (widget.post.keterangan == '') {
-      return Text('');
-    } else {
-      return Column(
-        children: <Widget>[
-          Text('Keterangan :\n'+widget.post.keterangan,style: TextStyle(fontSize: 16.0),),
-        ],
       );
     }
   }

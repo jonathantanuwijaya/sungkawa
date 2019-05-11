@@ -1,18 +1,15 @@
-import 'package:sungkawa/pages/about.dart';
-import 'package:sungkawa/pages/introslider.dart';
-import 'package:sungkawa/pages/login.dart';
-import 'package:sungkawa/pages/profil.dart';
-import 'package:sungkawa/pages/user_home.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:sung_user/pages/about.dart';
+import 'package:sung_user/pages/user_home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sung_user/pages/login.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:flutter/services.dart';
+import 'package:sung_user/pages/profil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'model/Notifikasi.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -29,7 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Sungkawa',
+      title: 'SUNGKAWA',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: Colors.lightBlue,
@@ -37,7 +34,7 @@ class MyApp extends StatelessWidget {
             TargetPlatform.android: CupertinoPageTransitionsBuilder(),
             TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
           })),
-      home: Opening(),
+      home: DashboardScreen(),
     );
   }
 }
@@ -52,13 +49,11 @@ enum AuthStatus { signedIn, notSignedIn }
 class _DashboardScreenState extends State<DashboardScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
-
+  FirebaseUser currentUser;
   SharedPreferences prefs;
   bool isLoading;
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   AuthStatus _authStatus = AuthStatus.notSignedIn;
   var connectionStatus;
-  final List<Notifikasi> notif = [];
 
   @override
   void initState() {
@@ -68,43 +63,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     getCurrentUser().then((userId) {
       setState(() {
         _authStatus =
-        userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+            userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
       });
     });
-//        .whenComplete(() {
-//      String displayName = googleSignIn.currentUser.displayName;
-//      Scaffold.of(context).showSnackBar(
-//          SnackBar(content: Text('User $displayName is signed in!')));
-//    });
-    _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
-    _firebaseMessaging.getToken();
-    _firebaseMessaging.subscribeToTopic('all');
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-        final notification = message['notification'];
-        setState(() {
-          notif.add(Notifikasi(
-            title: notification['title'],
-            nama: notification['body'],
-          ));
-        });
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-
-        final notification = message['data'];
-        setState(() {
-          notif.add(Notifikasi(
-            title: '${notification['title']}',
-            nama: '${notification['body']}',
-          ));
-        });
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-      },
-    );
   }
 
   Future<String> getCurrentUser() async {
@@ -121,90 +82,204 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         title: Text(
           'Sungkawa',
-          style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.white),
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.more_vert, color: Colors.white),
+            icon: Icon(Icons.more_vert,color: Colors.white),
             onPressed: () {
               showCupertinoModalPopup(
                   context: context,
-                  builder: (context) =>
-                      CupertinoActionSheet(
-                          title: const Text(
-                            'Pilihan menu',
-                          ),
-                          actions: <Widget>[
-                            CupertinoActionSheetAction(
-                              onPressed: () {
-                                switch (_authStatus) {
-                                  case AuthStatus.notSignedIn:
-                                    handleSignIn().then((_) {
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Profil()));
-                                    });
-                                    break;
-                                  case AuthStatus.signedIn:
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Profil()));
-                                    break;
-                                }
-                              },
-                              child: Text('Profil'),
-                            ),
-                            CupertinoActionSheetAction(
-                                onPressed: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => About()));
-                                },
-                                child: Text('Tentang Kami')),
-                            CupertinoActionSheetAction(
-                                isDestructiveAction: true,
-                                onPressed: signOut,
-                                child: Text(
-                                  'Sign Out',
-                                )),
-                          ],
-                          cancelButton: CupertinoActionSheetAction(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                'Cancel',
-                                style: TextStyle(color: Colors.red),
-                              ))));
+                  builder: (context) => CupertinoActionSheet(
+                      title: const Text(
+                        'Pilihan menu',
+                      ),
+                      actions: <Widget>[
+                        CupertinoActionSheetAction(
+                          onPressed: () {
+                            switch (_authStatus) {
+                              case AuthStatus.notSignedIn:
+                                handleSignIn().then((_){
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Profil()));
+                                });
+                                break;
+                              case AuthStatus.signedIn:
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Profil()));
+                                break;
+                            }
+                          },
+                          child: Text('Profil'),
+                        ),
+                        CupertinoActionSheetAction(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => About()));
+                            },
+                            child: Text('Tentang Kami')),
+                        CupertinoActionSheetAction(
+                            isDestructiveAction: true,
+                            onPressed: signOut,
+                            child: Text(
+                              'Sign Out',
+                            )),
+                      ],
+                      cancelButton: CupertinoActionSheetAction(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            'Cancel',
+                            style: TextStyle(color: Colors.red),
+                          ))));
             },
           )
+//          PopupMenuButton(
+//              onSelected: selectedAction,
+//              itemBuilder: (BuildContext context) => <PopupMenuEntry<Pilihan>>[
+//                    const PopupMenuItem(
+//                      child: Text('Tentang Kami'),
+//                      value: Pilihan.about,
+//                    ),
+//                    const PopupMenuItem(
+//                      child: Text('SignOut'),
+//                      value: Pilihan.signOut,
+//                    ),
+//                    const PopupMenuItem(
+//                      child: Text('Profil'),
+//                      value: Pilihan.profil,
+//                    )
+//                  ])
+//          CupertinoActionSheet(
+//              title: const Text('Pilihan menu'),
+//              actions: <Widget>[
+//                CupertinoActionSheetAction(
+//                    onPressed: () {
+//                      Navigator.push(context,
+//                          MaterialPageRoute(builder: (context) => About()));
+//                    },
+//                    child: Text('Tentang Kami')),
+//                CupertinoActionSheetAction(
+//                    onPressed: signOut, child: Text('SignOut')),
+//                CupertinoActionSheetAction(
+//                  onPressed: () {
+//                    Navigator.push(context,
+//                        MaterialPageRoute(builder: (context) => Profil()));
+//                  },
+//                  child: Text('Profil'),
+//                )
+//              ],
+//              cancelButton: CupertinoActionSheetAction(
+//                  onPressed: () {
+//                    Navigator.pop(context);
+//                  },
+//                  child: Text('Cancel')))
         ],
         backgroundColor: Colors.lightBlue,
       ),
       body: HomePage(),
+//      bottomNavigationBar: SwipeDetector(
+//        onSwipeRight: () {
+//          showCupertinoModalPopup(
+//              context: context,
+//              builder: (context) => CupertinoActionSheet(
+//                  title: const Text('Pilihan menu'),
+//                  actions: <Widget>[
+//                    CupertinoActionSheetAction(
+//                      onPressed: () {
+//                        switch (_authStatus) {
+//                          case AuthStatus.notSignedIn:
+//                            Navigator.push(
+//                                context,
+//                                MaterialPageRoute(
+//                                    builder: (context) => Login()));
+//                            break;
+//                          case AuthStatus.signedIn:
+//                            print('Profil dibuka');
+//                            Navigator.push(
+//                                context,
+//                                MaterialPageRoute(
+//                                    builder: (BuildContext context) =>
+//                                        Profil()));
+//                            break;
+//                        }
+//                      },
+//                      child: Text('Profil'),
+//                    ),
+//                    CupertinoActionSheetAction(
+//                        onPressed: () {
+//                          Navigator.push(context,
+//                              MaterialPageRoute(builder: (context) => About()));
+//                        },
+//                        child: Text('Tentang Kami')),
+//                    CupertinoActionSheetAction(
+//                        onPressed: signOut, child: Text('SignOut')),
+//                  ],
+//                  cancelButton: CupertinoActionSheetAction(
+//                      onPressed: () {
+//                        Navigator.pop(context);
+//                      },
+//                      child: Text(
+//                        'Cancel',
+//                        style: TextStyle(color: Colors.red),
+//                      ))));
+//        },
+//        child: BottomAppBar(
+//          color: Colors.white,
+//          child: Row(
+//            mainAxisAlignment: MainAxisAlignment.center,
+//            children: <Widget>[
+//              Text(
+//                'Info Aplikasi',
+//                style: TextStyle(fontSize: 28.0),
+//              )
+//            ],
+//          ),
+//        ),
+//      ),
     );
   }
 
-  void signOut() async {
-    prefs = await SharedPreferences.getInstance();
-    prefs.setString("nama",'');
-    prefs.setString("email",'');
-    prefs.setString("userId",'');
+  void selectedAction(Pilihan value) {
+    print('You choose : $value');
+    if (value == Pilihan.about) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (BuildContext context) => About()));
+    }
+    if (value == Pilihan.signOut) {
+      signOut();
+    }
+    if (value == Pilihan.profil) {
+      switch (_authStatus) {
+        case AuthStatus.notSignedIn:
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Login()));
+          break;
+        case AuthStatus.signedIn:
+          print('Profil dibuka');
+          Navigator.push(context,
+              MaterialPageRoute(builder: (BuildContext context) => Profil()));
+          break;
+      }
+    }
+  }
 
+  void signOut() async {
     FirebaseAuth.instance.signOut();
     googleSignIn.signOut();
     _authStatus = AuthStatus.notSignedIn;
+//    Scaffold.of(_snackBarContext).showSnackBar(SnackBar(content: Text("Signed Out"),
+//    duration: Duration(seconds: 2),));
+    SnackBar(
+      content: Text('Signed Out'),
+      duration: Duration(seconds: 2),
+    );
 
-    Navigator.pop(context);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (BuildContext context) => Login()));
-
   }
 
   void checkConnectivity() async {
@@ -224,7 +299,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       print('Error: $e');
     }
   }
-
   Future handleSignIn() async {
     GoogleSignInAccount googleAccount = await googleSignIn.signIn();
     GoogleSignInAuthentication googleAuth = await googleAccount.authentication;
@@ -256,16 +330,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         .then((snapshot) {
       if (snapshot.value == null) {
         print('Added to database');
-        crud.addUser(googleAccount.id, {
-          'userid': googleAccount.id,
-          'nama': googleAccount.displayName,
-          'email': googleAccount.email
-        });
+        crud.addUser(googleAccount.id,
+            {'userid':googleAccount.id,
+              'nama': googleAccount.displayName, 'email': googleAccount.email});
       }
     });
   }
 
-  void sendTokenToServer(String fcm) {
-    print('Token : $fcm');
-  }
 }

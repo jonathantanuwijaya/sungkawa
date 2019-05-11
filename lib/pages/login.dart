@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:sungkawa/main.dart';
-import 'package:sungkawa/utilities/crud.dart';
+
+import 'package:sung_user/main.dart';
+import 'package:sung_user/utilities/crud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,22 +36,10 @@ class _LoginState extends State<Login> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Image.asset(
-              'assets/images/icon_android.png',
-              fit: BoxFit.scaleDown,
-              width: 100,
-              height: 100,
-            ),
-            SizedBox(
-              height: 70.0,
-            ),
-            Text(
+            new Text(
               'Sungkawa',
               style: TextStyle(fontSize: 40.0),
               textAlign: TextAlign.center,
-            ),
-            SizedBox(
-              height: 10.0,
             ),
             CupertinoButton(
                 child: Text(
@@ -62,14 +51,6 @@ class _LoginState extends State<Login> {
 //                  login();
                   handleSignIn();
                 }),
-            FlatButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DashboardScreen()));
-                },
-                child: Text('Skip')),
             new Padding(padding: const EdgeInsets.all(10.0)),
           ],
         ),
@@ -108,11 +89,10 @@ class _LoginState extends State<Login> {
         .then((snapshot) {
       if (snapshot.value == null) {
         print('Added to database');
-        crud.addUser(googleAccount.id, {
-          'userid': googleAccount.id,
-          'nama': googleAccount.displayName,
-          'email': googleAccount.email
-        });
+        crud.addUser(googleAccount.id,
+            {'userid':googleAccount.id,
+              'nama': googleAccount.displayName,
+              'email': googleAccount.email});
       }
     });
   }

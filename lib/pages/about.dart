@@ -102,12 +102,6 @@ class About extends StatelessWidget {
                 fontSize: 16.0,
               ),
             ),
-            Text(
-              '7. Alvin Leonardo Djoni',
-              style: TextStyle(
-                fontSize: 16.0,
-              ),
-            ),
           ],
         ),
       ),

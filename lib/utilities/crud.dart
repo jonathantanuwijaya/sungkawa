@@ -39,8 +39,7 @@ class CRUD {
     });
   }
 
-  // ignore: missing_return
-  Future<bool> checkCommentEmpty(postId) async {
+  bool checkCommentEmpty(postId) {
     bool isEmpty;
     commentRef.child(postId).orderByKey().once().then((snapshot) {
       if (snapshot.value == null)
