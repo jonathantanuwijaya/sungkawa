@@ -31,6 +31,7 @@ dependencies:
   shared_preferences: ^0.5.1+2
   datetime_picker_formfield: ^0.1.8
   firebase_messaging: ^4.0.0+3
+  intro_views_flutter: ^2.6.0
 
 
 dev_dependencies:
@@ -51,6 +52,9 @@ flutter:
   assets:
     - assets/images/not_connected.png
     - assets/images/logo_mdp.png
+    - assets/images/garfield.jpeg
+    - assets/images/mario.jpg
+    - assets/images/mr_bean.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

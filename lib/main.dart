@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:sung/pages/about.dart';
 import 'package:sung/pages/admin_home.dart';
+import 'package:sung/pages/introslider.dart';
 import 'package:sung/pages/login.dart';
 import 'package:sung/pages/post_add.dart';
 import 'package:connectivity/connectivity.dart';
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
             TargetPlatform.android: CupertinoPageTransitionsBuilder(),
             TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
           })),
-      home: DashboardScreen(),
+      home: Opening(),
     );
   }
 }
