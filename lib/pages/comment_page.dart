@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:sung/model/comment.dart';
 import 'package:sung/model/posting.dart';
 import 'package:sung/utilities/crud.dart';
@@ -106,13 +107,18 @@ class _CommentPageState extends State<CommentPage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: ListTile(
-              title: TextField(
+              title: CupertinoTextField(
                 controller: commentController,
                 textInputAction: TextInputAction.send,
                 onEditingComplete: sendComment,
+                placeholder: 'Tuliskan Komentarmu disini',
                 focusNode: commentNode,
-                decoration:
-                    InputDecoration(hintText: 'Tuliskan Komentarmu disini'),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    border: Border.all(
+                        width: 0.0, color: CupertinoColors.activeBlue)),
+//                decoration:
+//                    InputDecoration(hintText: 'Tuliskan Komentarmu disini'),
               ),
               trailing:
                   IconButton(icon: Icon(Icons.send), onPressed: sendComment),

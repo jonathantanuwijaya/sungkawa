@@ -39,18 +39,13 @@ class _OpeningState extends State<Opening> {
 }
 
 class IntroSliderScreen extends StatefulWidget {
-  static TextStyle style = TextStyle(fontSize: 30.0);
+  static TextStyle style = TextStyle(fontSize: 28.0);
 
   @override
   _IntroSliderScreenState createState() => _IntroSliderScreenState();
 }
 
 class _IntroSliderScreenState extends State<IntroSliderScreen> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   final pages = [
     PageViewModel(
