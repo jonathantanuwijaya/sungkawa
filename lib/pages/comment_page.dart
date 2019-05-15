@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:sung/model/comment.dart';
 import 'package:sung/model/posting.dart';

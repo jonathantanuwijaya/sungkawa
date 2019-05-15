@@ -21,17 +21,19 @@ dependencies:
   cupertino_icons: ^0.1.2
   google_sign_in: 4.0.1+1
   firebase_auth:
-  firebase_core: any
-  firebase_database: ^1.0.5
-  firebase_storage: ^2.1.0+1
+  firebase_core: ^0.4.0+1
+  firebase_database: ^3.0.0
+  firebase_storage: ^3.0.0
+  firebase_messaging: ^5.0.1+1
+  cloud_functions: ^0.3.0
   connectivity: ^0.4.2
   intl: ^0.15.7
   cached_network_image: ^0.7.0
   image_picker: ^0.5.0+3
   shared_preferences: ^0.5.1+2
   datetime_picker_formfield: ^0.1.8
-  firebase_messaging: ^4.0.0+3
   intro_views_flutter: ^2.6.0
+
 
 
 dev_dependencies:
