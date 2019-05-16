@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 
@@ -23,7 +24,6 @@ class ApiService {
     @required String title,
     @required String body,
     @required String fcmToken,
-    @required String usia,
   }) =>
       client.post('https://fcm.googleapis.com/fcm/send',
           body: json.encode({

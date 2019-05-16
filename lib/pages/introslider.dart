@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:intro_views_flutter/intro_views_flutter.dart';
 import 'package:intro_views_flutter/Models/page_view_model.dart';
+import 'package:intro_views_flutter/intro_views_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sung/main.dart';
-import 'dart:async';
+
+SharedPreferences prefs;
 
 class Opening extends StatefulWidget {
   @override
@@ -12,14 +15,14 @@ class Opening extends StatefulWidget {
 
 class _OpeningState extends State<Opening> {
   Future checkFirstScreen() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
+
     bool _cek = (prefs.getBool('cek') ?? false);
 
     if (_cek) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => DashboardScreen()));
     } else {
-      prefs.setBool('cek', true);
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => IntroSliderScreen()));
     }
@@ -29,6 +32,7 @@ class _OpeningState extends State<Opening> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     checkFirstScreen();
   }
 
@@ -46,27 +50,43 @@ class IntroSliderScreen extends StatefulWidget {
 }
 
 class _IntroSliderScreenState extends State<IntroSliderScreen> {
-
   final pages = [
     PageViewModel(
-        title: Text('Halaman Pertama Intro '),
+        title: Text(
+          'Halaman Pertama Intro ',
+          overflow: TextOverflow.fade,
+          maxLines: 1,
+          softWrap: false,
+        ),
         bubble: Image.asset('assets/images/mario.jpg'),
         pageColor: Colors.blue,
         body: Text('Welcome to Halaman 1 '),
         mainImage: Image.asset('assets/images/mario.jpg'),
         textStyle: TextStyle(color: Colors.white)),
     PageViewModel(
-        title: Text('Halaman Kedua Intro '),
-        bubble: Image.asset('assets/images/mr_bean.png'),
+        title: Text(
+          'Halaman Kedua Intro ',
+          overflow: TextOverflow.fade,
+          maxLines: 1,
+          softWrap: false,
+        ),
+        bubble: Image.asset(
+          'assets/images/mr_bean.png',
+        ),
         pageColor: Colors.orange,
-        body: Text('Welcome to Halaman 1 '),
+        body: Text('Welcome to Halaman 2 '),
         mainImage: Image.asset('assets/images/mr_bean.png'),
         textStyle: TextStyle(color: Colors.white)),
     PageViewModel(
-        title: Text('Halaman Ketiga Intro '),
+        title: Text(
+          'Halaman Ketiga Intro ',
+          overflow: TextOverflow.fade,
+          maxLines: 1,
+          softWrap: false,
+        ),
         bubble: Image.asset('assets/images/garfield.jpeg'),
         pageColor: Colors.purpleAccent,
-        body: Text('Welcome to Halaman 1 '),
+        body: Text('Welcome to Halaman 3 '),
         mainImage: Image.asset('assets/images/garfield.jpeg'),
         textStyle: TextStyle(color: Colors.white)),
   ];
@@ -77,16 +97,17 @@ class _IntroSliderScreenState extends State<IntroSliderScreen> {
       debugShowCheckedModeBanner: false,
       home: Builder(
           builder: (context) => IntroViewsFlutter(
-                pages,
-                onTapDoneButton: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DashboardScreen()));
-                },
-                pageButtonTextStyles:
-                    TextStyle(color: Colors.white, fontSize: 18.0),
-              )),
+            pages,
+            onTapDoneButton: () {
+              prefs.setBool('cek', true);
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DashboardScreen()));
+            },
+            pageButtonTextStyles:
+            TextStyle(color: Colors.white, fontSize: 18.0),
+          )),
     );
   }
 }
