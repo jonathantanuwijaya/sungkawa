@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:sung_user/main.dart';
-import 'package:sung_user/utilities/crud.dart';
+import 'package:sungkawa_user/main.dart';
+import 'package:sungkawa_user/utilities/crud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -41,6 +41,7 @@ class _LoginState extends State<Login> {
               style: TextStyle(fontSize: 40.0),
               textAlign: TextAlign.center,
             ),
+            SizedBox(height: 5.0,),
             CupertinoButton(
                 child: Text(
                   "Sign In with Google",

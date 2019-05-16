@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:sung_user/model/posting.dart';
-import 'package:sung_user/pages/detail.dart';
-import 'package:sung_user/utilities/crud.dart';
-import 'package:sung_user/utilities/utilities.dart';
+import 'package:sungkawa_user/model/posting.dart';
+import 'package:sungkawa_user/pages/detail.dart';
+import 'package:sungkawa_user/utilities/crud.dart';
+import 'package:sungkawa_user/utilities/utilities.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';

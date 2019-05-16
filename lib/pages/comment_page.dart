@@ -1,11 +1,11 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sung_user/model/comment.dart';
-import 'package:sung_user/model/posting.dart';
-import 'package:sung_user/utilities/crud.dart';
-import 'package:sung_user/utilities/utilities.dart';
+import 'package:sungkawa_user/model/comment.dart';
+import 'package:sungkawa_user/model/posting.dart';
+import 'package:sungkawa_user/utilities/crud.dart';
+import 'package:sungkawa_user/utilities/utilities.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -117,13 +117,18 @@ class _CommentPageState extends State<CommentPage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: ListTile(
-              title: TextField(
+              title: CupertinoTextField(
                 controller: commentController,
                 textInputAction: TextInputAction.send,
                 onEditingComplete: sendComment,
+                placeholder: 'Tuliskan Komentarmu disini',
                 focusNode: commentNode,
-                decoration:
-                    InputDecoration(hintText: 'Tuliskan Komentarmu disini'),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                    border: Border.all(
+                        width: 0.0, color: CupertinoColors.activeBlue)),
+//                decoration:
+//                    InputDecoration(hintText: 'Tuliskan Komentarmu disini'),
               ),
               trailing: IconButton(
                   icon: Icon(Icons.send),
@@ -157,7 +162,7 @@ class _CommentPageState extends State<CommentPage> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               trailing:
-                  Text(util.convertTimestamp(_commentList[index].timestamp)),
+              Text(util.convertTimestamp(_commentList[index].timestamp)),
               subtitle: Text(_commentList[index].comment),
             );
           });

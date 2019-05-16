@@ -1,16 +1,19 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sung_user/pages/about.dart';
-import 'package:sung_user/pages/introslider.dart';
-import 'package:sung_user/pages/user_home.dart';
+import 'package:sungkawa_user/pages/about.dart';
+import 'package:sungkawa_user/pages/introslider.dart';
+import 'package:sungkawa_user/pages/user_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sung_user/pages/login.dart';
+import 'package:sungkawa_user/pages/login.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
-import 'package:sung_user/pages/profil.dart';
+import 'package:sungkawa_user/pages/profil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+import 'model/Notifikasi.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -53,8 +56,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   FirebaseUser currentUser;
   SharedPreferences prefs;
   bool isLoading;
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   AuthStatus _authStatus = AuthStatus.notSignedIn;
   var connectionStatus;
+  final List<Notifikasi> notif = [];
 
   @override
   void initState() {
@@ -64,9 +69,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
     getCurrentUser().then((userId) {
       setState(() {
         _authStatus =
-            userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+        userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
       });
     });
+    _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
+    _firebaseMessaging.getToken();
+    _firebaseMessaging.subscribeToTopic('all');
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        final notification = message['notification'];
+        setState(() {
+          notif.add(Notifikasi(
+            title: notification['title'],
+            nama: notification['body'],
+          ));
+        });
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+
+        final notification = message['data'];
+        setState(() {
+          notif.add(Notifikasi(
+            title: '${notification['title']}',
+            nama: '${notification['body']}',
+          ));
+        });
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    );
   }
 
   Future<String> getCurrentUser() async {
@@ -85,7 +119,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       appBar: AppBar(
         title: Text(
           'Sungkawa',
-        style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white),
         ),
         actions: <Widget>[
           IconButton(
@@ -145,29 +179,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  void selectedAction(Pilihan value) {
-    print('You choose : $value');
-    if (value == Pilihan.about) {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (BuildContext context) => About()));
-    }
-    if (value == Pilihan.signOut) {
-      signOut();
-    }
-    if (value == Pilihan.profil) {
-      switch (_authStatus) {
-        case AuthStatus.notSignedIn:
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Login()));
-          break;
-        case AuthStatus.signedIn:
-          print('Profil dibuka');
-          Navigator.push(context,
-              MaterialPageRoute(builder: (BuildContext context) => Profil()));
-          break;
-      }
-    }
-  }
+//  void selectedAction(Pilihan value) {
+//    print('You choose : $value');
+//    if (value == Pilihan.about) {
+//      Navigator.push(context,
+//          MaterialPageRoute(builder: (BuildContext context) => About()));
+//    }
+//    if (value == Pilihan.signOut) {
+//      signOut();
+//    }
+//    if (value == Pilihan.profil) {
+//      switch (_authStatus) {
+//        case AuthStatus.notSignedIn:
+//          Navigator.push(
+//              context, MaterialPageRoute(builder: (context) => Login()));
+//          break;
+//        case AuthStatus.signedIn:
+//          print('Profil dibuka');
+//          Navigator.push(context,
+//              MaterialPageRoute(builder: (BuildContext context) => Profil()));
+//          break;
+//      }
+//    }
+//  }
 
   void signOut() async {
     FirebaseAuth.instance.signOut();
@@ -239,4 +273,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
+
+  void sendTokenToServer(String fcm) {
+    print('Token : $fcm');
+  }
 }
