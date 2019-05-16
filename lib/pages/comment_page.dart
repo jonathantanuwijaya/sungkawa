@@ -1,14 +1,15 @@
 import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sungkawa_user/model/comment.dart';
 import 'package:sungkawa_user/model/posting.dart';
 import 'package:sungkawa_user/utilities/crud.dart';
 import 'package:sungkawa_user/utilities/utilities.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CommentPage extends StatefulWidget {
   CommentPage(this.post);
@@ -159,8 +160,8 @@ class _CommentPageState extends State<CommentPage> {
               subtitle: Text(_commentList[index].comment),
             );
           });
-    }
-//    return Center(child: CircularProgressIndicator());
+    } else
+      return Center(child: CircularProgressIndicator());
   }
 
   void sendComment() {

@@ -1,17 +1,18 @@
+import 'package:connectivity/connectivity.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sungkawa_user/pages/about.dart';
 import 'package:sungkawa_user/pages/introslider.dart';
-import 'package:sungkawa_user/pages/user_home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sungkawa_user/pages/login.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:flutter/services.dart';
 import 'package:sungkawa_user/pages/profil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:sungkawa_user/pages/user_home.dart';
+
 import 'model/Notifikasi.dart';
 
 void main() {
@@ -70,6 +71,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         _authStatus =
         userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
       });
+    }).whenComplete(() {
+      String displayName = googleSignIn.currentUser.displayName;
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text('User $displayName is signed in!')));
     });
     _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
     _firebaseMessaging.getToken();
@@ -122,7 +127,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.more_vert,color: Colors.white),
+            icon: Icon(Icons.more_vert, color: Colors.white),
             onPressed: () {
               showCupertinoModalPopup(
                   context: context,
@@ -135,12 +140,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           onPressed: () {
                             switch (_authStatus) {
                               case AuthStatus.notSignedIn:
-                                handleSignIn().then((_){
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Profil()));
+                                handleSignIn().then((_) {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Profil()));
                                 });
                                 break;
                               case AuthStatus.signedIn:
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Profil()));
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Profil()));
                                 break;
                             }
                           },
@@ -208,6 +219,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       print('Error: $e');
     }
   }
+
   Future handleSignIn() async {
     GoogleSignInAccount googleAccount = await googleSignIn.signIn();
     GoogleSignInAuthentication googleAuth = await googleAccount.authentication;
@@ -239,13 +251,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
         .then((snapshot) {
       if (snapshot.value == null) {
         print('Added to database');
-        crud.addUser(googleAccount.id,
-            {'userid':googleAccount.id,
-              'nama': googleAccount.displayName, 'email': googleAccount.email});
+        crud.addUser(googleAccount.id, {
+          'userid': googleAccount.id,
+          'nama': googleAccount.displayName,
+          'email': googleAccount.email
+        });
       }
     });
   }
-
 
   void sendTokenToServer(String fcm) {
     print('Token : $fcm');

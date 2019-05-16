@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:sungkawa_user/model/posting.dart';
-import 'package:sungkawa_user/pages/comment_page.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:sungkawa_user/model/comment.dart';
+import 'package:sungkawa_user/model/posting.dart';
+import 'package:sungkawa_user/pages/comment_page.dart';
 import 'package:sungkawa_user/utilities/utilities.dart';
 
 class Detail extends StatefulWidget {
@@ -52,7 +53,6 @@ class _DetailState extends State<Detail> {
     });
   }
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -72,6 +72,14 @@ class _DetailState extends State<Detail> {
     _onCommentRemovedSubscription =
         _commentRef.onChildRemoved.listen(_onCommentRemoved);
     keterangancontroller = widget.post.keterangan;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _onCommentAddedSubscription.cancel();
+    _onCommentChangedSubscription.cancel();
+    _onCommentRemovedSubscription.cancel();
   }
 
   @override
@@ -110,7 +118,7 @@ class _DetailState extends State<Detail> {
                     'Telah Meninggal Dunia',
                     textAlign: TextAlign.center,
                     style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     height: 30,
@@ -232,7 +240,7 @@ class _DetailState extends State<Detail> {
 //                OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
 //        controller: keterangancontroller,
 //      );
-    return Text(widget.post.keterangan);
+      return Text(widget.post.keterangan);
     }
   }
 }
