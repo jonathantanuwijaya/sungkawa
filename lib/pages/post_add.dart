@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:sung/API/ApiService.dart';
 import 'package:sung/main.dart';
+import 'package:sung/model/Notifikasi.dart';
 import 'package:sung/utilities/constants.dart';
 import 'package:sung/utilities/crud.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
@@ -10,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class PostAdd extends StatefulWidget {
   @override
@@ -24,7 +27,7 @@ class _PostAddState extends State<PostAdd> {
   bool isUploading = false;
   DateTime date = DateTime.now();
   int timestamp;
-
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final _formKey = GlobalKey<FormState>();
 
   final namaController = TextEditingController();
@@ -41,7 +44,6 @@ class _PostAddState extends State<PostAdd> {
   final dateFormat = DateFormat('dd/MM/yyyy');
   final timeFormat = DateFormat('hh:mm a');
   DateTime tanggalMeninggal;
-
   DateTime tanggalSemayam;
   DateTime waktuSemayam;
   BuildContext _snackBarContext;
@@ -51,6 +53,9 @@ class _PostAddState extends State<PostAdd> {
   bool isLoading = false;
   String kubur, agama;
   CRUD crud = new CRUD();
+
+//  Notifikasi notif ;
+
   Constants constants = new Constants();
   var radioValue;
 
@@ -406,6 +411,7 @@ class _PostAddState extends State<PostAdd> {
               'waktuSemayam': waktuSemayamController.text,
               'keterangan': keteranganController.text
             }).whenComplete(() {
+              sendNotification();
               print('Posting selesai.......');
               Navigator.pop(context,
                   MaterialPageRoute(builder: (context) => DashboardScreen()));
@@ -443,6 +449,36 @@ class _PostAddState extends State<PostAdd> {
     super.initState();
     _prosesi = 'Dimakamkan';
     tanggalMeninggal = DateTime.now();
+
+//    _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
+//    _firebaseMessaging.getToken();
+//    _firebaseMessaging.subscribeToTopic('all');
+//    _firebaseMessaging.configure(
+//      onMessage: (Map<String, dynamic> message) async {
+//        print("onMessage: $message");
+//        final notification = message['notification'];
+//        setState(() {
+//          notif.add(Notifikasi(
+//              title: notification['title'],
+//              nama: notification['body'],
+//          ));
+//        });
+//      },
+//      onLaunch: (Map<String, dynamic> message) async {
+//        print("onLaunch: $message");
+//
+//        final notification = message['data'];
+//        setState(() {
+//          notif.add(Notifikasi(
+//              title: '${notification['title']}',
+//              nama: '${notification['body']}',
+//      ));
+//        });
+//      },
+//      onResume: (Map<String, dynamic> message) async {
+//        print("onResume: $message");
+//      },
+//    );
   }
 
   void showErrorMessage() {
@@ -450,5 +486,23 @@ class _PostAddState extends State<PostAdd> {
       content: Text("Photo wajib ada"),
       duration: Duration(seconds: 2),
     ));
+  }
+
+  void sendTokenToServer(String fcmtoken) {
+    print('Token : $fcmtoken');
+  }
+
+  Future sendNotification() async {
+    final response = await ApiService.sendToAll(
+        title: 'Turut Berduka Cita atas berpulangnya saudara kita ' +
+            namaController.text,
+        body: 'Dalam usia ' + umurController.text);
+
+    if (response.statusCode != 200) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content:
+        Text('[${response.statusCode}] Error message: ${response.body}'),
+      ));
+    }
   }
 }
