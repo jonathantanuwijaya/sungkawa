@@ -23,8 +23,7 @@ class ApiService {
     @required String title,
     @required String body,
     @required String fcmToken,
-    @required String usia,
-  }) =>
+     }) =>
       client.post('https://fcm.googleapis.com/fcm/send',
           body: json.encode({
             'notification': {'body': '$body', 'title': '$title'},
