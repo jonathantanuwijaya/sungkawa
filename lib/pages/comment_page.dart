@@ -23,18 +23,14 @@ enum AuthStatus { signedIn, notSignedIn }
 
 class _CommentPageState extends State<CommentPage> {
   String fullName, userId;
-
   CRUD crud = new CRUD();
   Utilities util = new Utilities();
-
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   var _commentRef;
   AuthStatus _authStatus = AuthStatus.notSignedIn;
-
   final commentController = new TextEditingController();
   final commentNode = new FocusNode();
-
   SharedPreferences prefs;
   List<Comment> _commentList = new List();
   StreamSubscription<Event> _onCommentAddedSubscription;
@@ -78,7 +74,6 @@ class _CommentPageState extends State<CommentPage> {
         .orderByChild('timestamp');
     readLocal();
     _commentList.clear();
-
     _onCommentAddedSubscription =
         _commentRef.onChildAdded.listen(_onCommentAdded);
     _onCommentChangedSubscription =
@@ -124,11 +119,9 @@ class _CommentPageState extends State<CommentPage> {
                 placeholder: 'Tuliskan Komentarmu disini',
                 focusNode: commentNode,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
+                    borderRadius: BorderRadius.circular(5.0),
                     border: Border.all(
                         width: 0.0, color: CupertinoColors.activeBlue)),
-//                decoration:
-//                    InputDecoration(hintText: 'Tuliskan Komentarmu disini'),
               ),
               trailing: IconButton(
                   icon: Icon(Icons.send),
@@ -162,7 +155,7 @@ class _CommentPageState extends State<CommentPage> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               trailing:
-              Text(util.convertTimestamp(_commentList[index].timestamp)),
+                  Text(util.convertTimestamp(_commentList[index].timestamp)),
               subtitle: Text(_commentList[index].comment),
             );
           });

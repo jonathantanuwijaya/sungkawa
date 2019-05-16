@@ -29,25 +29,6 @@ class _ProfilState extends State<Profil> {
   final FocusNode focusNodeEmail = new FocusNode();
   final formkey = GlobalKey<FormState>();
 
-//  Future<FirebaseUser> _handleProfile() async{
-//    final FirebaseUser user = await _auth.currentUser() ;
-//    username = user.displayName;
-//    email = user.email;
-//
-//  }
-
-//  @override
-//  void initState() {
-//    // TODO: implement initState
-//    super.initState();
-//    userRef = FirebaseDatabase.instance
-//        .reference()
-//        .child('users')
-//        .child(widget.pengguna.key);
-////    print('useskey' + widget.pengguna.key);
-//    username = widget.pengguna.nama;
-//    email = widget.pengguna.email;
-//  }
   @override
   void initState() {
     // TODO: implement initState
@@ -175,10 +156,5 @@ class _ProfilState extends State<Profil> {
           fontSize: 16.0);
     });
 
-//    Firestore.instance
-//        .collection('users')
-//        .document(userid)
-//        .updateData({'nama': username, 'email': email}).then((data) async {
-//
   }
 }

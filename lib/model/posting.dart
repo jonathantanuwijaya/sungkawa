@@ -37,35 +37,20 @@ class Posting {
       this._timestamp);
 
   String get key => _key;
-
   String get photo => _photo;
-
   String get nama => _nama;
-
   get agama => _agama;
-
   get userId => _userId;
-
   get tempatMakam => _tempatMakam;
-
   String get usia => _usia;
-
   get keterangan => _keterangan;
-
   get tanggalSemayam => _tanggalSemayam;
-
   get lokasiSemayam => _lokasiSemayam;
-
   get lokasiMakam => _lokasiMakam;
-
   get alamat => _alamat;
-
   get tanggalMeninggal => _tanggalMeninggal;
-
   get prosesi => _prosesi;
-
   get waktuSemayam => _waktuSemayam;
-
   int get timestamp => _timestamp;
 
   Posting.fromSnapshot(DataSnapshot snapshot) {

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:sungkawa_user/main.dart';
 import 'package:sungkawa_user/utilities/crud.dart';
 import 'package:firebase_auth/firebase_auth.dart';

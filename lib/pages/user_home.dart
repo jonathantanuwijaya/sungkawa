@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:sungkawa_user/model/posting.dart';
 import 'package:sungkawa_user/pages/detail.dart';
 import 'package:sungkawa_user/utilities/crud.dart';

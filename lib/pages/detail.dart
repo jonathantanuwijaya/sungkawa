@@ -52,55 +52,6 @@ class _DetailState extends State<Detail> {
     });
   }
 
-//  Widget buildCommentPage() {
-//    if (_commentList.length != 0) {
-//      return ListView.builder(
-//          itemCount: _commentList.length,
-//          itemBuilder: (context, index) {
-//            Column(
-//              children: <Widget>[
-//                ListTile(
-//                  title: Text(
-//                    _commentList[0].fullName,
-//                    style: TextStyle(fontWeight: FontWeight.bold),
-//                  ),
-//                  trailing:
-//                      Text(util.convertTimestamp(_commentList[0].timestamp)),
-//                  subtitle: Text(_commentList[0].comment),
-//                ),
-//                ListTile(
-//                  title: Text(
-//                    _commentList[1].fullName,
-//                    style: TextStyle(fontWeight: FontWeight.bold),
-//                  ),
-//                  trailing:
-//                      Text(util.convertTimestamp(_commentList[1].timestamp)),
-//                  subtitle: Text(_commentList[1].comment),
-//                ),
-//                ListTile(
-//                  title: Text(
-//                    _commentList[2].fullName,
-//                    style: TextStyle(fontWeight: FontWeight.bold),
-//                  ),
-//                  trailing:
-//                      Text(util.convertTimestamp(_commentList[2].timestamp)),
-//                  subtitle: Text(_commentList[2].comment),
-//                ),
-//              ],
-//            );
-////            return ListTile(
-////              title: Text(
-////                _commentList[0-1].fullName,
-////                style: TextStyle(fontWeight: FontWeight.bold),
-////              ),
-////              trailing:
-////              Text(util.convertTimestamp(_commentList[0-1].timestamp)),
-////              subtitle: Text(_commentList[0-1].comment),
-////            );
-//          });
-//    }
-////    return Center(child: CircularProgressIndicator());
-//  }
 
   @override
   void initState() {

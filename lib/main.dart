@@ -12,7 +12,6 @@ import 'package:flutter/services.dart';
 import 'package:sungkawa_user/pages/profil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
 import 'model/Notifikasi.dart';
 
 void main() {
@@ -179,36 +178,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-//  void selectedAction(Pilihan value) {
-//    print('You choose : $value');
-//    if (value == Pilihan.about) {
-//      Navigator.push(context,
-//          MaterialPageRoute(builder: (BuildContext context) => About()));
-//    }
-//    if (value == Pilihan.signOut) {
-//      signOut();
-//    }
-//    if (value == Pilihan.profil) {
-//      switch (_authStatus) {
-//        case AuthStatus.notSignedIn:
-//          Navigator.push(
-//              context, MaterialPageRoute(builder: (context) => Login()));
-//          break;
-//        case AuthStatus.signedIn:
-//          print('Profil dibuka');
-//          Navigator.push(context,
-//              MaterialPageRoute(builder: (BuildContext context) => Profil()));
-//          break;
-//      }
-//    }
-//  }
-
   void signOut() async {
     FirebaseAuth.instance.signOut();
     googleSignIn.signOut();
     _authStatus = AuthStatus.notSignedIn;
-//    Scaffold.of(_snackBarContext).showSnackBar(SnackBar(content: Text("Signed Out"),
-//    duration: Duration(seconds: 2),));
     SnackBar(
       content: Text('Signed Out'),
       duration: Duration(seconds: 2),

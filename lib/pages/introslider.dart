@@ -51,29 +51,6 @@ class IntroSliderScreen extends StatefulWidget {
 
 class _IntroSliderScreenState extends State<IntroSliderScreen> {
   @override
-//  final pages = [
-//    PageViewModel(
-//        title: Text('Halaman Pertama Intro '),
-//        bubble: Image.asset('assets/images/mario.jpg'),
-//        pageColor: Colors.blue,
-//        body: Text('Welcome to Halaman 1 '),
-//        mainImage: Image.asset('assets/images/mario.jpg'),
-//        textStyle: TextStyle(color: Colors.white)),
-//    PageViewModel(
-//        title: Text('Halaman Kedua Intro '),
-//        bubble: Image.asset('assets/images/mr_bean.png'),
-//        pageColor: Colors.orange,
-//        body: Text('Welcome to Halaman 1 '),
-//        mainImage: Image.asset('assets/images/mr_bean.png'),
-//        textStyle: TextStyle(color: Colors.white)),
-//    PageViewModel(
-//        title: Text('Halaman Ketiga Intro '),
-//        bubble: Image.asset('assets/images/garfield.jpeg'),
-//        pageColor: Colors.purpleAccent,
-//        body: Text('Welcome to Halaman 1 '),
-//        mainImage: Image.asset('assets/images/garfield.jpeg'),
-//        textStyle: TextStyle(color: Colors.white)),
-//  ];
   final pages = [
     PageViewModel(
         title: Text('Intro Pertama'),

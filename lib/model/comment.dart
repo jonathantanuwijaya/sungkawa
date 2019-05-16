@@ -12,15 +12,10 @@ class Comment {
       this._userName, this._timestamp);
 
   String get userName => _userName;
-
   int get timestamp => _timestamp;
-
   String get postId => _postId;
-
   String get comment => _comment;
-
   String get fullName => _fullName;
-
   String get key => _key;
 
   Comment.fromSnapshot(DataSnapshot snapshot) {
