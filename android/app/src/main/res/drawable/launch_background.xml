@@ -8,5 +8,5 @@
         <bitmap
             android:gravity="center"
             android:src="@drawable/logo_mdp" />
-    </item> -->
+    </item>
 </layer-list>

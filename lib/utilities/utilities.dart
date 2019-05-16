@@ -9,7 +9,7 @@ class Utilities{
     var timetext = '';
 
     if(diff.inSeconds <=0  || diff.inSeconds >0 && diff.inMinutes ==0 ||
-    diff.inMinutes >0 && diff.inHours == 0 || diff.inHours > 0 && diff.inDays ==0){
+        diff.inMinutes >0 && diff.inHours == 0 || diff.inHours > 0 && diff.inDays ==0){
       timetext = format.format(date);
 
     }else{

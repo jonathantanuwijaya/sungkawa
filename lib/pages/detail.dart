@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:sung_user/model/posting.dart';
-import 'package:sung_user/pages/comment_page.dart';
+import 'package:sungkawa_user/model/posting.dart';
+import 'package:sungkawa_user/pages/comment_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:sung_user/model/comment.dart';
-import 'package:sung_user/utilities/utilities.dart';
+import 'package:sungkawa_user/model/comment.dart';
+import 'package:sungkawa_user/utilities/utilities.dart';
 
 class Detail extends StatefulWidget {
   final Posting post;
@@ -19,7 +19,7 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> {
   List<Comment> _commentList = new List();
   var _commentRef;
-
+  TextEditingController keterangancontroller;
   Utilities util = new Utilities();
   StreamSubscription<Event> _onCommentAddedSubscription;
   StreamSubscription<Event> _onCommentChangedSubscription;
@@ -120,6 +120,7 @@ class _DetailState extends State<Detail> {
         _commentRef.onChildRemoved.listen(_onCommentRemoved);
     _onCommentRemovedSubscription =
         _commentRef.onChildRemoved.listen(_onCommentRemoved);
+    keterangancontroller = widget.post.keterangan;
   }
 
   @override
@@ -158,7 +159,7 @@ class _DetailState extends State<Detail> {
                     'Telah Meninggal Dunia',
                     textAlign: TextAlign.center,
                     style:
-                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     height: 30,
@@ -213,6 +214,7 @@ class _DetailState extends State<Detail> {
                   Divider(
                     color: Colors.green,
                   ),
+                  buildKeluarga(),
                   SizedBox(height: 10.0),
                   Text(
                     'Ucapan Belasungkawa (' +
@@ -263,6 +265,21 @@ class _DetailState extends State<Detail> {
             Text(_commentList[0].comment, style: TextStyle(fontSize: 16.0)),
           ],
         ),
+      );
+    }
+  }
+
+  buildKeluarga() {
+    if (widget.post.keterangan == null) {
+      return '';
+    } else {
+      return TextField(
+        enabled: false,
+        decoration: InputDecoration(
+            labelText: 'Keterangan',
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
+        controller: keterangancontroller,
       );
     }
   }
