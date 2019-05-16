@@ -11,6 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+import 'model/Notifikasi.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -24,6 +27,7 @@ enum Pilihan { about, signOut }
 final GoogleSignIn googleSignIn = GoogleSignIn();
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -52,7 +56,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   var connectionStatus;
   SharedPreferences prefs;
   GoogleSignIn user;
-
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final List<Notifikasi> notif = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -64,6 +69,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
             userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
       });
     });
+    _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
+    _firebaseMessaging.getToken();
+    _firebaseMessaging.subscribeToTopic('all');
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        final notification = message['notification'];
+        setState(() {
+          notif.add(Notifikasi(
+            title: notification['title'],
+            nama: notification['body'],
+          ));
+        });
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+
+        final notification = message['data'];
+        setState(() {
+          notif.add(Notifikasi(
+            title: '${notification['title']}',
+            nama: '${notification['body']}',
+          ));
+        });
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    );
   }
 
   Future<String> getCurrentUser() async {
@@ -181,5 +215,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       print('Connectivity Result: not connected');
       return false;
     }
+  }
+
+  void sendTokenToServer(String fcm) {
+    print('Token : $fcm');
   }
 }
