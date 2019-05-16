@@ -273,14 +273,15 @@ class _DetailState extends State<Detail> {
     if (widget.post.keterangan == null) {
       return '';
     } else {
-      return TextField(
-        enabled: false,
-        decoration: InputDecoration(
-            labelText: 'Keterangan',
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
-        controller: keterangancontroller,
-      );
+//      return TextField(
+//        enabled: false,
+//        decoration: InputDecoration(
+//            labelText: 'Keterangan',
+//            border:
+//                OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
+//        controller: keterangancontroller,
+//      );
+    return Text(widget.post.keterangan);
     }
   }
 }
