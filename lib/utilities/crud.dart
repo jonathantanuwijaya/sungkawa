@@ -4,11 +4,11 @@ import 'package:firebase_database/firebase_database.dart';
 
 class CRUD {
   DatabaseReference postRef =
-      FirebaseDatabase.instance.reference().child('posts');
+  FirebaseDatabase.instance.reference().child('posts');
   DatabaseReference commentRef =
-      FirebaseDatabase.instance.reference().child('comments');
+  FirebaseDatabase.instance.reference().child('comments');
   DatabaseReference adminRef =
-      FirebaseDatabase.instance.reference().child('admins');
+  FirebaseDatabase.instance.reference().child('admins');
 
   Future<void> addAdmin(String adminId, adminData) async {
     adminRef.child(adminId).set(adminData);
@@ -39,7 +39,8 @@ class CRUD {
     });
   }
 
-  bool checkCommentEmpty(postId) {
+  // ignore: missing_return
+  Future<bool> checkCommentEmpty(postId) async {
     bool isEmpty;
     commentRef.child(postId).orderByKey().once().then((snapshot) {
       if (snapshot.value == null)

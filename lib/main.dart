@@ -1,17 +1,18 @@
 import 'dart:async';
-import 'package:sung/pages/about.dart';
-import 'package:sung/pages/admin_home.dart';
-import 'package:sung/pages/introslider.dart';
-import 'package:sung/pages/login.dart';
-import 'package:sung/pages/post_add.dart';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:sung/pages/about.dart';
+import 'package:sung/pages/admin_home.dart';
+import 'package:sung/pages/introslider.dart';
+import 'package:sung/pages/login.dart';
+import 'package:sung/pages/post_add.dart';
 
 import 'model/Notifikasi.dart';
 
@@ -27,7 +28,6 @@ enum Pilihan { about, signOut }
 final GoogleSignIn googleSignIn = GoogleSignIn();
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -58,6 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   GoogleSignIn user;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final List<Notifikasi> notif = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -66,9 +67,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
     getCurrentUser().then((userId) {
       setState(() {
         _authStatus =
-            userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+        userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
       });
+    }).whenComplete(() {
+      if (_authStatus == AuthStatus.signedIn) {
+        String displayName = user.currentUser.displayName;
+
+        Scaffold.of(context).showSnackBar(
+            SnackBar(content: Text('User $displayName signed in!')));
+      }
     });
+
     _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
     _firebaseMessaging.getToken();
     _firebaseMessaging.subscribeToTopic('all');

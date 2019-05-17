@@ -90,55 +90,56 @@ class _HomePageState extends State<HomePage> {
               showCupertinoModalPopup(
                   context: context,
                   builder: (context) => CupertinoActionSheet(
-                        title: Text("Apa yang ingin anda lakukan?"),
-                        actions: <Widget>[
-                          CupertinoActionSheetAction(
-                              onPressed: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            UpdatePost(_postList[index])));
-                              },
-                              child: Text('Update')),
-                          CupertinoActionSheetAction(
-                              isDestructiveAction: true,
-                              child: Text('Delete'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                                showCupertinoDialog(
-                                    context: context,
-                                    builder: (context) => CupertinoAlertDialog(
-                                          content: Text(
-                                              'Anda yakin dengan pilihan ini'),
-                                          actions: <Widget>[
-                                            FlatButton(
-                                                onPressed: () {
-                                                  crud.deletePost(
-                                                      _postList[index].key);
-                                                  setState(() {
-                                                    _postList.removeAt(index);
-                                                    Navigator.pop(context);
-                                                  });
-                                                },
-                                                child: Text('YA',
-                                                    style: TextStyle(
-                                                      color: Colors.red,
-                                                    ))),
-                                            FlatButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Text(
-                                                  'Tidak',
-                                                  style: TextStyle(
-                                                      color: Colors.blue),
-                                                )),
-                                          ],
-                                        ));
-                              })
-                        ],
-                      ));
+                    title: Text("Apa yang ingin anda lakukan?"),
+                    actions: <Widget>[
+                      CupertinoActionSheetAction(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        UpdatePost(_postList[index])));
+                          },
+                          child: Text('Update')),
+                      CupertinoActionSheetAction(
+                          isDestructiveAction: true,
+                          child: Text('Delete'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            showCupertinoDialog(
+                                context: context,
+                                builder: (context) =>
+                                    CupertinoAlertDialog(
+                                      content: Text(
+                                          'Anda yakin dengan pilihan ini'),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                            onPressed: () {
+                                              crud.deletePost(
+                                                  _postList[index].key);
+                                              setState(() {
+                                                _postList.removeAt(index);
+                                                Navigator.pop(context);
+                                              });
+                                            },
+                                            child: Text('YA',
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                ))),
+                                        FlatButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text(
+                                              'Tidak',
+                                              style: TextStyle(
+                                                  color: Colors.blue),
+                                            )),
+                                      ],
+                                    ));
+                          })
+                    ],
+                  ));
             },
             child: Card(
               shape: RoundedRectangleBorder(

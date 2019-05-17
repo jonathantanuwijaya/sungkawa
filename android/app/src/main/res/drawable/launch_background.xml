@@ -6,6 +6,6 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/logo_mdp" />
+            android:src="@drawable/sungkawa_splash" />
     </item>
 </layer-list>

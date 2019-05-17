@@ -1,12 +1,13 @@
 import 'dart:async';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sung/model/comment.dart';
 import 'package:sung/model/posting.dart';
 import 'package:sung/utilities/crud.dart';
 import 'package:sung/utilities/utilities.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CommentPage extends StatefulWidget {
   CommentPage(this.post);
@@ -22,7 +23,7 @@ class _CommentPageState extends State<CommentPage> {
   CRUD crud = new CRUD();
   Utilities util = new Utilities();
   var _commentRef;
-  bool isEmpty;
+  var isEmpty;
   final commentController = new TextEditingController();
   final commentNode = new FocusNode();
 
@@ -120,7 +121,7 @@ class _CommentPageState extends State<CommentPage> {
 //                    InputDecoration(hintText: 'Tuliskan Komentarmu disini'),
               ),
               trailing:
-                  IconButton(icon: Icon(Icons.send), onPressed: sendComment),
+              IconButton(icon: Icon(Icons.send), onPressed: sendComment),
             ),
           )
         ],
@@ -162,7 +163,7 @@ class _CommentPageState extends State<CommentPage> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             trailing:
-                Text(util.convertTimestamp(_commentList[index].timestamp)),
+            Text(util.convertTimestamp(_commentList[index].timestamp)),
             subtitle: Text(_commentList[index].comment),
           ),
           key: Key(_commentList[index].key),
