@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
 
 class CRUD {
@@ -38,7 +39,8 @@ class CRUD {
     });
   }
 
-  bool checkCommentEmpty(postId) {
+  // ignore: missing_return
+  Future<bool> checkCommentEmpty(postId) async {
     bool isEmpty;
     commentRef.child(postId).orderByKey().once().then((snapshot) {
       if (snapshot.value == null)
