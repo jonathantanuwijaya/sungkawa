@@ -4,7 +4,7 @@ class Utilities {
   String convertPostTimestamp(int timestamp) {
     var now = new DateTime.now();
     var timeFormat = new DateFormat('HH:mm');
-    var dateFormat = new DateFormat('D/M/YYYY');
+    var dateFormat = new DateFormat('DD/MM/YY');
     var date = new DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000);
     var diff = now.difference(date);
     var timeText = '';
