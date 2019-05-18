@@ -20,7 +20,6 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> {
   List<Comment> _commentList = new List();
   var _commentRef;
-  TextEditingController keterangancontroller;
   Utilities util = new Utilities();
   StreamSubscription<Event> _onCommentAddedSubscription;
   StreamSubscription<Event> _onCommentChangedSubscription;
@@ -71,7 +70,7 @@ class _DetailState extends State<Detail> {
         _commentRef.onChildRemoved.listen(_onCommentRemoved);
     _onCommentRemovedSubscription =
         _commentRef.onChildRemoved.listen(_onCommentRemoved);
-//    keterangancontroller = widget.post.keterangan;
+
   }
 
   @override
@@ -233,7 +232,12 @@ class _DetailState extends State<Detail> {
       return Text('');
     } else {
 
-      return Text(widget.post.keterangan);
+      return Column(
+        children: <Widget>[
+          Text('Keterangan :'),
+          Text(widget.post.keterangan),
+        ],
+      );
     }
   }
 }
