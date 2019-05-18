@@ -1,12 +1,13 @@
 import 'dart:async';
-import 'package:sung/main.dart';
-import 'package:sung/utilities/crud.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sung/main.dart';
+import 'package:sung/utilities/crud.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -37,8 +38,12 @@ class _LoginState extends State<Login> {
           children: <Widget>[
             Image.asset(
               'assets/images/icon_android.png',
-              fit: BoxFit.cover,
-              width: 280,
+              fit: BoxFit.scaleDown,
+              width: 100,
+              height: 100,
+            ),
+            SizedBox(
+              height: 50,
             ),
             new Text(
               'Sungkawa',
