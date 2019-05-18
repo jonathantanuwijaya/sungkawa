@@ -66,6 +66,7 @@ flutter:
     - assets/images/splash.png
     - assets/images/wlcome.png
     - assets/images/icon1024.png
+    - assets/images/logo_mdp.png
 
 
   # To add assets to your application, add an assets section, like this:

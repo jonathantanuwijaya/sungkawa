@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:sung/main.dart';
 import 'package:sung/utilities/crud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,10 +35,18 @@ class _LoginState extends State<Login> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            Image.asset(
+              'assets/images/icon_android.png',
+              fit: BoxFit.cover,
+              width: 280,
+            ),
             new Text(
               'Sungkawa',
               style: TextStyle(fontSize: 40.0),
               textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 10.0,
             ),
             CupertinoButton(
                 child: Text(
@@ -83,14 +90,17 @@ class _LoginState extends State<Login> {
     print('Adding to database');
     FirebaseDatabase.instance
         .reference()
-        .child('admins')
+        .child('users')
         .child(googleAccount.id)
         .once()
         .then((snapshot) {
       if (snapshot.value == null) {
         print('Added to database');
-        crud.addAdmin(googleAccount.id,
-            {'nama': googleAccount.displayName, 'email': googleAccount.email});
+        crud.addAdmin(googleAccount.id, {
+          'userid': googleAccount.id,
+          'nama': googleAccount.displayName,
+          'email': googleAccount.email
+        });
       }
     });
   }
