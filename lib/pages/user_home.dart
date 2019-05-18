@@ -199,12 +199,12 @@ class _HomePageState extends State<HomePage> {
 
     if (now.isAfter(tanggalMeninggal))
       return Text(
-        data.prosesi,
-        style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+        'Telah ${data.prosesi}',
+        style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
       );
     else
       return Text(
-        ' Telah ',
+        'Telah Disemayamkan',
         style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
       );
   }
