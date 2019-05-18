@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:intro_views_flutter/intro_views_flutter.dart';
-import 'package:intro_views_flutter/Models/page_view_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sungkawa_user/main.dart';
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:intro_views_flutter/Models/page_view_model.dart';
+import 'package:intro_views_flutter/intro_views_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:Sungkawa/main.dart';
+
+SharedPreferences prefs;
 
 class Opening extends StatefulWidget {
   @override
@@ -12,17 +14,15 @@ class Opening extends StatefulWidget {
 }
 
 class _OpeningState extends State<Opening> {
-
   Future checkFirstScreen() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
+
     bool _cek = (prefs.getBool('cek') ?? false);
 
     if (_cek) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => DashboardScreen()));
-    }
-    else {
-      prefs.setBool('cek', true);
+    } else {
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => IntroSliderScreen()));
     }
@@ -32,6 +32,7 @@ class _OpeningState extends State<Opening> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     checkFirstScreen();
   }
 
@@ -41,54 +42,71 @@ class _OpeningState extends State<Opening> {
   }
 }
 
-
 class IntroSliderScreen extends StatefulWidget {
-  static TextStyle style = TextStyle(fontSize: 30.0);
+  static TextStyle style = TextStyle(fontSize: 28.0);
 
   @override
   _IntroSliderScreenState createState() => _IntroSliderScreenState();
 }
 
 class _IntroSliderScreenState extends State<IntroSliderScreen> {
-  @override
   final pages = [
     PageViewModel(
-        title: Text('Intro Pertama'),
-        bubble:Image.asset('assets/images/mario.jpg'),
+        title: Text(
+          ' ',
+          overflow: TextOverflow.fade,
+          maxLines: 1,
+          softWrap: false,
+        ),
+        bubble: Image.asset('assets/images/wlcome.png'),
         pageColor: Colors.blue,
-        body: Text('Welcome to Halaman 1'),
-        mainImage: Image.asset('assets/images/mario.jpg'),
+        body: Text('Sungkawa '),
+        mainImage: Image.asset('assets/images/wlcome.png'),
         textStyle: TextStyle(color: Colors.white)),
     PageViewModel(
-        title: Text('Intro Kedua'),
-        bubble:Image.asset('assets/images/mr_bean.png'),
+        title: Text(
+          ' ',
+          overflow: TextOverflow.fade,
+          maxLines: 1,
+          softWrap: false,
+        ),
+        bubble: Image.asset(
+          'assets/images/phone.png',
+        ),
         pageColor: Colors.orange,
-        body: Text('Welcome to Halaman 2'),
-        mainImage: Image.asset('assets/images/mr_bean.png'),
+        body: Text('Berikan ucapan belasungkawamu '),
+        mainImage: Image.asset('assets/images/phone.png'),
         textStyle: TextStyle(color: Colors.white)),
     PageViewModel(
-        title: Text('Intro Ketiga'),
-        bubble:Image.asset('assets/images/garfield.jpeg'),
+        title: Text(
+          ' ',
+          overflow: TextOverflow.fade,
+          maxLines: 1,
+          softWrap: false,
+        ),
+        bubble: Image.asset('assets/images/speed.png'),
         pageColor: Colors.purpleAccent,
-        body: Text('Welcome to Halaman 3'),
-        mainImage: Image.asset('assets/images/garfield.jpeg'),
+        body: Text('Semua data akan terupdate secara realtime '),
+        mainImage: Image.asset('assets/images/speed.png'),
         textStyle: TextStyle(color: Colors.white)),
-
   ];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Builder(builder: (context) =>
-          IntroViewsFlutter(
+      home: Builder(
+          builder: (context) => IntroViewsFlutter(
             pages,
             onTapDoneButton: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => DashboardScreen()));
+              prefs.setBool('cek', true);
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DashboardScreen()));
             },
-            pageButtonTextStyles: TextStyle(
-                color: Colors.white, fontSize: 18.0),
+            pageButtonTextStyles:
+            TextStyle(color: Colors.white, fontSize: 18.0),
           )),
     );
   }

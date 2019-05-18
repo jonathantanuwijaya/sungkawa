@@ -1,14 +1,15 @@
 import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sungkawa_user/model/comment.dart';
-import 'package:sungkawa_user/model/posting.dart';
-import 'package:sungkawa_user/utilities/crud.dart';
-import 'package:sungkawa_user/utilities/utilities.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:Sungkawa/model/comment.dart';
+import 'package:Sungkawa/model/posting.dart';
+import 'package:Sungkawa/utilities/crud.dart';
+import 'package:Sungkawa/utilities/utilities.dart';
 
 class CommentPage extends StatefulWidget {
   CommentPage(this.post);
@@ -155,12 +156,12 @@ class _CommentPageState extends State<CommentPage> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               trailing:
-                  Text(util.convertTimestamp(_commentList[index].timestamp)),
+              Text(util.convertTimestamp(_commentList[index].timestamp)),
               subtitle: Text(_commentList[index].comment),
             );
           });
-    }
-//    return Center(child: CircularProgressIndicator());
+    } else
+      return Center(child: CircularProgressIndicator());
   }
 
   void sendComment() {
