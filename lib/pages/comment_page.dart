@@ -163,7 +163,7 @@ class _CommentPageState extends State<CommentPage> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             trailing:
-            Text(util.convertTimestamp(_commentList[index].timestamp)),
+            Text(util.convertCommentTimestamp(_commentList[index].timestamp)),
             subtitle: Text(_commentList[index].comment),
           ),
           key: Key(_commentList[index].key),

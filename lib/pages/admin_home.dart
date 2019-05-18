@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:sung/model/posting.dart';
-import 'package:sung/pages/detail.dart';
-import 'package:sung/pages/post_update.dart';
-import 'package:sung/utilities/crud.dart';
-import 'package:sung/utilities/utilities.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sung/model/posting.dart';
+import 'package:sung/pages/detail.dart';
+import 'package:sung/pages/post_update.dart';
+import 'package:sung/utilities/crud.dart';
+import 'package:sung/utilities/utilities.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -256,12 +256,12 @@ class _HomePageState extends State<HomePage> {
 
     if (now.isAfter(tanggalMeninggal))
       return Text(
-        data.prosesi,
-        style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+        'Telah ${data.prosesi}',
+        style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
       );
     else
       return Text(
-        ' Prosesi Pemakaman telah selesai',
+        'Telah Disemayamkan',
         style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
       );
   }
