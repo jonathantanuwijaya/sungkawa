@@ -229,25 +229,12 @@ class _DetailState extends State<Detail> {
   }
 
   buildKeluarga() {
-//    return [
-//      Divider(
-//        color: Colors.green,
-//      ),
-//      if (widget.post.keterangan == null)
-//        {Text('')}
-//      else
-//        {Text(widget.post.keterangan)},
-//      Divider(
-//        color: Colors.green,
-//      ),
-//    ];
-    if (widget.post.keterangan == null) {
+    if (widget.post.keterangan == '') {
       return Text('');
     } else {
       return Column(
         children: <Widget>[
           Text('Keterangan :\n'+widget.post.keterangan,style: TextStyle(fontSize: 16.0),),
-//          Text( widget.post.keterangan,style: TextStyle(fontSize: 16.0),)
         ],
       );
     }
