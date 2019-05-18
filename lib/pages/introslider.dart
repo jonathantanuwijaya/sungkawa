@@ -74,7 +74,7 @@ class _IntroSliderScreenState extends State<IntroSliderScreen> {
           'assets/images/phone.png',
         ),
         pageColor: Colors.orange,
-        body: Text('Berikan ucapan belasungkawa anda '),
+        body: Text('Ucapan belasungkawa yang interaktif '),
         mainImage: Image.asset('assets/images/phone.png'),
         textStyle: TextStyle(color: Colors.white)),
     PageViewModel(
@@ -86,7 +86,7 @@ class _IntroSliderScreenState extends State<IntroSliderScreen> {
         ),
         bubble: Image.asset('assets/images/speed.png'),
         pageColor: Colors.purpleAccent,
-        body: Text('Semua data akan terupdate secara realtime '),
+        body: Text('Data yang realtime dan cepat '),
         mainImage: Image.asset('assets/images/speed.png'),
         textStyle: TextStyle(color: Colors.white)),
   ];
