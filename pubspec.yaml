@@ -48,9 +48,9 @@ dependency_overrides:
   image: 2.0.7
 
 flutter_icons:
-  image_path: "assets/images/iconn.png"
+  image_path: "assets/images/icon1024.png"
   android: true
-  ios: "assets/images/iconios.png"
+  ios: "assets/images/icon_ios.png"
 
 
 # For information on the generic Dart part of this file, see the
@@ -66,17 +66,14 @@ flutter:
   assets:
     - assets/images/not_connected.png
     - assets/images/logo_mdp.png
-    - assets/images/garfield.jpeg
-    - assets/images/mario.jpg
-    - assets/images/mr_bean.png
     - assets/images/phone.png
     - assets/images/speed.png
     - assets/images/icon.png
-    - assets/images/iconcon.png
+    - assets/images/icon200.png
     - assets/images/splash.png
-    - assets/images/wlcome.png
-    - assets/images/iconandroid.png
-    - assets/images/iconios.png
+    - assets/images/welcome.png
+    - assets/images/icon_android.png
+    - assets/images/icon_ios.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

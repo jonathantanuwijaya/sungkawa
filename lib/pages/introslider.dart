@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:Sungkawa/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intro_views_flutter/Models/page_view_model.dart';
 import 'package:intro_views_flutter/intro_views_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:Sungkawa/main.dart';
 
 SharedPreferences prefs;
 
@@ -58,10 +58,10 @@ class _IntroSliderScreenState extends State<IntroSliderScreen> {
           maxLines: 1,
           softWrap: false,
         ),
-        bubble: Image.asset('assets/images/wlcome.png'),
+        bubble: Image.asset('assets/images/welcome.png'),
         pageColor: Colors.blue,
         body: Text('Sungkawa '),
-        mainImage: Image.asset('assets/images/wlcome.png'),
+        mainImage: Image.asset('assets/images/welcome.png'),
         textStyle: TextStyle(color: Colors.white)),
     PageViewModel(
         title: Text(
