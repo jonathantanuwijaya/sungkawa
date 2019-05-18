@@ -6,6 +6,6 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/sungkawa_splash" />
+            android:src="@drawable/iconn" />
     </item>
 </layer-list>

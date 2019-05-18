@@ -45,7 +45,7 @@ dependency_overrides:
   image: 2.0.7
 
 flutter_icons:
-  image_path: "assets/images/icon.png"
+  image_path: "assets/images/iconn.png"
   android: true
   ios: true
 
@@ -69,7 +69,7 @@ flutter:
     - assets/images/speed.png
     - assets/images/splash.png
     - assets/images/wlcome.png
-    - assets/images/icon.png
+    - assets/images/iconn.png
     - assets/images/iconcon.png
 
   # To add assets to your application, add an assets section, like this:
