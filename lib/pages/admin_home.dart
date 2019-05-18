@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                           child: SizedBox(),
                         ),
                         Text(
-                          util.convertTimestamp(
+                          util.convertPostTimestamp(
                             _postList[index].timestamp,
                           ),
                           style: TextStyle(fontSize: 14.0, color: Colors.grey),

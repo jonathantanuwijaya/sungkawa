@@ -1,9 +1,10 @@
 import 'package:intl/intl.dart';
 
 class Utilities {
-  String convertTimestamp(int timestamp) {
+  String convertPostTimestamp(int timestamp) {
     var now = new DateTime.now();
-    var format = new DateFormat('HH:mm');
+    var timeFormat = new DateFormat('HH:mm');
+    var dateFormat = new DateFormat('D/M/YYYY');
     var date = new DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000);
     var diff = now.difference(date);
     var timeText = '';
@@ -12,9 +13,9 @@ class Utilities {
         diff.inSeconds > 0 && diff.inMinutes == 0 ||
         diff.inMinutes > 0 && diff.inHours == 0 ||
         diff.inHours > 0 && diff.inDays == 0) {
-      timeText = format.format(date);
+      timeText = timeFormat.format(date);
     } else {
-      timeText = diff.inDays.toString() + ' HARI YANG LALU';
+      timeText = dateFormat.format(date);
     }
     return timeText;
   }
