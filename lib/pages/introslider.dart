@@ -97,17 +97,17 @@ class _IntroSliderScreenState extends State<IntroSliderScreen> {
       debugShowCheckedModeBanner: false,
       home: Builder(
           builder: (context) => IntroViewsFlutter(
-            pages,
-            onTapDoneButton: () {
-              prefs.setBool('cek', true);
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DashboardScreen()));
-            },
-            pageButtonTextStyles:
-            TextStyle(color: Colors.white, fontSize: 18.0),
-          )),
+                pages,
+                onTapDoneButton: () {
+                  prefs.setBool('cek', true);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DashboardScreen()));
+                },
+                pageButtonTextStyles:
+                    TextStyle(color: Colors.white, fontSize: 18.0),
+              )),
     );
   }
 }

@@ -24,6 +24,5 @@ class Comment {
     _comment = snapshot.value['comment'];
     _timestamp = snapshot.value['timestamp'];
     _postId = snapshot.value['postId'];
-
   }
 }

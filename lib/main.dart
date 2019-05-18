@@ -69,7 +69,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     getCurrentUser().then((userId) {
       setState(() {
         _authStatus =
-        userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+            userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
       });
     }).whenComplete(() {
       String displayName = googleSignIn.currentUser.displayName;

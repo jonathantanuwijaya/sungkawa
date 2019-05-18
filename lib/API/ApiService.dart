@@ -14,16 +14,16 @@ class ApiService {
       sendToTopic(title: title, body: body, topic: 'all');
 
   static Future<Response> sendToTopic(
-      {@required String title,
-        @required String body,
-        @required String topic}) =>
+          {@required String title,
+          @required String body,
+          @required String topic}) =>
       sendTo(title: title, body: body, fcmToken: '/topics/$topic');
 
   static Future<Response> sendTo({
     @required String title,
     @required String body,
     @required String fcmToken,
-     }) =>
+  }) =>
       client.post('https://fcm.googleapis.com/fcm/send',
           body: json.encode({
             'notification': {'body': '$body', 'title': '$title'},

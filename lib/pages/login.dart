@@ -40,7 +40,9 @@ class _LoginState extends State<Login> {
               style: TextStyle(fontSize: 40.0),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 5.0,),
+            SizedBox(
+              height: 5.0,
+            ),
             CupertinoButton(
                 child: Text(
                   "Sign In with Google",
@@ -89,10 +91,11 @@ class _LoginState extends State<Login> {
         .then((snapshot) {
       if (snapshot.value == null) {
         print('Added to database');
-        crud.addUser(googleAccount.id,
-            {'userid':googleAccount.id,
-              'nama': googleAccount.displayName,
-              'email': googleAccount.email});
+        crud.addUser(googleAccount.id, {
+          'userid': googleAccount.id,
+          'nama': googleAccount.displayName,
+          'email': googleAccount.email
+        });
       }
     });
   }

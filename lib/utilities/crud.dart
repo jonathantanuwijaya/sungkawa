@@ -4,11 +4,11 @@ import 'package:firebase_database/firebase_database.dart';
 
 class CRUD {
   DatabaseReference postRef =
-  FirebaseDatabase.instance.reference().child('posts');
+      FirebaseDatabase.instance.reference().child('posts');
   DatabaseReference commentRef =
-  FirebaseDatabase.instance.reference().child('comments');
+      FirebaseDatabase.instance.reference().child('comments');
   DatabaseReference userRef =
-  FirebaseDatabase.instance.reference().child('users');
+      FirebaseDatabase.instance.reference().child('users');
 
   Future<void> addUser(String adminId, adminData) async {
     userRef.child(adminId).set(adminData);

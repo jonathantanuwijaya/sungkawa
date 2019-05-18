@@ -91,20 +91,20 @@ class Posting {
   }
 
   Map<String, dynamic> toJson() => {
-    'userId': _userId,
-    'nama': _nama,
-    'usia': _usia,
-    'agama': _agama,
-    'photo': _photo,
-    'alamat': _alamat,
-    'tanggalMeninggal': _tanggalMeninggal,
-    'prosesi': _prosesi,
-    'lokasiSemayam': _lokasiSemayam,
-    'lokasiMakam': _lokasiMakam,
-    'tempatMakam': _tempatMakam,
-    'tanggalSemayam': _tanggalSemayam,
-    'waktuSemayam': _waktuSemayam,
-    'keterangan': _keterangan,
-    'timestamp': _timestamp
-  };
+        'userId': _userId,
+        'nama': _nama,
+        'usia': _usia,
+        'agama': _agama,
+        'photo': _photo,
+        'alamat': _alamat,
+        'tanggalMeninggal': _tanggalMeninggal,
+        'prosesi': _prosesi,
+        'lokasiSemayam': _lokasiSemayam,
+        'lokasiMakam': _lokasiMakam,
+        'tempatMakam': _tempatMakam,
+        'tanggalSemayam': _tanggalSemayam,
+        'waktuSemayam': _waktuSemayam,
+        'keterangan': _keterangan,
+        'timestamp': _timestamp
+      };
 }
