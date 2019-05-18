@@ -84,7 +84,7 @@ class _UpdatePostState extends State<UpdatePost> {
             },
           ),
         ],
-        backgroundColor: Colors.grey[400],
+        backgroundColor: Colors.green,
       ),
       backgroundColor: Colors.grey[200],
       body: Padding(

@@ -52,24 +52,24 @@ class IntroSliderScreen extends StatefulWidget {
 class _IntroSliderScreenState extends State<IntroSliderScreen> {
   final pages = [
     PageViewModel(
-//        title: Text(
-//          'Halaman Pertama Intro ',
-//          overflow: TextOverflow.fade,
-//          maxLines: 1,
-//          softWrap: false,
-//        ),
+        title: Text(
+          '',
+          overflow: TextOverflow.fade,
+          maxLines: 1,
+          softWrap: false,
+        ),
         bubble: Image.asset('assets/images/wlcome.png'),
         pageColor: Colors.blue,
         body: Text('Welcome to Sungkawa '),
         mainImage: Image.asset('assets/images/wlcome.png'),
         textStyle: TextStyle(color: Colors.white)),
     PageViewModel(
-//        title: Text(
-//          'Halaman Kedua Intro ',
-//          overflow: TextOverflow.fade,
-//          maxLines: 1,
-//          softWrap: false,
-//        ),
+        title: Text(
+          '',
+          overflow: TextOverflow.fade,
+          maxLines: 1,
+          softWrap: false,
+        ),
         bubble: Image.asset(
           'assets/images/phone.png',
         ),
@@ -78,12 +78,12 @@ class _IntroSliderScreenState extends State<IntroSliderScreen> {
         mainImage: Image.asset('assets/images/phone.png'),
         textStyle: TextStyle(color: Colors.white)),
     PageViewModel(
-//        title: Text(
-//          'Halaman Ketiga Intro ',
-//          overflow: TextOverflow.fade,
-//          maxLines: 1,
-//          softWrap: false,
-//        ),
+        title: Text(
+          '',
+          overflow: TextOverflow.fade,
+          maxLines: 1,
+          softWrap: false,
+        ),
         bubble: Image.asset('assets/images/speed.png'),
         pageColor: Colors.purpleAccent,
         body: Text('Semua data akan terupdate secara realtime '),
