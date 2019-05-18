@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Sungkawa',
+      title: 'Sungkawa Admin',
       debugShowCheckedModeBanner: false,
       theme: new ThemeData(
           primarySwatch: Colors.green,

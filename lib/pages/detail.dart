@@ -159,6 +159,7 @@ class _DetailState extends State<Detail> {
                   Divider(
                     color: Colors.green,
                   ),
+                  buildKeluarga(),
                   Text(
                     widget.post.prosesi +
                         ' di ' +
@@ -222,6 +223,20 @@ class _DetailState extends State<Detail> {
             Text(_commentList[0].comment, style: TextStyle(fontSize: 16.0)),
           ],
         ),
+      );
+    }
+  }
+
+  buildKeluarga() {
+    if (widget.post.keterangan == '') {
+      return Text('');
+    } else {
+      return Column(
+        children: <Widget>[
+          Text('Keterangan :\n' + widget.post.keterangan,
+            style: TextStyle(fontSize: 16.0),),
+
+        ],
       );
     }
   }
