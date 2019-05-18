@@ -462,9 +462,12 @@ class _PostAddState extends State<PostAdd> {
 
   Future sendNotification() async {
     final response = await ApiService.sendToAll(
-        title: 'Turut Berduka Cita atas berpulangnya saudara kita ' +
-            namaController.text,
-        body: 'Dalam usia ' + umurController.text);
+        title: 'Berita Duka Cita',
+        body: 'Telah meninggal dunia \n' +
+            namaController.text +
+            ' (' +
+            umurController.text +
+            ' tahun)');
 
     if (response.statusCode != 200) {
       Scaffold.of(context).showSnackBar(SnackBar(
