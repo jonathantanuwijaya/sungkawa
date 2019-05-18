@@ -5,7 +5,7 @@ class Utilities {
     var now = new DateTime.now();
     var timeFormat = new DateFormat('HH:mm');
     var dateFormat = new DateFormat('DD/MM/YY');
-    var date = new DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000);
+    var date = new DateTime.fromMillisecondsSinceEpoch(timestamp);
     var diff = now.difference(date);
     var timeText = '';
 
@@ -24,7 +24,7 @@ class Utilities {
     var now = new DateTime.now();
     var timeFormat = new DateFormat('HH:mm');
     var dateFormat = new DateFormat('D/M');
-    var date = new DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000);
+    var date = new DateTime.fromMillisecondsSinceEpoch(timestamp);
     var diff = now.difference(date);
     var text = '';
 
