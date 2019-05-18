@@ -229,10 +229,17 @@ class _DetailState extends State<Detail> {
   }
 
   buildKeluarga() {
-    if (widget.post.keterangan == null) {
-      return Text('');
-    } else {
-      return Text(widget.post.keterangan);
-    }
+    return [
+      Divider(
+        color: Colors.green,
+      ),
+      if (widget.post.keterangan == null)
+        {Text('')}
+      else
+        {Text(widget.post.keterangan)},
+      Divider(
+        color: Colors.green,
+      ),
+    ];
   }
 }
