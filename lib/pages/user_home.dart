@@ -1,9 +1,8 @@
 import 'dart:async';
-
-import 'package:sungkawa_user/model/posting.dart';
-import 'package:sungkawa_user/pages/detail.dart';
-import 'package:sungkawa_user/utilities/crud.dart';
-import 'package:sungkawa_user/utilities/utilities.dart';
+import 'package:Sungkawa/model/posting.dart';
+import 'package:Sungkawa/pages/detail.dart';
+import 'package:Sungkawa/utilities/crud.dart';
+import 'package:Sungkawa/utilities/utilities.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -87,7 +86,7 @@ class _HomePageState extends State<HomePage> {
             },
             child: Card(
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0)),
+                  borderRadius: BorderRadius.circular(5.0)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -205,7 +204,7 @@ class _HomePageState extends State<HomePage> {
       );
     else
       return Text(
-        ' Telah Disemayamkan',
+        ' Telah ',
         style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
       );
   }

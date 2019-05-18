@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sungkawa_user/model/user.dart';
+import 'package:Sungkawa/model/user.dart';
 
 class Profil extends StatefulWidget {
   final User pengguna;

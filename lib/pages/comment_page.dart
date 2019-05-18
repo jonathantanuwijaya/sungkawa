@@ -1,14 +1,15 @@
 import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sungkawa_user/model/comment.dart';
-import 'package:sungkawa_user/model/posting.dart';
-import 'package:sungkawa_user/utilities/crud.dart';
-import 'package:sungkawa_user/utilities/utilities.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:Sungkawa/model/comment.dart';
+import 'package:Sungkawa/model/posting.dart';
+import 'package:Sungkawa/utilities/crud.dart';
+import 'package:Sungkawa/utilities/utilities.dart';
 
 class CommentPage extends StatefulWidget {
   CommentPage(this.post);
@@ -23,18 +24,14 @@ enum AuthStatus { signedIn, notSignedIn }
 
 class _CommentPageState extends State<CommentPage> {
   String fullName, userId;
-
   CRUD crud = new CRUD();
   Utilities util = new Utilities();
-
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   var _commentRef;
   AuthStatus _authStatus = AuthStatus.notSignedIn;
-
   final commentController = new TextEditingController();
   final commentNode = new FocusNode();
-
   SharedPreferences prefs;
   List<Comment> _commentList = new List();
   StreamSubscription<Event> _onCommentAddedSubscription;
@@ -78,7 +75,6 @@ class _CommentPageState extends State<CommentPage> {
         .orderByChild('timestamp');
     readLocal();
     _commentList.clear();
-
     _onCommentAddedSubscription =
         _commentRef.onChildAdded.listen(_onCommentAdded);
     _onCommentChangedSubscription =
@@ -124,11 +120,9 @@ class _CommentPageState extends State<CommentPage> {
                 placeholder: 'Tuliskan Komentarmu disini',
                 focusNode: commentNode,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
+                    borderRadius: BorderRadius.circular(5.0),
                     border: Border.all(
                         width: 0.0, color: CupertinoColors.activeBlue)),
-//                decoration:
-//                    InputDecoration(hintText: 'Tuliskan Komentarmu disini'),
               ),
               trailing: IconButton(
                   icon: Icon(Icons.send),
@@ -166,8 +160,8 @@ class _CommentPageState extends State<CommentPage> {
               subtitle: Text(_commentList[index].comment),
             );
           });
-    }
-//    return Center(child: CircularProgressIndicator());
+    } else
+      return Center(child: CircularProgressIndicator());
   }
 
   void sendComment() {

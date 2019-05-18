@@ -1,17 +1,17 @@
+import 'package:connectivity/connectivity.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sungkawa_user/pages/about.dart';
-import 'package:sungkawa_user/pages/introslider.dart';
-import 'package:sungkawa_user/pages/user_home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sungkawa_user/pages/login.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
-import 'package:sungkawa_user/pages/profil.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:Sungkawa/pages/about.dart';
+import 'package:Sungkawa/pages/introslider.dart';
+import 'package:Sungkawa/pages/login.dart';
+import 'package:Sungkawa/pages/profil.dart';
+import 'package:Sungkawa/pages/user_home.dart';
 
 import 'model/Notifikasi.dart';
 
@@ -71,6 +71,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         _authStatus =
         userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
       });
+    }).whenComplete(() {
+      String displayName = googleSignIn.currentUser.displayName;
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text('User $displayName is signed in!')));
     });
     _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
     _firebaseMessaging.getToken();
@@ -123,7 +127,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.more_vert,color: Colors.white),
+            icon: Icon(Icons.more_vert, color: Colors.white),
             onPressed: () {
               showCupertinoModalPopup(
                   context: context,
@@ -136,12 +140,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           onPressed: () {
                             switch (_authStatus) {
                               case AuthStatus.notSignedIn:
-                                handleSignIn().then((_){
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Profil()));
+                                handleSignIn().then((_) {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Profil()));
                                 });
                                 break;
                               case AuthStatus.signedIn:
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Profil()));
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Profil()));
                                 break;
                             }
                           },
@@ -179,36 +189,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-//  void selectedAction(Pilihan value) {
-//    print('You choose : $value');
-//    if (value == Pilihan.about) {
-//      Navigator.push(context,
-//          MaterialPageRoute(builder: (BuildContext context) => About()));
-//    }
-//    if (value == Pilihan.signOut) {
-//      signOut();
-//    }
-//    if (value == Pilihan.profil) {
-//      switch (_authStatus) {
-//        case AuthStatus.notSignedIn:
-//          Navigator.push(
-//              context, MaterialPageRoute(builder: (context) => Login()));
-//          break;
-//        case AuthStatus.signedIn:
-//          print('Profil dibuka');
-//          Navigator.push(context,
-//              MaterialPageRoute(builder: (BuildContext context) => Profil()));
-//          break;
-//      }
-//    }
-//  }
-
   void signOut() async {
     FirebaseAuth.instance.signOut();
     googleSignIn.signOut();
     _authStatus = AuthStatus.notSignedIn;
-//    Scaffold.of(_snackBarContext).showSnackBar(SnackBar(content: Text("Signed Out"),
-//    duration: Duration(seconds: 2),));
     SnackBar(
       content: Text('Signed Out'),
       duration: Duration(seconds: 2),
@@ -235,6 +219,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       print('Error: $e');
     }
   }
+
   Future handleSignIn() async {
     GoogleSignInAccount googleAccount = await googleSignIn.signIn();
     GoogleSignInAuthentication googleAuth = await googleAccount.authentication;
@@ -266,13 +251,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
         .then((snapshot) {
       if (snapshot.value == null) {
         print('Added to database');
-        crud.addUser(googleAccount.id,
-            {'userid':googleAccount.id,
-              'nama': googleAccount.displayName, 'email': googleAccount.email});
+        crud.addUser(googleAccount.id, {
+          'userid': googleAccount.id,
+          'nama': googleAccount.displayName,
+          'email': googleAccount.email
+        });
       }
     });
   }
-
 
   void sendTokenToServer(String fcm) {
     print('Token : $fcm');

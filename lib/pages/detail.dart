@@ -1,11 +1,12 @@
 import 'dart:async';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:sungkawa_user/model/posting.dart';
-import 'package:sungkawa_user/pages/comment_page.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:sungkawa_user/model/comment.dart';
-import 'package:sungkawa_user/utilities/utilities.dart';
+import 'package:Sungkawa/model/comment.dart';
+import 'package:Sungkawa/model/posting.dart';
+import 'package:Sungkawa/pages/comment_page.dart';
+import 'package:Sungkawa/utilities/utilities.dart';
 
 class Detail extends StatefulWidget {
   final Posting post;
@@ -52,56 +53,6 @@ class _DetailState extends State<Detail> {
     });
   }
 
-//  Widget buildCommentPage() {
-//    if (_commentList.length != 0) {
-//      return ListView.builder(
-//          itemCount: _commentList.length,
-//          itemBuilder: (context, index) {
-//            Column(
-//              children: <Widget>[
-//                ListTile(
-//                  title: Text(
-//                    _commentList[0].fullName,
-//                    style: TextStyle(fontWeight: FontWeight.bold),
-//                  ),
-//                  trailing:
-//                      Text(util.convertTimestamp(_commentList[0].timestamp)),
-//                  subtitle: Text(_commentList[0].comment),
-//                ),
-//                ListTile(
-//                  title: Text(
-//                    _commentList[1].fullName,
-//                    style: TextStyle(fontWeight: FontWeight.bold),
-//                  ),
-//                  trailing:
-//                      Text(util.convertTimestamp(_commentList[1].timestamp)),
-//                  subtitle: Text(_commentList[1].comment),
-//                ),
-//                ListTile(
-//                  title: Text(
-//                    _commentList[2].fullName,
-//                    style: TextStyle(fontWeight: FontWeight.bold),
-//                  ),
-//                  trailing:
-//                      Text(util.convertTimestamp(_commentList[2].timestamp)),
-//                  subtitle: Text(_commentList[2].comment),
-//                ),
-//              ],
-//            );
-////            return ListTile(
-////              title: Text(
-////                _commentList[0-1].fullName,
-////                style: TextStyle(fontWeight: FontWeight.bold),
-////              ),
-////              trailing:
-////              Text(util.convertTimestamp(_commentList[0-1].timestamp)),
-////              subtitle: Text(_commentList[0-1].comment),
-////            );
-//          });
-//    }
-////    return Center(child: CircularProgressIndicator());
-//  }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -120,7 +71,15 @@ class _DetailState extends State<Detail> {
         _commentRef.onChildRemoved.listen(_onCommentRemoved);
     _onCommentRemovedSubscription =
         _commentRef.onChildRemoved.listen(_onCommentRemoved);
-    keterangancontroller = widget.post.keterangan;
+//    keterangancontroller = widget.post.keterangan;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _onCommentAddedSubscription.cancel();
+    _onCommentChangedSubscription.cancel();
+    _onCommentRemovedSubscription.cancel();
   }
 
   @override
@@ -159,7 +118,7 @@ class _DetailState extends State<Detail> {
                     'Telah Meninggal Dunia',
                     textAlign: TextAlign.center,
                     style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     height: 30,
@@ -271,16 +230,10 @@ class _DetailState extends State<Detail> {
 
   buildKeluarga() {
     if (widget.post.keterangan == null) {
-      return '';
+      return Text('');
     } else {
-      return TextField(
-        enabled: false,
-        decoration: InputDecoration(
-            labelText: 'Keterangan',
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
-        controller: keterangancontroller,
-      );
+
+      return Text(widget.post.keterangan);
     }
   }
 }
