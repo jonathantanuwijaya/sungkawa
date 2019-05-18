@@ -1,11 +1,10 @@
 import 'package:intl/intl.dart';
 
 class Utilities {
-  String convertPostTimestamp(int timestamp) {
+  String convertTimestamp(int timestamp) {
     var now = new DateTime.now();
-    var timeFormat = new DateFormat('HH:mm');
-    var dateFormat = new DateFormat('dd-MM-yy');
-    var date = new DateTime.fromMillisecondsSinceEpoch(timestamp);
+    var format = new DateFormat('HH:mm');
+    var date = new DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000);
     var diff = now.difference(date);
     var timeText = '';
 
@@ -13,9 +12,9 @@ class Utilities {
         diff.inSeconds > 0 && diff.inMinutes == 0 ||
         diff.inMinutes > 0 && diff.inHours == 0 ||
         diff.inHours > 0 && diff.inDays == 0) {
-      timeText = timeFormat.format(date);
+      timeText = format.format(date);
     } else {
-      timeText = dateFormat.format(date);
+      timeText = diff.inDays.toString() + ' HARI YANG LALU';
     }
     return timeText;
   }
@@ -23,8 +22,8 @@ class Utilities {
   String convertCommentTimestamp(int timestamp) {
     var now = new DateTime.now();
     var timeFormat = new DateFormat('HH:mm');
-    var dateFormat = new DateFormat('d-M');
-    var date = new DateTime.fromMillisecondsSinceEpoch(timestamp);
+    var dateFormat = new DateFormat('D/M');
+    var date = new DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000);
     var diff = now.difference(date);
     var text = '';
 
