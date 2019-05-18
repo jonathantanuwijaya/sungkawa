@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
 import 'package:Sungkawa/model/comment.dart';
 import 'package:Sungkawa/model/posting.dart';
 import 'package:Sungkawa/pages/comment_page.dart';
 import 'package:Sungkawa/utilities/utilities.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 
 class Detail extends StatefulWidget {
   final Posting post;
@@ -20,6 +20,7 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> {
   List<Comment> _commentList = new List();
   var _commentRef;
+  TextEditingController keterangancontroller;
   Utilities util = new Utilities();
   StreamSubscription<Event> _onCommentAddedSubscription;
   StreamSubscription<Event> _onCommentChangedSubscription;
@@ -70,7 +71,7 @@ class _DetailState extends State<Detail> {
         _commentRef.onChildRemoved.listen(_onCommentRemoved);
     _onCommentRemovedSubscription =
         _commentRef.onChildRemoved.listen(_onCommentRemoved);
-
+//    keterangancontroller = widget.post.keterangan;
   }
 
   @override
@@ -231,13 +232,7 @@ class _DetailState extends State<Detail> {
     if (widget.post.keterangan == null) {
       return Text('');
     } else {
-
-      return Column(
-        children: <Widget>[
-          Text('Keterangan :'),
-          Text(widget.post.keterangan),
-        ],
-      );
+      return Text(widget.post.keterangan);
     }
   }
 }
