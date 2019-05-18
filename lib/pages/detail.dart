@@ -173,7 +173,7 @@ class _DetailState extends State<Detail> {
                   Divider(
                     color: Colors.green,
                   ),
-                  buildKeluarga(),
+                  buildKeterangan(),
                   SizedBox(height: 10.0),
                   Text(
                     'Ucapan Belasungkawa (' +
@@ -228,18 +228,20 @@ class _DetailState extends State<Detail> {
     }
   }
 
-  buildKeluarga() {
-    return [
-      Divider(
-        color: Colors.green,
-      ),
-      if (widget.post.keterangan == null)
-        {Text('')}
-      else
-        {Text(widget.post.keterangan)},
-      Divider(
-        color: Colors.green,
-      ),
-    ];
+  Widget buildKeterangan() {
+    return Column(
+      children: <Widget>[
+        Divider(
+          color: Colors.green,
+        ),
+        if (widget.post.keterangan == null)
+          Text('')
+        else
+          Text(widget.post.keterangan),
+        Divider(
+          color: Colors.green,
+        ),
+      ],
+    );
   }
 }
