@@ -35,13 +35,18 @@ class _LoginState extends State<Login> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            Image.asset(
+              'assets/images/icon_android.png',
+              fit: BoxFit.cover,
+              width: 280,
+            ),
             new Text(
               'Sungkawa',
               style: TextStyle(fontSize: 40.0),
               textAlign: TextAlign.center,
             ),
             SizedBox(
-              height: 5.0,
+              height: 10.0,
             ),
             CupertinoButton(
                 child: Text(
