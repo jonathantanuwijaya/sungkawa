@@ -99,14 +99,14 @@ class _ProfilState extends State<Profil> {
                   ),
                   Expanded(
                       child: Container(
-                        child: TextField(
-                          decoration:
+                    child: TextField(
+                      decoration:
                           InputDecoration(hintText: 'Usename harus diisi'),
-                          controller: usernameController,
-                          onChanged: (value) => username = value,
-                          focusNode: focusNodeUsername,
-                        ),
-                      )),
+                      controller: usernameController,
+                      onChanged: (value) => username = value,
+                      focusNode: focusNodeUsername,
+                    ),
+                  )),
                 ],
               ),
               Row(
@@ -124,11 +124,11 @@ class _ProfilState extends State<Profil> {
                   Expanded(
                       child: Container(
                           child: TextField(
-                            controller: emailController,
-                            onChanged: (value) => email = value,
-                            focusNode: focusNodeEmail,
-                            enabled: false,
-                          ))),
+                    controller: emailController,
+                    onChanged: (value) => email = value,
+                    focusNode: focusNodeEmail,
+                    enabled: false,
+                  ))),
                 ],
               ),
               SizedBox(
@@ -159,7 +159,7 @@ class _ProfilState extends State<Profil> {
       isLoading = true;
     });
     var userRef =
-    FirebaseDatabase.instance.reference().child('users').child(userid);
+        FirebaseDatabase.instance.reference().child('users').child(userid);
     userRef.update({'username': username, 'email': email}).then((data) async {
       await prefs.setString('userid', userid);
       await prefs.setString('nama', username);

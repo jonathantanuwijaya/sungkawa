@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 @immutable
 class Notifikasi {
-  final String title, nama, usia;
+  final String title, nama;
 
-  const Notifikasi(
-      {@required this.title, @required this.nama, @required this.usia});
+  const Notifikasi({
+    @required this.title,
+    @required this.nama,
+  });
 }

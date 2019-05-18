@@ -118,7 +118,7 @@ class _DetailState extends State<Detail> {
                     'Telah Meninggal Dunia',
                     textAlign: TextAlign.center,
                     style:
-                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     height: 30,
@@ -229,10 +229,27 @@ class _DetailState extends State<Detail> {
   }
 
   buildKeluarga() {
+//    return [
+//      Divider(
+//        color: Colors.green,
+//      ),
+//      if (widget.post.keterangan == null)
+//        {Text('')}
+//      else
+//        {Text(widget.post.keterangan)},
+//      Divider(
+//        color: Colors.green,
+//      ),
+//    ];
     if (widget.post.keterangan == null) {
       return Text('');
     } else {
-      return Text(widget.post.keterangan);
+      return Column(
+        children: <Widget>[
+          Text('Keterangan :\n'+widget.post.keterangan,style: TextStyle(fontSize: 16.0),),
+//          Text( widget.post.keterangan,style: TextStyle(fontSize: 16.0),)
+        ],
+      );
     }
   }
 }
