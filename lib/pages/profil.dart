@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:Sungkawa/model/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:Sungkawa/model/user.dart';
 
 class Profil extends StatefulWidget {
   final User pengguna;
@@ -43,9 +43,10 @@ class _ProfilState extends State<Profil> {
     username = prefs.getString('nama') ?? '';
     email = prefs.getString('email') ?? '';
     print('username = $username');
-    usernameController = new TextEditingController(text: username);
-    emailController = new TextEditingController(text: email);
-    setState(() {});
+    setState(() {
+      usernameController = new TextEditingController(text: username);
+      emailController = new TextEditingController(text: email);
+    });
   }
 
   @override
@@ -135,7 +136,6 @@ class _ProfilState extends State<Profil> {
     focusNodeUsername.unfocus();
     focusNodeEmail.unfocus();
 
-//    print('uid ${widget.pengguna.uid}');
     setState(() {
       isLoading = true;
     });
@@ -155,6 +155,5 @@ class _ProfilState extends State<Profil> {
           textColor: Colors.white,
           fontSize: 16.0);
     });
-
   }
 }
