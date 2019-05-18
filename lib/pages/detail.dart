@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
 import 'package:Sungkawa/model/comment.dart';
 import 'package:Sungkawa/model/posting.dart';
 import 'package:Sungkawa/pages/comment_page.dart';
 import 'package:Sungkawa/utilities/utilities.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 
 class Detail extends StatefulWidget {
   final Posting post;
@@ -232,7 +232,6 @@ class _DetailState extends State<Detail> {
     if (widget.post.keterangan == null) {
       return Text('');
     } else {
-
       return Text(widget.post.keterangan);
     }
   }
