@@ -133,40 +133,14 @@ class _CommentPageState extends State<CommentPage> {
     return ListView.builder(
       itemCount: _commentList.length,
       itemBuilder: (context, index) {
-        return Dismissible(
-          background: Container(
-            color: Colors.red,
-            child: Align(
-                alignment: Alignment.centerLeft,
-                child: Icon(
-                  Icons.delete_forever,
-                  color: Colors.white,
-                )),
+        return ListTile(
+          title: Text(
+            _commentList[index].fullName,
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          direction: DismissDirection.startToEnd,
-          onDismissed: (direction) {
-            crud.deleteComment(widget.post.key, _commentList[index].key);
-//              setState(() {
-//                _commentList.removeAt(index);
-//              });
-
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Comment Removed'),
-                duration: Duration(seconds: 2),
-              ),
-            );
-          },
-          child: ListTile(
-            title: Text(
-              _commentList[index].fullName,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            trailing:
-            Text(util.convertCommentTimestamp(_commentList[index].timestamp)),
-            subtitle: Text(_commentList[index].comment),
-          ),
-          key: Key(_commentList[index].key),
+          trailing:
+          Text(util.convertCommentTimestamp(_commentList[index].timestamp)),
+          subtitle: Text(_commentList[index].comment),
         );
       },
     );
