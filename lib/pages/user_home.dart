@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:Sungkawa/model/posting.dart';
 import 'package:Sungkawa/pages/detail.dart';
 import 'package:Sungkawa/utilities/crud.dart';
@@ -205,7 +204,7 @@ class _HomePageState extends State<HomePage> {
       );
     else
       return Text(
-        'Akan ${data.prosesi}',
+        'Telah Disemayamkan',
         style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
       );
   }
