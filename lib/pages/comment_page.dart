@@ -150,7 +150,7 @@ class _CommentPageState extends State<CommentPage> {
       itemBuilder: (context, index) {
         return ListTile(
           title: Text(
-            _commentList[index].userName,
+            _commentList[index].fullName,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           trailing:
