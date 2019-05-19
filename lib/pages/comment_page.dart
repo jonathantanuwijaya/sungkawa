@@ -124,18 +124,19 @@ class _CommentPageState extends State<CommentPage> {
                         width: 0.0, color: CupertinoColors.activeBlue)),
               ),
               trailing: IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () {
-                    switch (_authStatus) {
-                      case AuthStatus.notSignedIn:
-                        handleSignIn().then((data) {
-                          sendComment();
-                        });
-                        break;
-                      case AuthStatus.signedIn:
+                icon: Icon(Icons.send),
+                onPressed: () {
+                  switch (_authStatus) {
+                    case AuthStatus.notSignedIn:
+                      handleSignIn().then((data) {
                         sendComment();
-                    }
-                  }),
+                      });
+                      break;
+                    case AuthStatus.signedIn:
+                      sendComment();
+                  }
+                },
+              ),
             ),
           )
         ],
