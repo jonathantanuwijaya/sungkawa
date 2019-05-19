@@ -63,9 +63,9 @@ class _PostAddState extends State<PostAdd> {
       appBar: AppBar(
         title: Text(
           'Tambahkan posting',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.grey[350],
+        backgroundColor: Colors.green,
         actions: <Widget>[
           Builder(builder: (BuildContext context) {
             return IconButton(
