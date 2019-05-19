@@ -1,6 +1,10 @@
 import 'dart:async';
 
 import 'package:Sungkawa/main.dart';
+import 'package:Sungkawa/model/comment.dart';
+import 'package:Sungkawa/model/posting.dart';
+import 'package:Sungkawa/utilities/crud.dart';
+import 'package:Sungkawa/utilities/utilities.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,10 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:Sungkawa/model/comment.dart';
-import 'package:Sungkawa/model/posting.dart';
-import 'package:Sungkawa/utilities/crud.dart';
-import 'package:Sungkawa/utilities/utilities.dart';
 
 class CommentPage extends StatefulWidget {
   CommentPage(this.post);
@@ -149,7 +149,7 @@ class _CommentPageState extends State<CommentPage> {
       itemBuilder: (context, index) {
         return ListTile(
           title: Text(
-            _commentList[index].fullName,
+            _commentList[index].userName,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           trailing:
@@ -163,7 +163,9 @@ class _CommentPageState extends State<CommentPage> {
   void sendComment() {
     print('Comment : ' + commentController.text);
 
-    if(commentController.text == ' '|| commentController.text == '' || commentController.text == '  '){
+    if (commentController.text == ' ' ||
+        commentController.text == '' ||
+        commentController.text == '  ') {
       Fluttertoast.showToast(
           msg: "Ucapan tidak boleh kosong",
           toastLength: Toast.LENGTH_SHORT,
@@ -172,7 +174,7 @@ class _CommentPageState extends State<CommentPage> {
           backgroundColor: Colors.black,
           textColor: Colors.white,
           fontSize: 16.0);
-    }else{
+    } else {
       setState(() {
         crud.addComment(widget.post.key, {
           'fullName': fullName,
@@ -185,7 +187,6 @@ class _CommentPageState extends State<CommentPage> {
         });
       });
     }
-
   }
 
   Future handleSignIn() async {
