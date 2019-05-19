@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:Sungkawa/main.dart';
+
 import 'package:Sungkawa/utilities/crud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -85,8 +85,9 @@ class _LoginState extends State<Login> {
 
     firebaseAuth.signInWithCredential(credential).whenComplete(() {
       addToDatabase(googleAccount);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => DashboardScreen()));
+//      Navigator.pushReplacement(
+//          context, MaterialPageRoute(builder: (context) => DashboardScreen()));
+      Navigator.pop(context);
     });
   }
 
