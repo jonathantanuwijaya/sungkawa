@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:sung/model/posting.dart';
+import 'package:sung/utilities/constants.dart';
 import 'package:sung/utilities/crud.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
@@ -53,7 +54,6 @@ class _UpdatePostState extends State<UpdatePost> {
     agama = widget.post.agama;
     usia = widget.post.usia;
     alamat = widget.post.alamat;
-
     keterangan = widget.post.keterangan;
     lokasiSemayam = widget.post.lokasiSemayam;
     tempatMakam = widget.post.tempatMakam;
@@ -160,20 +160,45 @@ class _UpdatePostState extends State<UpdatePost> {
                 maxLines: 1,
                 textCapitalization: TextCapitalization.words,
               ),
-              TextFormField(
-                initialValue: agama,
-                validator: (value) =>
-                    value.isEmpty ? 'Agma tidak boleh kosong' : null,
-                onSaved: (value) => agama = value,
+//              TextFormField(
+//                initialValue: agama,
+//                validator: (value) =>
+//                    value.isEmpty ? 'Agma tidak boleh kosong' : null,
+//                onSaved: (value) => agama = value,
+//                decoration: InputDecoration(
+//                  labelText: 'Agama',
+//                  alignLabelWithHint: true,
+//                  border: OutlineInputBorder(
+//                    borderRadius: BorderRadius.circular(5.0),
+//                  ),
+//                ),
+//                maxLines: 1,
+//                textCapitalization: TextCapitalization.words,
+//              ),
+              DropdownButtonFormField(
                 decoration: InputDecoration(
-                  labelText: 'Agama',
-                  alignLabelWithHint: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                ),
-                maxLines: 1,
-                textCapitalization: TextCapitalization.words,
+                    hintText: 'Agama',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5))),
+                validator: (value) =>
+                value.isNotEmpty
+                    ? null
+                    : 'Agama Wajib di isi',
+                value: agama,
+                items: Constants.agama.map((String value) {
+                  return DropdownMenuItem(
+                    child: Text(value),
+                    value: value,
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    agama = value;
+                    if (agama == 'Islam') {
+                      _prosesi = 'Dimakamkan';
+                    }
+                  });
+                },
               ),
               SizedBox(
                 height: 12.0,

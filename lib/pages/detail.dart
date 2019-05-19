@@ -135,7 +135,7 @@ class _DetailState extends State<Detail> {
                     style: TextStyle(fontSize: 16.0),
                   ),
                   Text(
-                    "Agama : " + widget.post.agama,
+                    "Agama : ${ widget.post.agama}",
                     style: TextStyle(fontSize: 16.0),
                   ),
                   Divider(

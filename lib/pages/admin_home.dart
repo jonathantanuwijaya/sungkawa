@@ -113,6 +113,17 @@ class _HomePageState extends State<HomePage> {
                                       content: Text(
                                           'Anda yakin dengan pilihan ini'),
                                       actions: <Widget>[
+
+                                        FlatButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text(
+                                              'Batal',
+                                              style: TextStyle(
+                                                  color: Colors.blue,
+                                                  fontWeight: FontWeight.bold),
+                                            )),
                                         FlatButton(
                                             onPressed: () {
                                               crud.deletePost(
@@ -122,19 +133,10 @@ class _HomePageState extends State<HomePage> {
                                                 Navigator.pop(context);
                                               });
                                             },
-                                            child: Text('YA',
+                                            child: Text('Ya',
                                                 style: TextStyle(
                                                   color: Colors.red,
                                                 ))),
-                                        FlatButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(
-                                              'Tidak',
-                                              style: TextStyle(
-                                                  color: Colors.blue),
-                                            )),
                                       ],
                                     ));
                           })
@@ -216,7 +218,7 @@ class _HomePageState extends State<HomePage> {
                           child: SizedBox(),
                         ),
                         Text(
-                          "Agama : " + _postList[index].agama,
+                          "Agama : ${_postList[index].agama}",
                           style: TextStyle(fontSize: 14.0, color: Colors.grey),
                         )
                       ],

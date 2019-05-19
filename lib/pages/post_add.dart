@@ -106,6 +106,7 @@ class _PostAddState extends State<PostAdd> {
                     validator: (value) =>
                     value.isNotEmpty ? null : 'Nama wajib diisi',
                   ),
+                  SizedBox(height: 8.0,),
                   TextFormField(
                     decoration: InputDecoration(
                       labelText: 'Usia',
@@ -123,11 +124,16 @@ class _PostAddState extends State<PostAdd> {
                     validator: (value) =>
                     value.isNotEmpty ? null : 'Usia wajib diisi',
                   ),
+                  SizedBox(height: 8.0,),
                   DropdownButtonFormField(
                     decoration: InputDecoration(
                         hintText: 'Agama',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5))),
+                    validator: (value) =>
+                    value.isNotEmpty
+                        ? null
+                        : 'Agama Wajib di isi',
                     value: agama,
                     items: Constants.agama.map((String value) {
                       return DropdownMenuItem(
@@ -247,9 +253,10 @@ class _PostAddState extends State<PostAdd> {
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                     ),
-//                    validator: (value) => value.isBefore(tanggalMeninggal)
-//                        ? null
-//                        : 'Tanggal Prosesi tidak boleh diisi sebelum Tanggal Meninggal',
+                    validator: (value) =>
+                    value.isBefore(tanggalMeninggal)
+                        ? null
+                        : 'Tanggal Prosesi tidak boleh diisi sebelum Tanggal Meninggal',
                   ),
                   SizedBox(
                     height: 8.0,

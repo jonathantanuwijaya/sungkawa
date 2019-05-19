@@ -77,7 +77,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             SnackBar(content: Text('User $displayName signed in!')));
       }
     });
-
     _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
     _firebaseMessaging.getToken();
     _firebaseMessaging.subscribeToTopic('all');
