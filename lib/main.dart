@@ -1,3 +1,8 @@
+import 'package:Sungkawa/pages/about.dart';
+import 'package:Sungkawa/pages/introslider.dart';
+import 'package:Sungkawa/pages/login.dart';
+import 'package:Sungkawa/pages/profil.dart';
+import 'package:Sungkawa/pages/user_home.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -5,14 +10,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:Sungkawa/pages/about.dart';
-import 'package:Sungkawa/pages/introslider.dart';
-import 'package:Sungkawa/pages/login.dart';
-import 'package:Sungkawa/pages/profil.dart';
-import 'package:Sungkawa/pages/user_home.dart';
 
 import 'model/Notifikasi.dart';
 
@@ -204,7 +203,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 //      content: Text('Signed Out'),
 //      duration: Duration(seconds: 2),
 //    );
-//    Navigator.pop(context);
+    Navigator.pop(context);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (BuildContext context) => Login()));
 //      .whenComplete((){
