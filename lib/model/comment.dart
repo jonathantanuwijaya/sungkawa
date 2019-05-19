@@ -36,9 +36,7 @@ class Comment {
     _comment = snapshot.value['comment'];
     _timestamp = snapshot.value['timestamp'];
     _userId = snapshot.value['userId'];
-  }
 
-  Comment.getUserInfo(_userId) {
     FirebaseDatabase.instance
         .reference()
         .child('users')
