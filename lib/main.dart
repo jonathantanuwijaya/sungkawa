@@ -207,6 +207,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     FirebaseAuth.instance.signOut();
     googleSignIn.signOut();
     _authStatus = AuthStatus.notSignedIn;
+
+    prefs = await SharedPreferences.getInstance();
+
+    prefs.remove('userId');
+    prefs.remove('nama');
+    prefs.remove('email');
+
     Navigator.pop(context);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (BuildContext context) => Login()));

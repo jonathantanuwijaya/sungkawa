@@ -43,7 +43,7 @@ class _LoginState extends State<Login> {
               height: 100,
             ),
             SizedBox(
-              height: 50,
+              height: 70,
             ),
             new Text(
               'Sungkawa',

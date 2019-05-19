@@ -86,7 +86,7 @@ class _IntroSliderScreenState extends State<IntroSliderScreen> {
         ),
         bubble: Image.asset('assets/images/speed.png'),
         pageColor: Colors.purpleAccent,
-        body: Text('Data yang realtime dan cepat '),
+        body: Text('Informasi yang selalu realtime '),
         mainImage: Image.asset('assets/images/speed.png'),
         textStyle: TextStyle(color: Colors.white)),
   ];

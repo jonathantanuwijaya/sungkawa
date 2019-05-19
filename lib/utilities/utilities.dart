@@ -23,7 +23,7 @@ class Utilities {
   String convertCommentTimestamp(int timestamp) {
     var now = new DateTime.now();
     var timeFormat = new DateFormat('HH:mm');
-    var dateFormat = new DateFormat('d-M');
+    var dateFormat = new DateFormat('d-M-yy');
     var date = new DateTime.fromMillisecondsSinceEpoch(timestamp);
     var diff = now.difference(date);
     var text = '';

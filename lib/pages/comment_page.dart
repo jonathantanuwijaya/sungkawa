@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -174,17 +174,32 @@ class _CommentPageState extends State<CommentPage> {
 
   void sendComment() {
     print('Comment : ' + commentController.text);
-    setState(() {
-      crud.addComment(widget.post.key, {
-        'fullName': fullName,
-        'comment': commentController.text,
-        'timestamp': DateTime.now().millisecondsSinceEpoch,
-        'userId': userId,
-      }).whenComplete(() {
-        commentController.clear();
-        commentNode.unfocus();
+
+    if (commentController.text == ' ' || commentController.text == '' ||
+        commentController.text == '  ') {
+      Fluttertoast.showToast(
+          msg: "Ucapan tidak boleh kosong",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      setState(() {
+        crud.addComment(widget.post.key, {
+          'fullName': fullName,
+          'comment': commentController.text,
+          'timestamp': DateTime
+              .now()
+              .millisecondsSinceEpoch,
+          'userId': userId,
+        }).whenComplete(() {
+          commentController.clear();
+          commentNode.unfocus();
+        });
       });
-    });
+    }
   }
 
   void readLocal() async {
