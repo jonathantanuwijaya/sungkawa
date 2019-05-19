@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:Sungkawa/main.dart';
+//import 'package:Sungkawa/main.dart';
 import 'package:Sungkawa/model/comment.dart';
 import 'package:Sungkawa/model/posting.dart';
 import 'package:Sungkawa/utilities/crud.dart';
@@ -21,13 +21,13 @@ class CommentPage extends StatefulWidget {
   @override
   _CommentPageState createState() => _CommentPageState();
 }
-
+enum AuthStatus { signedIn, notSignedIn }
 class _CommentPageState extends State<CommentPage> {
-  String fullName, userId;
   CRUD crud = new CRUD();
   Utilities util = new Utilities();
   var _commentRef;
   var isEmpty;
+  final GoogleSignIn googleSignIn = GoogleSignIn();
   final commentController = new TextEditingController();
   final commentNode = new FocusNode();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -73,7 +73,14 @@ class _CommentPageState extends State<CommentPage> {
         .child('comments')
         .child(widget.post.key)
         .orderByChild('timestamp');
-    readLocal();
+//    readLocal();
+//    getCurrentUser();
+    getCurrentUser().then((userId) {
+      setState(() {
+        _authStatus =
+        userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+      });
+    });
     _commentList.clear();
 
     _onCommentAddedSubscription =
@@ -124,19 +131,22 @@ class _CommentPageState extends State<CommentPage> {
                         width: 0.0, color: CupertinoColors.activeBlue)),
               ),
               trailing: IconButton(
-                icon: Icon(Icons.send),
-                onPressed: () {
-                  switch (_authStatus) {
-                    case AuthStatus.notSignedIn:
-                      handleSignIn().then((data) {
-                        sendComment();
-                      });
-                      break;
-                    case AuthStatus.signedIn:
-                      sendComment();
-                  }
-                },
-              ),
+                  icon: Icon(Icons.send),
+                  onPressed: () {
+//                    if(googleSignIn.isSignedIn()){
+//                      sendComment();
+//                    }
+//                    else{
+//                      SignInAndComment();
+//                    }
+                    switch (_authStatus) {
+                      case AuthStatus.notSignedIn:
+                        SignInAndComment();
+                        break;
+                      case AuthStatus.signedIn:
+                          sendComment();
+                    }
+                  }),
             ),
           )
         ],
@@ -150,7 +160,7 @@ class _CommentPageState extends State<CommentPage> {
       itemBuilder: (context, index) {
         return ListTile(
           title: Text(
-            _commentList[index].fullName,
+            _commentList[index].userName,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           trailing:
@@ -161,8 +171,12 @@ class _CommentPageState extends State<CommentPage> {
     );
   }
 
-  void sendComment() {
+  void sendComment() async {
+    String fullName,userId;
     print('Comment : ' + commentController.text);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    fullName = prefs.getString('username');
+    userId = prefs.getString('userId');
 
     if (commentController.text == ' ' ||
         commentController.text == '' ||
@@ -189,8 +203,16 @@ class _CommentPageState extends State<CommentPage> {
       });
     }
   }
-
-  Future handleSignIn() async {
+  Future<String> getCurrentUser() async {
+    try {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      return user != null ? user.uid : null;
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
+  Future SignInAndComment() async {
     GoogleSignInAccount googleAccount = await googleSignIn.signIn();
     GoogleSignInAuthentication googleAuth = await googleAccount.authentication;
     final AuthCredential credential = GoogleAuthProvider.getCredential(
@@ -204,12 +226,33 @@ class _CommentPageState extends State<CommentPage> {
     prefs.setString('nama', googleAccount.displayName);
     prefs.setString('email', googleAccount.email);
 
-    fullName = prefs.getString('nama');
-    userId = prefs.getString('userId');
-
     firebaseAuth.signInWithCredential(credential).whenComplete(() {
       addToDatabase(googleAccount);
     });
+    if (commentController.text == ' ' ||
+        commentController.text == '' ||
+        commentController.text == '  ') {
+      Fluttertoast.showToast(
+          msg: "Ucapan tidak boleh kosong",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      setState(() {
+        crud.addComment(widget.post.key, {
+          'fullName': googleAccount.displayName,
+          'comment': commentController.text,
+          'timestamp': DateTime.now().millisecondsSinceEpoch,
+          'userId': googleAccount.id,
+        }).whenComplete(() {
+          commentController.clear();
+          commentNode.unfocus();
+        });
+      });
+    }
   }
 
   Future addToDatabase(GoogleSignInAccount googleAccount) async {
@@ -231,9 +274,9 @@ class _CommentPageState extends State<CommentPage> {
     });
   }
 
-  void readLocal() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    fullName = prefs.getString('nama');
-    userId = prefs.getString('userId');
-  }
+//  void readLocal() async {
+//    SharedPreferences prefs = await SharedPreferences.getInstance();
+//    fullName = prefs.getString('nama');
+//    userId = prefs.getString('userId');
+//  }
 }

@@ -142,8 +142,9 @@ class _ProfilState extends State<Profil> {
     var userRef =
         FirebaseDatabase.instance.reference().child('users').child(userid);
     userRef.update({'username': username, 'email': email}).then((data) async {
+      print('username == ${username}');
       await prefs.setString('userid', userid);
-      await prefs.setString('nama', username);
+      await prefs.setString('username', username);
       await prefs.setString('email', email);
     }).whenComplete(() {
       Fluttertoast.showToast(

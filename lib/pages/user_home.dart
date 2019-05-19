@@ -159,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                           child: SizedBox(),
                         ),
                         Text(
-                          "Agama : " + _postList[index].agama,
+                          "Agama :  ${_postList[index].agama}",
                           style: TextStyle(fontSize: 14.0, color: Colors.grey),
                         )
                       ],

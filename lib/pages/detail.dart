@@ -136,7 +136,7 @@ class _DetailState extends State<Detail> {
                     style: TextStyle(fontSize: 16.0),
                   ),
                   Text(
-                    "Agama : " + widget.post.agama,
+                    "Agama : ${widget.post.agama}",
                     style: TextStyle(fontSize: 16.0),
                   ),
                   Divider(
@@ -219,7 +219,7 @@ class _DetailState extends State<Detail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(_commentList[0].fullName,
+            Text(_commentList[0].userName,
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
             Text(_commentList[0].comment, style: TextStyle(fontSize: 16.0)),
           ],
