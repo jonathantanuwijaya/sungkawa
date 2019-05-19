@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:Sungkawa/pages/about.dart';
@@ -69,7 +70,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     getCurrentUser().then((userId) {
       setState(() {
         _authStatus =
-            userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+        userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
       });
     }).whenComplete(() {
       String displayName = googleSignIn.currentUser.displayName;
@@ -131,55 +132,56 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onPressed: () {
               showCupertinoModalPopup(
                   context: context,
-                  builder: (context) => CupertinoActionSheet(
-                      title: const Text(
-                        'Pilihan menu',
-                      ),
-                      actions: <Widget>[
-                        CupertinoActionSheetAction(
-                          onPressed: () {
-                            switch (_authStatus) {
-                              case AuthStatus.notSignedIn:
-                                handleSignIn().then((_) {
+                  builder: (context) =>
+                      CupertinoActionSheet(
+                          title: const Text(
+                            'Pilihan menu',
+                          ),
+                          actions: <Widget>[
+                            CupertinoActionSheetAction(
+                              onPressed: () {
+                                switch (_authStatus) {
+                                  case AuthStatus.notSignedIn:
+                                    handleSignIn().then((_) {
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Profil()));
+                                    });
+                                    break;
+                                  case AuthStatus.signedIn:
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Profil()));
+                                    break;
+                                }
+                              },
+                              child: Text('Profil'),
+                            ),
+                            CupertinoActionSheetAction(
+                                onPressed: () {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Profil()));
-                                });
-                                break;
-                              case AuthStatus.signedIn:
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Profil()));
-                                break;
-                            }
-                          },
-                          child: Text('Profil'),
-                        ),
-                        CupertinoActionSheetAction(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => About()));
-                            },
-                            child: Text('Tentang Kami')),
-                        CupertinoActionSheetAction(
-                            isDestructiveAction: true,
-                            onPressed: signOut,
-                            child: Text(
-                              'Sign Out',
-                            )),
-                      ],
-                      cancelButton: CupertinoActionSheetAction(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'Cancel',
-                            style: TextStyle(color: Colors.red),
-                          ))));
+                                          builder: (context) => About()));
+                                },
+                                child: Text('Tentang Kami')),
+                            CupertinoActionSheetAction(
+                                isDestructiveAction: true,
+                                onPressed: signOut,
+                                child: Text(
+                                  'Sign Out',
+                                )),
+                          ],
+                          cancelButton: CupertinoActionSheetAction(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                'Cancel',
+                                style: TextStyle(color: Colors.red),
+                              ))));
             },
           )
         ],
@@ -193,13 +195,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
     FirebaseAuth.instance.signOut();
     googleSignIn.signOut();
     _authStatus = AuthStatus.notSignedIn;
-    SnackBar(
-      content: Text('Signed Out'),
-      duration: Duration(seconds: 2),
-    );
 
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString('userId', '');
+    prefs.setString('nama', '');
+    prefs.setString('email', '');
+//    SnackBar(
+//      content: Text('Signed Out'),
+//      duration: Duration(seconds: 2),
+//    );
+//    Navigator.pop(context);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (BuildContext context) => Login()));
+//      .whenComplete((){
+//      Fluttertoast.showToast(
+//          msg: "Signed Out",
+//          toastLength: Toast.LENGTH_SHORT,
+//          gravity: ToastGravity.CENTER,
+//          timeInSecForIos: 1,
+//          backgroundColor: Colors.black,
+//          textColor: Colors.white,
+//          fontSize: 16.0);
+//    });
   }
 
   void checkConnectivity() async {

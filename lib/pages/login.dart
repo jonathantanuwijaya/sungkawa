@@ -37,10 +37,14 @@ class _LoginState extends State<Login> {
           children: <Widget>[
             Image.asset(
               'assets/images/icon_android.png',
-              fit: BoxFit.cover,
-              width: 280,
+              fit: BoxFit.scaleDown,
+              width: 100,
+              height: 100,
             ),
-            new Text(
+            SizedBox(
+              height: 70.0,
+            ),
+            Text(
               'Sungkawa',
               style: TextStyle(fontSize: 40.0),
               textAlign: TextAlign.center,
