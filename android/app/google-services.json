@@ -8,17 +8,25 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:752220941673:android:1d34f670efc775ca",
+        "mobilesdk_app_id": "1:752220941673:android:87508042aca05cfb",
         "android_client_info": {
-          "package_name": "com.example.sungkawa_user"
+          "package_name": "com.mdpic.sungkawa_admin"
         }
       },
       "oauth_client": [
         {
-          "client_id": "752220941673-pkc6qpsq466jkf605gmgrao75gf2gofc.apps.googleusercontent.com",
+          "client_id": "752220941673-b220k218mfebns9ci5vp1i9stjtnn6nl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.sungkawa_user",
+            "package_name": "com.mdpic.sungkawa_admin",
+            "certificate_hash": "cfc383dea68a3448d723eedfee4f0ea3146398a2"
+          }
+        },
+        {
+          "client_id": "752220941673-9v1lapbc14f4ut6fj6jsebpjvh9d6i0i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mdpic.sungkawa_admin",
             "certificate_hash": "5173e5403f418c7ae4bb7c95dd32919a998d6ec1"
           }
         },
@@ -45,25 +53,25 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:752220941673:android:87508042aca05cfb",
+        "mobilesdk_app_id": "1:752220941673:android:a1a86f7e80cd8067",
         "android_client_info": {
-          "package_name": "com.mdpic.sungkawa_admin"
+          "package_name": "com.mdpic.sungkawa_user"
         }
       },
       "oauth_client": [
         {
-          "client_id": "752220941673-b220k218mfebns9ci5vp1i9stjtnn6nl.apps.googleusercontent.com",
+          "client_id": "752220941673-37j61bdc2m9fab5g7im53sj537rntat8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.mdpic.sungkawa_admin",
+            "package_name": "com.mdpic.sungkawa_user",
             "certificate_hash": "cfc383dea68a3448d723eedfee4f0ea3146398a2"
           }
         },
         {
-          "client_id": "752220941673-9v1lapbc14f4ut6fj6jsebpjvh9d6i0i.apps.googleusercontent.com",
+          "client_id": "752220941673-go4d4fkrts9tntr8o0q0mnfut1gcoh1b.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.mdpic.sungkawa_admin",
+            "package_name": "com.mdpic.sungkawa_user",
             "certificate_hash": "5173e5403f418c7ae4bb7c95dd32919a998d6ec1"
           }
         },
