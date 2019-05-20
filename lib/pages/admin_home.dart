@@ -24,14 +24,14 @@ Utilities util = new Utilities();
 CRUD crud = new CRUD();
 
 class _HomePageState extends State<HomePage> {
-  List<Posting> _postList = new List();
+  List<Post> _postList = new List();
 
   StreamSubscription<Event> _onPostAddedSubscription;
   StreamSubscription<Event> _onPostChangedSubscription;
 
   _onPostAdded(Event event) {
     setState(() {
-      _postList.add(Posting.fromSnapshot(event.snapshot));
+      _postList.add(Post.fromSnapshot(event.snapshot));
       _postList.sort((a, b) => b.timestamp.compareTo(a.timestamp));
     });
   }
@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       _postList[_postList.indexOf(oldEntry)] =
-          Posting.fromSnapshot(event.snapshot);
+          Post.fromSnapshot(event.snapshot);
     });
   }
 
@@ -113,7 +113,6 @@ class _HomePageState extends State<HomePage> {
                                       content: Text(
                                           'Anda yakin dengan pilihan ini'),
                                       actions: <Widget>[
-
                                         FlatButton(
                                             onPressed: () {
                                               Navigator.pop(context);
@@ -122,7 +121,8 @@ class _HomePageState extends State<HomePage> {
                                               'Batal',
                                               style: TextStyle(
                                                   color: Colors.blue,
-                                                  fontWeight: FontWeight.bold),
+                                                  fontWeight:
+                                                  FontWeight.bold),
                                             )),
                                         FlatButton(
                                             onPressed: () {

@@ -43,7 +43,7 @@ class _LoginState extends State<Login> {
               height: 100,
             ),
             SizedBox(
-              height: 70,
+              height: 110,
             ),
             new Text(
               'Sungkawa',
@@ -63,6 +63,9 @@ class _LoginState extends State<Login> {
 //                  login();
                   handleSignIn();
                 }),
+            SizedBox(
+              height: 200,
+            ),
             new Padding(padding: const EdgeInsets.all(10.0)),
           ],
         ),

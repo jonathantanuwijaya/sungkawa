@@ -12,7 +12,7 @@ import 'package:sung/utilities/utilities.dart';
 class CommentPage extends StatefulWidget {
   CommentPage(this.post);
 
-  final Posting post;
+  final Post post;
 
   @override
   _CommentPageState createState() => _CommentPageState();
@@ -162,8 +162,8 @@ class _CommentPageState extends State<CommentPage> {
               _commentList[index].fullName,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            trailing:
-            Text(util.convertCommentTimestamp(_commentList[index].timestamp)),
+            trailing: Text(
+                util.convertCommentTimestamp(_commentList[index].timestamp)),
             subtitle: Text(_commentList[index].comment),
           ),
           key: Key(_commentList[index].key),
@@ -175,7 +175,8 @@ class _CommentPageState extends State<CommentPage> {
   void sendComment() {
     print('Comment : ' + commentController.text);
 
-    if (commentController.text == ' ' || commentController.text == '' ||
+    if (commentController.text == ' ' ||
+        commentController.text == '' ||
         commentController.text == '  ') {
       Fluttertoast.showToast(
           msg: "Ucapan tidak boleh kosong",

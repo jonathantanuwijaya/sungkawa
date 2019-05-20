@@ -1,6 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 
-class Posting {
+class Post {
   String _key;
   String _photo;
   String _nama,
@@ -9,16 +9,17 @@ class Posting {
       _tempatMakam,
       _usia,
       _keterangan,
+      _tanggalDimakamkan,
       _tanggalSemayam,
       _lokasiSemayam,
       _lokasiMakam,
       _alamat,
       _tanggalMeninggal,
       _prosesi,
-      _waktuSemayam;
+      _waktuDimakamkan;
   int _timestamp;
 
-  Posting(
+  Post(
       this._key,
       this._photo,
       this._nama,
@@ -27,13 +28,14 @@ class Posting {
       this._tempatMakam,
       this._usia,
       this._keterangan,
+      this._tanggalDimakamkan,
       this._tanggalSemayam,
       this._lokasiSemayam,
       this._lokasiMakam,
       this._alamat,
       this._tanggalMeninggal,
       this._prosesi,
-      this._waktuSemayam,
+      this._waktuDimakamkan,
       this._timestamp);
 
   String get key => _key;
@@ -48,9 +50,11 @@ class Posting {
 
   get tempatMakam => _tempatMakam;
 
-  String get usia => _usia;
+  get usia => _usia;
 
   get keterangan => _keterangan;
+
+  get tanggalDimakamkan => _tanggalDimakamkan;
 
   get tanggalSemayam => _tanggalSemayam;
 
@@ -64,11 +68,11 @@ class Posting {
 
   get prosesi => _prosesi;
 
-  get waktuSemayam => _waktuSemayam;
+  get waktuDimakamkan => _waktuDimakamkan;
 
   int get timestamp => _timestamp;
 
-  Posting.fromSnapshot(DataSnapshot snapshot) {
+  Post.fromSnapshot(DataSnapshot snapshot) {
     _key = snapshot.key;
     _userId = snapshot.value['userId'];
     _nama = snapshot.value["nama"];
@@ -77,17 +81,18 @@ class Posting {
     _photo = snapshot.value['photo'];
     _alamat = snapshot.value['alamat'];
     _tanggalMeninggal = snapshot.value["tanggalMeninggal"];
+    _tanggalSemayam = snapshot.value["tanggalSemayam"];
     _prosesi = snapshot.value["prosesi"];
     _lokasiSemayam = snapshot.value["lokasiSemayam"];
     _lokasiMakam = snapshot.value["lokasiMakam"];
     _tempatMakam = snapshot.value["tempatMakam"];
-    _tanggalSemayam = snapshot.value["tanggalSemayam"];
-    _waktuSemayam = snapshot.value["waktuSemayam"];
+    _tanggalDimakamkan = snapshot.value["tanggalDimakamkan"];
+    _waktuDimakamkan = snapshot.value["waktuDimakamkan"];
     _keterangan = snapshot.value["keterangan"];
     _timestamp = snapshot.value['timestamp'];
   }
 
-  Posting.fromJson(Map<String, dynamic> json) {
+  Post.fromJson(Map<String, dynamic> json) {
     _userId = json['userId'];
     _nama = json["nama"];
     _usia = json["usia"];
@@ -99,8 +104,8 @@ class Posting {
     _lokasiSemayam = json["lokasiSemayam"];
     _lokasiMakam = json["lokasiMakam"];
     _tempatMakam = json["tempatMakam"];
-    _tanggalSemayam = json["tanggalSemayam"];
-    _waktuSemayam = json["waktuSemayam"];
+    _tanggalDimakamkan = json["tanggalSemayam"];
+    _waktuDimakamkan = json["waktuSemayam"];
     _keterangan = json["keterangan"];
     _timestamp = json['timestamp'];
   }
@@ -117,8 +122,8 @@ class Posting {
         'lokasiSemayam': _lokasiSemayam,
         'lokasiMakam': _lokasiMakam,
         'tempatMakam': _tempatMakam,
-        'tanggalSemayam': _tanggalSemayam,
-        'waktuSemayam': _waktuSemayam,
+    'tanggalSemayam': _tanggalDimakamkan,
+    'waktuSemayam': _waktuDimakamkan,
         'keterangan': _keterangan,
         'timestamp': _timestamp
       };

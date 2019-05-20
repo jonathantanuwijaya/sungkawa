@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Sungkawa Admin',
+      title: 'Admin Sungkawa',
       debugShowCheckedModeBanner: false,
       theme: new ThemeData(
           primarySwatch: Colors.green,
@@ -69,13 +69,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
         _authStatus =
         userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
       });
-    }).whenComplete(() {
-      if (_authStatus == AuthStatus.signedIn) {
-        String displayName = user.currentUser.displayName;
-
-        Scaffold.of(context).showSnackBar(
-            SnackBar(content: Text('User $displayName signed in!')));
-      }
+//      if (_authStatus == AuthStatus.signedIn) {
+//        String displayName = user.currentUser.displayName;
+//
+//        Scaffold.of(context).showSnackBar(
+//            SnackBar(content: Text('User $displayName signed in!')));
+//      }
     });
     _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
     _firebaseMessaging.getToken();
@@ -213,7 +212,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     prefs.remove('nama');
     prefs.remove('email');
 
-    Navigator.pop(context);
+//    Navigator.pop(context);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (BuildContext context) => Login()));
   }

@@ -14,7 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdatePost extends StatefulWidget {
-  final Posting post;
+  final Post post;
 
   UpdatePost(this.post);
 
@@ -47,9 +47,9 @@ class _UpdatePostState extends State<UpdatePost> {
         .child('posts')
         .child(widget.post.key);
     _prosesi = widget.post.prosesi;
-    tanggalSemayam = dateFormat.parse(widget.post.tanggalSemayam);
+    tanggalDimakamkan = dateFormat.parse(widget.post.tanggalSemayam);
     tanggalMeninggal = dateFormat.parse(widget.post.tanggalMeninggal);
-    waktuSemayam = timeFormat.parse(widget.post.waktuSemayam);
+    waktuDimakamkan = timeFormat.parse(widget.post.waktuDimakamkan);
     nama = widget.post.nama;
     agama = widget.post.agama;
     usia = widget.post.usia;
@@ -59,7 +59,7 @@ class _UpdatePostState extends State<UpdatePost> {
     tempatMakam = widget.post.tempatMakam;
   }
 
-  DateTime tanggalSemayam, waktuSemayam, tanggalMeninggal;
+  DateTime tanggalDimakamkan, waktuDimakamkan, tanggalMeninggal;
 
   var radioValue;
   int timestamp;
@@ -160,30 +160,13 @@ class _UpdatePostState extends State<UpdatePost> {
                 maxLines: 1,
                 textCapitalization: TextCapitalization.words,
               ),
-//              TextFormField(
-//                initialValue: agama,
-//                validator: (value) =>
-//                    value.isEmpty ? 'Agma tidak boleh kosong' : null,
-//                onSaved: (value) => agama = value,
-//                decoration: InputDecoration(
-//                  labelText: 'Agama',
-//                  alignLabelWithHint: true,
-//                  border: OutlineInputBorder(
-//                    borderRadius: BorderRadius.circular(5.0),
-//                  ),
-//                ),
-//                maxLines: 1,
-//                textCapitalization: TextCapitalization.words,
-//              ),
               DropdownButtonFormField(
                 decoration: InputDecoration(
                     hintText: 'Agama',
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5))),
                 validator: (value) =>
-                value.isNotEmpty
-                    ? null
-                    : 'Agama Wajib di isi',
+                value.isNotEmpty ? null : 'Agama Wajib di isi',
                 value: agama,
                 items: Constants.agama.map((String value) {
                   return DropdownMenuItem(
@@ -202,6 +185,20 @@ class _UpdatePostState extends State<UpdatePost> {
               ),
               SizedBox(
                 height: 12.0,
+              ),
+              DateTimePickerFormField(
+                inputType: InputType.date,
+                editable: false,
+                format: dateFormat,
+                decoration: InputDecoration(
+                  labelText: 'Tanggal Disemayamkan',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                ),
+                validator: (value) =>
+                value != null ? null : 'Tanggal wajib diisi',
+                onChanged: (value) => setState(() => tanggalDimakamkan = value),
               ),
               DateTimePickerFormField(
                 initialValue: tanggalMeninggal,
@@ -299,11 +296,11 @@ class _UpdatePostState extends State<UpdatePost> {
                 inputType: InputType.date,
                 editable: false,
                 format: dateFormat,
-                initialValue: tanggalSemayam,
+                initialValue: tanggalDimakamkan,
                 validator: (value) => value.isBefore(tanggalMeninggal)
                     ? 'Tanggal Prosesi harus sesudah Tanggal Meninggal'
                     : null,
-                onSaved: (value) => tanggalSemayam = value,
+                onSaved: (value) => tanggalDimakamkan = value,
                 decoration: InputDecoration(
                   labelText: 'Tanggal Pemakaman/Kremasi',
                   border: OutlineInputBorder(
@@ -318,8 +315,8 @@ class _UpdatePostState extends State<UpdatePost> {
                 inputType: InputType.time,
                 editable: false,
                 format: timeFormat,
-                initialValue: waktuSemayam,
-                onSaved: (value) => waktuSemayam = value,
+                initialValue: waktuDimakamkan,
+                onSaved: (value) => waktuDimakamkan = value,
                 decoration: InputDecoration(
                   labelText: 'Jam Pemakaman/Kremasi',
                   border: OutlineInputBorder(
@@ -473,9 +470,9 @@ class _UpdatePostState extends State<UpdatePost> {
         'alamat': alamat,
         'prosesi': _prosesi.toString(),
         'tempatMakam': tempatMakam,
-        'tanggalSemayam': dateFormat.format(tanggalSemayam),
+        'tanggalSemayam': dateFormat.format(tanggalDimakamkan),
         'lokasiSemayam': lokasiSemayam,
-        'waktuSemayam': timeFormat.format(waktuSemayam),
+        'waktuSemayam': timeFormat.format(waktuDimakamkan),
         'keterangan': keterangan
       });
     } catch (e) {

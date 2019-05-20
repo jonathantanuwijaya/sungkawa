@@ -9,7 +9,7 @@ import 'package:sung/pages/comment_page.dart';
 import 'package:sung/utilities/utilities.dart';
 
 class Detail extends StatefulWidget {
-  final Posting post;
+  final Post post;
 
   Detail(this.post);
 
@@ -135,7 +135,7 @@ class _DetailState extends State<Detail> {
                     style: TextStyle(fontSize: 16.0),
                   ),
                   Text(
-                    "Agama : ${ widget.post.agama}",
+                    "Agama : ${widget.post.agama}",
                     style: TextStyle(fontSize: 16.0),
                   ),
                   Divider(
@@ -165,9 +165,9 @@ class _DetailState extends State<Detail> {
                         ' di ' +
                         widget.post.tempatMakam +
                         ' pada ' +
-                        widget.post.tanggalSemayam +
+                        widget.post.tanggalDimakamkan +
                         ' pukul ' +
-                        widget.post.waktuSemayam,
+                        widget.post.waktuDimakamkan,
                     style: TextStyle(fontSize: 16.0),
                   ),
                   Divider(
@@ -233,9 +233,10 @@ class _DetailState extends State<Detail> {
     } else {
       return Column(
         children: <Widget>[
-          Text('Keterangan :\n' + widget.post.keterangan,
-            style: TextStyle(fontSize: 16.0),),
-
+          Text(
+            'Keterangan :\n' + widget.post.keterangan,
+            style: TextStyle(fontSize: 16.0),
+          ),
         ],
       );
     }

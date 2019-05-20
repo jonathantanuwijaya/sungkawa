@@ -34,12 +34,13 @@ class _PostAddState extends State<PostAdd> {
   final alamatController = TextEditingController();
   final tempatProsesiController = TextEditingController();
   final tanggalMeninggalController = TextEditingController();
+  final tanggalDisemayamkanController = TextEditingController();
   final tempatSemayamController = TextEditingController();
   final keluargaController = TextEditingController();
   final tempatsemyamController = TextEditingController();
   final keteranganController = TextEditingController();
   final tanggalProsesiController = TextEditingController();
-  final waktuSemayamController = TextEditingController();
+  final waktuDimakamkanController = TextEditingController();
   final dateFormat = DateFormat('dd/MM/yyyy');
   final timeFormat = DateFormat('hh:mm a');
 
@@ -106,7 +107,9 @@ class _PostAddState extends State<PostAdd> {
                     validator: (value) =>
                     value.isNotEmpty ? null : 'Nama wajib diisi',
                   ),
-                  SizedBox(height: 8.0,),
+                  SizedBox(
+                    height: 8.0,
+                  ),
                   TextFormField(
                     decoration: InputDecoration(
                       labelText: 'Usia',
@@ -124,16 +127,16 @@ class _PostAddState extends State<PostAdd> {
                     validator: (value) =>
                     value.isNotEmpty ? null : 'Usia wajib diisi',
                   ),
-                  SizedBox(height: 8.0,),
+                  SizedBox(
+                    height: 8.0,
+                  ),
                   DropdownButtonFormField(
                     decoration: InputDecoration(
                         hintText: 'Agama',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5))),
                     validator: (value) =>
-                    value.isNotEmpty
-                        ? null
-                        : 'Agama Wajib di isi',
+                    value != null ? null : 'Agama Wajib di isi',
                     value: agama,
                     items: Constants.agama.map((String value) {
                       return DropdownMenuItem(
@@ -157,6 +160,24 @@ class _PostAddState extends State<PostAdd> {
                     inputType: InputType.date,
                     editable: false,
                     format: dateFormat,
+                    controller: tanggalDisemayamkanController,
+                    decoration: InputDecoration(
+                      labelText: 'Tanggal Disemayamkan',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                    validator: (value) =>
+                    value != null ? null : 'Tanggal wajib diisi',
+                    onChanged: (value) => setState(() => date = value),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  DateTimePickerFormField(
+                    inputType: InputType.date,
+                    editable: false,
+                    format: dateFormat,
                     controller: tanggalMeninggalController,
                     decoration: InputDecoration(
                       labelText: 'Tanggal Meninggal',
@@ -164,6 +185,8 @@ class _PostAddState extends State<PostAdd> {
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                     ),
+                    validator: (value) =>
+                    value != null ? null : 'Tanggal wajib diisi',
                     onChanged: (value) => setState(() => date = value),
                   ),
                   SizedBox(
@@ -247,16 +270,18 @@ class _PostAddState extends State<PostAdd> {
                     editable: false,
                     format: dateFormat,
                     controller: tanggalProsesiController,
+                    validator: (value) =>
+                    value != null ? null : 'Tanggal wajib diisi',
                     decoration: InputDecoration(
                       labelText: 'Tanggal Pemakaman/Kremasi',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                     ),
-                    validator: (value) =>
-                    value.isBefore(tanggalMeninggal)
-                        ? null
-                        : 'Tanggal Prosesi tidak boleh diisi sebelum Tanggal Meninggal',
+//                    validator: (value) =>
+//                    value.isBefore(tanggalMeninggal)
+//                        ? null
+//                        : 'Tanggal Prosesi tidak boleh diisi sebelum Tanggal Meninggal',
                   ),
                   SizedBox(
                     height: 8.0,
@@ -265,7 +290,9 @@ class _PostAddState extends State<PostAdd> {
                     inputType: InputType.time,
                     editable: false,
                     format: timeFormat,
-                    controller: waktuSemayamController,
+                    validator: (value) =>
+                    value != null ? null : 'Jam wajib diisi',
+                    controller: waktuDimakamkanController,
                     decoration: InputDecoration(
                       labelText: 'Jam Pemakaman/Kremasi',
                       border: OutlineInputBorder(
@@ -407,13 +434,14 @@ class _PostAddState extends State<PostAdd> {
               'photo': _url,
               'timestamp': timestamp,
               'userId': userId,
+              'tanggalSemayam': tanggalDisemayamkanController.text,
               'tanggalMeninggal': tanggalMeninggalController.text,
               'alamat': alamatController.text,
               'prosesi': _prosesi.toString(),
               'tempatMakam': tempatProsesiController.text,
-              'tanggalSemayam': tanggalProsesiController.text,
+              'tanggalDimakamkan': tanggalProsesiController.text,
               'lokasiSemayam': tempatSemayamController.text,
-              'waktuSemayam': waktuSemayamController.text,
+              'waktuDimakamkan': waktuDimakamkanController.text,
               'keterangan': keteranganController.text
             }).whenComplete(() {
               sendNotification();
@@ -423,7 +451,7 @@ class _PostAddState extends State<PostAdd> {
               namaController.clear();
               tempatProsesiController.clear();
               alamatController.clear();
-              waktuSemayamController.clear();
+              waktuDimakamkanController.clear();
               keteranganController.clear();
               tanggalMeninggalController.clear();
               umurController.clear();
