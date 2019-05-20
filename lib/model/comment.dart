@@ -42,7 +42,7 @@ class Comment {
         .child(_userId)
         .once()
         .then((snapshot) {
-      _displayName = snapshot.value['userName'];
+      _displayName = snapshot.value['username'];
     });
   }
 }

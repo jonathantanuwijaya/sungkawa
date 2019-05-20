@@ -1,6 +1,5 @@
 import 'dart:async';
 
-//import 'package:Sungkawa/main.dart';
 import 'package:Sungkawa/model/comment.dart';
 import 'package:Sungkawa/model/posting.dart';
 import 'package:Sungkawa/utilities/crud.dart';
@@ -21,12 +20,15 @@ class CommentPage extends StatefulWidget {
   @override
   _CommentPageState createState() => _CommentPageState();
 }
+
 enum AuthStatus { signedIn, notSignedIn }
+
 class _CommentPageState extends State<CommentPage> {
   CRUD crud = new CRUD();
   Utilities util = new Utilities();
   var _commentRef;
   var isEmpty;
+  String fullName, userId;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final commentController = new TextEditingController();
   final commentNode = new FocusNode();
@@ -73,7 +75,7 @@ class _CommentPageState extends State<CommentPage> {
         .child('comments')
         .child(widget.post.key)
         .orderByChild('timestamp');
-//    readLocal();
+    readLocal();
 //    getCurrentUser();
     getCurrentUser().then((userId) {
       setState(() {
@@ -141,10 +143,10 @@ class _CommentPageState extends State<CommentPage> {
 //                    }
                     switch (_authStatus) {
                       case AuthStatus.notSignedIn:
-                        SignInAndComment();
+                        signInAndComment();
                         break;
                       case AuthStatus.signedIn:
-                          sendComment();
+                        sendComment();
                     }
                   }),
             ),
@@ -172,10 +174,10 @@ class _CommentPageState extends State<CommentPage> {
   }
 
   void sendComment() async {
-    String fullName,userId;
+    String fullName, userId;
     print('Comment : ' + commentController.text);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    fullName = prefs.getString('username');
+    fullName = prefs.getString('nama');
     userId = prefs.getString('userId');
 
     if (commentController.text == ' ' ||
@@ -203,6 +205,7 @@ class _CommentPageState extends State<CommentPage> {
       });
     }
   }
+
   Future<String> getCurrentUser() async {
     try {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
@@ -212,7 +215,8 @@ class _CommentPageState extends State<CommentPage> {
       return null;
     }
   }
-  Future SignInAndComment() async {
+
+  Future signInAndComment() async {
     GoogleSignInAccount googleAccount = await googleSignIn.signIn();
     GoogleSignInAuthentication googleAuth = await googleAccount.authentication;
     final AuthCredential credential = GoogleAuthProvider.getCredential(
@@ -241,6 +245,7 @@ class _CommentPageState extends State<CommentPage> {
           textColor: Colors.white,
           fontSize: 16.0);
     } else {
+      print('username == ${googleAccount.displayName}');
       setState(() {
         crud.addComment(widget.post.key, {
           'fullName': googleAccount.displayName,
@@ -274,9 +279,9 @@ class _CommentPageState extends State<CommentPage> {
     });
   }
 
-//  void readLocal() async {
-//    SharedPreferences prefs = await SharedPreferences.getInstance();
-//    fullName = prefs.getString('nama');
-//    userId = prefs.getString('userId');
-//  }
+  void readLocal() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    fullName = prefs.getString('nama');
+    userId = prefs.getString('userId');
+  }
 }
