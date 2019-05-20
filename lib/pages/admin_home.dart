@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage> {
 
   StreamSubscription<Event> _onPostAddedSubscription;
   StreamSubscription<Event> _onPostChangedSubscription;
+  StreamSubscription<Event> _onPostRemovedSubscription;
 
   @override
   Widget build(BuildContext context) {
@@ -253,6 +254,7 @@ class _HomePageState extends State<HomePage> {
     _postList.clear();
     _onPostAddedSubscription.cancel();
     _onPostChangedSubscription.cancel();
+    _onPostRemovedSubscription.cancel();
   }
 
   @override
@@ -261,6 +263,7 @@ class _HomePageState extends State<HomePage> {
     _postList.clear();
     _onPostAddedSubscription = _postRef.onChildAdded.listen(_onPostAdded);
     _onPostChangedSubscription = _postRef.onChildChanged.listen(_onPostChanged);
+    _onPostRemovedSubscription = _postRef.onChildRemoved.listen(_onPostRemoved);
     _postList.sort((a, b) => b.timestamp.compareTo(a.timestamp));
   }
 
@@ -279,6 +282,16 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _postList[_postList.indexOf(oldEntry)] =
           Post.fromSnapshot(event.snapshot);
+    });
+  }
+
+  _onPostRemoved(Event event) {
+    var deletedEntry = _postList.singleWhere((entry) {
+      return entry.key == event.snapshot.key;
+    });
+    print('on child removed called');
+    setState(() {
+      _postList.remove(deletedEntry);
     });
   }
 }
