@@ -1,52 +1,90 @@
 {
   "project_info": {
-    "project_number": "894027800385",
-    "firebase_url": "https://gsign-8956d.firebaseio.com",
-    "project_id": "gsign-8956d",
-    "storage_bucket": "gsign-8956d.appspot.com"
+    "project_number": "752220941673",
+    "firebase_url": "https://sungkawa-2f442.firebaseio.com",
+    "project_id": "sungkawa-2f442",
+    "storage_bucket": "sungkawa-2f442.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:894027800385:android:81b7093e02661573",
+        "mobilesdk_app_id": "1:752220941673:android:1d34f670efc775ca",
         "android_client_info": {
-          "package_name": "com.example.sung"
+          "package_name": "com.example.sungkawa_user"
         }
       },
       "oauth_client": [
         {
-          "client_id": "894027800385-rkr1u0pruri55ue21usbjei8bppfi7ks.apps.googleusercontent.com",
+          "client_id": "752220941673-pkc6qpsq466jkf605gmgrao75gf2gofc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.sung",
-            "certificate_hash": "f49f170cf2ef5e4381a177a39cc71b3107f64814"
+            "package_name": "com.example.sungkawa_user",
+            "certificate_hash": "5173e5403f418c7ae4bb7c95dd32919a998d6ec1"
           }
         },
         {
-          "client_id": "894027800385-hnrvnb2nhc8teeimefn1ot57b1ai1gbg.apps.googleusercontent.com",
+          "client_id": "752220941673-2km3d4gu6ajdif5rb5l084ovboon3f19.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAlkSHQJ6wfeTvYymQXltSQJ0lmct1ZDhs"
+          "current_key": "AIzaSyDppWVBFPimBi-itiPIzsdLa3ls3q1uiSY"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "894027800385-hnrvnb2nhc8teeimefn1ot57b1ai1gbg.apps.googleusercontent.com",
+              "client_id": "752220941673-2km3d4gu6ajdif5rb5l084ovboon3f19.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:752220941673:android:87508042aca05cfb",
+        "android_client_info": {
+          "package_name": "com.mdpic.sungkawa_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "752220941673-b220k218mfebns9ci5vp1i9stjtnn6nl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mdpic.sungkawa_admin",
+            "certificate_hash": "cfc383dea68a3448d723eedfee4f0ea3146398a2"
+          }
         },
-        "ads_service": {
-          "status": 2
+        {
+          "client_id": "752220941673-9v1lapbc14f4ut6fj6jsebpjvh9d6i0i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mdpic.sungkawa_admin",
+            "certificate_hash": "5173e5403f418c7ae4bb7c95dd32919a998d6ec1"
+          }
+        },
+        {
+          "client_id": "752220941673-2km3d4gu6ajdif5rb5l084ovboon3f19.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDppWVBFPimBi-itiPIzsdLa3ls3q1uiSY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "752220941673-2km3d4gu6ajdif5rb5l084ovboon3f19.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
