@@ -1,13 +1,16 @@
 import 'dart:async';
 
+import 'package:sungkawa/model/comment.dart';
+import 'package:sungkawa/model/posting.dart';
+import 'package:sungkawa/utilities/crud.dart';
+import 'package:sungkawa/utilities/utilities.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:Sungkawa/model/comment.dart';
-import 'package:Sungkawa/model/posting.dart';
-import 'package:Sungkawa/utilities/crud.dart';
-import 'package:Sungkawa/utilities/utilities.dart';
 
 class CommentPage extends StatefulWidget {
   CommentPage(this.post);
@@ -18,15 +21,19 @@ class CommentPage extends StatefulWidget {
   _CommentPageState createState() => _CommentPageState();
 }
 
+enum AuthStatus { signedIn, notSignedIn }
+
 class _CommentPageState extends State<CommentPage> {
-  String fullName, userId;
   CRUD crud = new CRUD();
   Utilities util = new Utilities();
   var _commentRef;
   var isEmpty;
+  String fullName, userId;
+  final GoogleSignIn googleSignIn = GoogleSignIn();
   final commentController = new TextEditingController();
   final commentNode = new FocusNode();
-
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  AuthStatus _authStatus = AuthStatus.notSignedIn;
   SharedPreferences prefs;
   List<Comment> _commentList = new List();
   StreamSubscription<Event> _onCommentAddedSubscription;
@@ -69,6 +76,13 @@ class _CommentPageState extends State<CommentPage> {
         .child(widget.post.key)
         .orderByChild('timestamp');
     readLocal();
+//    getCurrentUser();
+    getCurrentUser().then((userId) {
+      setState(() {
+        _authStatus =
+        userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+      });
+    });
     _commentList.clear();
 
     _onCommentAddedSubscription =
@@ -117,11 +131,24 @@ class _CommentPageState extends State<CommentPage> {
                     borderRadius: BorderRadius.circular(5.0),
                     border: Border.all(
                         width: 0.0, color: CupertinoColors.activeBlue)),
-//                decoration:
-//                    InputDecoration(hintText: 'Tuliskan Komentarmu disini'),
               ),
-              trailing:
-              IconButton(icon: Icon(Icons.send), onPressed: sendComment),
+              trailing: IconButton(
+                  icon: Icon(Icons.send),
+                  onPressed: () {
+//                    if(googleSignIn.isSignedIn()){
+//                      sendComment();
+//                    }
+//                    else{
+//                      SignInAndComment();
+//                    }
+                    switch (_authStatus) {
+                      case AuthStatus.notSignedIn:
+                        signInAndComment();
+                        break;
+                      case AuthStatus.signedIn:
+                        sendComment();
+                    }
+                  }),
             ),
           )
         ],
@@ -135,29 +162,120 @@ class _CommentPageState extends State<CommentPage> {
       itemBuilder: (context, index) {
         return ListTile(
           title: Text(
-            _commentList[index].fullName,
+            _commentList[index].userName,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           trailing:
-          Text(util.convertCommentTimestamp(_commentList[index].timestamp)),
+              Text(util.convertCommentTimestamp(_commentList[index].timestamp)),
           subtitle: Text(_commentList[index].comment),
         );
       },
     );
   }
 
-  void sendComment() {
+  void sendComment() async {
+    String fullName, userId;
     print('Comment : ' + commentController.text);
-    setState(() {
-      crud.addComment(widget.post.key, {
-        'fullName': fullName,
-        'comment': commentController.text,
-        'timestamp': DateTime.now().millisecondsSinceEpoch,
-        'userId': userId,
-      }).whenComplete(() {
-        commentController.clear();
-        commentNode.unfocus();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    fullName = prefs.getString('nama');
+    userId = prefs.getString('userId');
+
+    if (commentController.text == ' ' ||
+        commentController.text == '' ||
+        commentController.text == '  ') {
+      Fluttertoast.showToast(
+          msg: "Ucapan tidak boleh kosong",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      setState(() {
+        crud.addComment(widget.post.key, {
+          'fullName': fullName,
+          'comment': commentController.text,
+          'timestamp': DateTime.now().millisecondsSinceEpoch,
+          'userId': userId,
+        }).whenComplete(() {
+          commentController.clear();
+          commentNode.unfocus();
+        });
       });
+    }
+  }
+
+  Future<String> getCurrentUser() async {
+    try {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      return user != null ? user.uid : null;
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
+
+  Future signInAndComment() async {
+    GoogleSignInAccount googleAccount = await googleSignIn.signIn();
+    GoogleSignInAuthentication googleAuth = await googleAccount.authentication;
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    prefs = await SharedPreferences.getInstance();
+
+    prefs.setString('userId', googleAccount.id);
+    prefs.setString('nama', googleAccount.displayName);
+    prefs.setString('email', googleAccount.email);
+
+    firebaseAuth.signInWithCredential(credential).whenComplete(() {
+      addToDatabase(googleAccount);
+    });
+    if (commentController.text == ' ' ||
+        commentController.text == '' ||
+        commentController.text == '  ') {
+      Fluttertoast.showToast(
+          msg: "Ucapan tidak boleh kosong",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      print('username == ${googleAccount.displayName}');
+      setState(() {
+        crud.addComment(widget.post.key, {
+          'fullName': googleAccount.displayName,
+          'comment': commentController.text,
+          'timestamp': DateTime.now().millisecondsSinceEpoch,
+          'userId': googleAccount.id,
+        }).whenComplete(() {
+          commentController.clear();
+          commentNode.unfocus();
+        });
+      });
+    }
+  }
+
+  Future addToDatabase(GoogleSignInAccount googleAccount) async {
+    print('Adding to database');
+    FirebaseDatabase.instance
+        .reference()
+        .child('users')
+        .child(googleAccount.id)
+        .once()
+        .then((snapshot) {
+      if (snapshot.value == null) {
+        print('Added to database');
+        crud.addUser(googleAccount.id, {
+          'userid': googleAccount.id,
+          'nama': googleAccount.displayName,
+          'email': googleAccount.email
+        });
+      }
     });
   }
 

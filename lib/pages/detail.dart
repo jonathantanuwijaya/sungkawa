@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:Sungkawa/model/comment.dart';
-import 'package:Sungkawa/model/posting.dart';
-import 'package:Sungkawa/pages/comment_page.dart';
-import 'package:Sungkawa/utilities/utilities.dart';
+import 'package:sungkawa/model/comment.dart';
+import 'package:sungkawa/model/posting.dart';
+import 'package:sungkawa/pages/comment_page.dart';
+import 'package:sungkawa/utilities/utilities.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -136,7 +136,7 @@ class _DetailState extends State<Detail> {
                     style: TextStyle(fontSize: 16.0),
                   ),
                   Text(
-                    "Agama : " + widget.post.agama,
+                    "Agama : ${widget.post.agama}",
                     style: TextStyle(fontSize: 16.0),
                   ),
                   Divider(
@@ -165,9 +165,9 @@ class _DetailState extends State<Detail> {
                         ' di ' +
                         widget.post.tempatMakam +
                         ' pada ' +
-                        widget.post.tanggalSemayam +
+                        widget.post.tanggalDimakamkan +
                         ' pukul ' +
-                        widget.post.waktuSemayam,
+                        widget.post.waktuDimakamkan,
                     style: TextStyle(fontSize: 16.0),
                   ),
                   Divider(
@@ -219,7 +219,7 @@ class _DetailState extends State<Detail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(_commentList[0].fullName,
+            Text(_commentList[0].userName,
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
             Text(_commentList[0].comment, style: TextStyle(fontSize: 16.0)),
           ],
@@ -229,25 +229,12 @@ class _DetailState extends State<Detail> {
   }
 
   buildKeluarga() {
-//    return [
-//      Divider(
-//        color: Colors.green,
-//      ),
-//      if (widget.post.keterangan == null)
-//        {Text('')}
-//      else
-//        {Text(widget.post.keterangan)},
-//      Divider(
-//        color: Colors.green,
-//      ),
-//    ];
-    if (widget.post.keterangan == null) {
+    if (widget.post.keterangan == '') {
       return Text('');
     } else {
       return Column(
         children: <Widget>[
           Text('Keterangan :\n'+widget.post.keterangan,style: TextStyle(fontSize: 16.0),),
-//          Text( widget.post.keterangan,style: TextStyle(fontSize: 16.0),)
         ],
       );
     }

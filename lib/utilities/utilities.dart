@@ -4,7 +4,7 @@ class Utilities {
   String convertPostTimestamp(int timestamp) {
     var now = new DateTime.now();
     var timeFormat = new DateFormat('HH:mm');
-    var dateFormat = new DateFormat('dd-MM-yy');
+    var dateFormat = new DateFormat('dd-M-yy');
     var date = new DateTime.fromMillisecondsSinceEpoch(timestamp);
     var diff = now.difference(date);
     var timeText = '';
@@ -23,7 +23,7 @@ class Utilities {
   String convertCommentTimestamp(int timestamp) {
     var now = new DateTime.now();
     var timeFormat = new DateFormat('HH:mm');
-    var dateFormat = new DateFormat('d-M');
+    var dateFormat = new DateFormat('d-MM-yy');
     var date = new DateTime.fromMillisecondsSinceEpoch(timestamp);
     var diff = now.difference(date);
     var text = '';

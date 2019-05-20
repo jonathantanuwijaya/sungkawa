@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:Sungkawa/main.dart';
-import 'package:Sungkawa/utilities/crud.dart';
+import 'package:sungkawa/main.dart';
+import 'package:sungkawa/utilities/crud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,10 +37,14 @@ class _LoginState extends State<Login> {
           children: <Widget>[
             Image.asset(
               'assets/images/icon_android.png',
-              fit: BoxFit.cover,
-              width: 280,
+              fit: BoxFit.scaleDown,
+              width: 100,
+              height: 100,
             ),
-            new Text(
+            SizedBox(
+              height: 70.0,
+            ),
+            Text(
               'Sungkawa',
               style: TextStyle(fontSize: 40.0),
               textAlign: TextAlign.center,
@@ -58,6 +62,14 @@ class _LoginState extends State<Login> {
 //                  login();
                   handleSignIn();
                 }),
+            FlatButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DashboardScreen()));
+                },
+                child: Text('Skip')),
             new Padding(padding: const EdgeInsets.all(10.0)),
           ],
         ),

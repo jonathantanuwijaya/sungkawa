@@ -9,13 +9,14 @@ class Posting {
       _tempatMakam,
       _usia,
       _keterangan,
+      _tanggalDimakamkan,
       _tanggalSemayam,
       _lokasiSemayam,
       _lokasiMakam,
       _alamat,
       _tanggalMeninggal,
       _prosesi,
-      _waktuSemayam;
+      _waktuDimakamkan;
   int _timestamp;
 
   Posting(
@@ -27,13 +28,14 @@ class Posting {
       this._tempatMakam,
       this._usia,
       this._keterangan,
+      this._tanggalDimakamkan,
       this._tanggalSemayam,
       this._lokasiSemayam,
       this._lokasiMakam,
       this._alamat,
       this._tanggalMeninggal,
       this._prosesi,
-      this._waktuSemayam,
+      this._waktuDimakamkan,
       this._timestamp);
 
   String get key => _key;
@@ -48,9 +50,11 @@ class Posting {
 
   get tempatMakam => _tempatMakam;
 
-  String get usia => _usia;
+  get usia => _usia;
 
   get keterangan => _keterangan;
+
+  get tanggalDimakamkan => _tanggalDimakamkan;
 
   get tanggalSemayam => _tanggalSemayam;
 
@@ -64,7 +68,7 @@ class Posting {
 
   get prosesi => _prosesi;
 
-  get waktuSemayam => _waktuSemayam;
+  get waktuDimakamkan => _waktuDimakamkan;
 
   int get timestamp => _timestamp;
 
@@ -77,12 +81,13 @@ class Posting {
     _photo = snapshot.value['photo'];
     _alamat = snapshot.value['alamat'];
     _tanggalMeninggal = snapshot.value["tanggalMeninggal"];
+    _tanggalSemayam = snapshot.value["tanggalSemayam"];
     _prosesi = snapshot.value["prosesi"];
     _lokasiSemayam = snapshot.value["lokasiSemayam"];
     _lokasiMakam = snapshot.value["lokasiMakam"];
     _tempatMakam = snapshot.value["tempatMakam"];
-    _tanggalSemayam = snapshot.value["tanggalSemayam"];
-    _waktuSemayam = snapshot.value["waktuSemayam"];
+    _tanggalDimakamkan = snapshot.value["tanggalDimakamkan"];
+    _waktuDimakamkan = snapshot.value["waktuDimakamkan"];
     _keterangan = snapshot.value["keterangan"];
     _timestamp = snapshot.value['timestamp'];
   }
@@ -99,27 +104,27 @@ class Posting {
     _lokasiSemayam = json["lokasiSemayam"];
     _lokasiMakam = json["lokasiMakam"];
     _tempatMakam = json["tempatMakam"];
-    _tanggalSemayam = json["tanggalSemayam"];
-    _waktuSemayam = json["waktuSemayam"];
+    _tanggalDimakamkan = json["tanggalSemayam"];
+    _waktuDimakamkan = json["waktuSemayam"];
     _keterangan = json["keterangan"];
     _timestamp = json['timestamp'];
   }
 
   Map<String, dynamic> toJson() => {
-        'userId': _userId,
-        'nama': _nama,
-        'usia': _usia,
-        'agama': _agama,
-        'photo': _photo,
-        'alamat': _alamat,
-        'tanggalMeninggal': _tanggalMeninggal,
-        'prosesi': _prosesi,
-        'lokasiSemayam': _lokasiSemayam,
-        'lokasiMakam': _lokasiMakam,
-        'tempatMakam': _tempatMakam,
-        'tanggalSemayam': _tanggalSemayam,
-        'waktuSemayam': _waktuSemayam,
-        'keterangan': _keterangan,
-        'timestamp': _timestamp
-      };
+    'userId': _userId,
+    'nama': _nama,
+    'usia': _usia,
+    'agama': _agama,
+    'photo': _photo,
+    'alamat': _alamat,
+    'tanggalMeninggal': _tanggalMeninggal,
+    'prosesi': _prosesi,
+    'lokasiSemayam': _lokasiSemayam,
+    'lokasiMakam': _lokasiMakam,
+    'tempatMakam': _tempatMakam,
+    'tanggalSemayam': _tanggalDimakamkan,
+    'waktuSemayam': _waktuDimakamkan,
+    'keterangan': _keterangan,
+    'timestamp': _timestamp
+  };
 }

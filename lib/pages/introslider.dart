@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:Sungkawa/main.dart';
+import 'package:sungkawa/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intro_views_flutter/Models/page_view_model.dart';
 import 'package:intro_views_flutter/intro_views_flutter.dart';
@@ -74,7 +74,7 @@ class _IntroSliderScreenState extends State<IntroSliderScreen> {
           'assets/images/phone.png',
         ),
         pageColor: Colors.orange,
-        body: Text('Berikan ucapan belasungkawamu '),
+        body: Text('Ucapan belasungkawa yang interaktif '),
         mainImage: Image.asset('assets/images/phone.png'),
         textStyle: TextStyle(color: Colors.white)),
     PageViewModel(
@@ -86,7 +86,7 @@ class _IntroSliderScreenState extends State<IntroSliderScreen> {
         ),
         bubble: Image.asset('assets/images/speed.png'),
         pageColor: Colors.purpleAccent,
-        body: Text('Semua data akan terupdate secara realtime '),
+        body: Text('Informasi yang selalu realtime '),
         mainImage: Image.asset('assets/images/speed.png'),
         textStyle: TextStyle(color: Colors.white)),
   ];

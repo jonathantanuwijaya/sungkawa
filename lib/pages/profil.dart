@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:sungkawa/model/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:Sungkawa/model/user.dart';
 
 class Profil extends StatefulWidget {
   final User pengguna;
@@ -29,25 +29,6 @@ class _ProfilState extends State<Profil> {
   final FocusNode focusNodeEmail = new FocusNode();
   final formkey = GlobalKey<FormState>();
 
-//  Future<FirebaseUser> _handleProfile() async{
-//    final FirebaseUser user = await _auth.currentUser() ;
-//    username = user.displayName;
-//    email = user.email;
-//
-//  }
-
-//  @override
-//  void initState() {
-//    // TODO: implement initState
-//    super.initState();
-//    userRef = FirebaseDatabase.instance
-//        .reference()
-//        .child('users')
-//        .child(widget.pengguna.key);
-////    print('useskey' + widget.pengguna.key);
-//    username = widget.pengguna.nama;
-//    email = widget.pengguna.email;
-//  }
   @override
   void initState() {
     // TODO: implement initState
@@ -62,9 +43,10 @@ class _ProfilState extends State<Profil> {
     username = prefs.getString('nama') ?? '';
     email = prefs.getString('email') ?? '';
     print('username = $username');
-    usernameController = new TextEditingController(text: username);
-    emailController = new TextEditingController(text: email);
-    setState(() {});
+    setState(() {
+      usernameController = new TextEditingController(text: username);
+      emailController = new TextEditingController(text: email);
+    });
   }
 
   @override
@@ -154,13 +136,13 @@ class _ProfilState extends State<Profil> {
     focusNodeUsername.unfocus();
     focusNodeEmail.unfocus();
 
-//    print('uid ${widget.pengguna.uid}');
     setState(() {
       isLoading = true;
     });
     var userRef =
         FirebaseDatabase.instance.reference().child('users').child(userid);
     userRef.update({'username': username, 'email': email}).then((data) async {
+      print('username == $username');
       await prefs.setString('userid', userid);
       await prefs.setString('nama', username);
       await prefs.setString('email', email);
@@ -174,11 +156,5 @@ class _ProfilState extends State<Profil> {
           textColor: Colors.white,
           fontSize: 16.0);
     });
-
-//    Firestore.instance
-//        .collection('users')
-//        .document(userid)
-//        .updateData({'nama': username, 'email': email}).then((data) async {
-//
   }
 }

@@ -1,3 +1,8 @@
+import 'package:sungkawa/pages/about.dart';
+import 'package:sungkawa/pages/introslider.dart';
+import 'package:sungkawa/pages/login.dart';
+import 'package:sungkawa/pages/profil.dart';
+import 'package:sungkawa/pages/user_home.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -7,12 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:Sungkawa/pages/about.dart';
-import 'package:Sungkawa/pages/introslider.dart';
-import 'package:Sungkawa/pages/login.dart';
-import 'package:Sungkawa/pages/profil.dart';
-import 'package:Sungkawa/pages/user_home.dart';
-
 import 'model/Notifikasi.dart';
 
 void main() {
@@ -30,7 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'SUNGKAWA',
+      title: 'Sungkawa',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: Colors.lightBlue,
@@ -53,7 +52,7 @@ enum AuthStatus { signedIn, notSignedIn }
 class _DashboardScreenState extends State<DashboardScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  FirebaseUser currentUser;
+
   SharedPreferences prefs;
   bool isLoading;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -69,13 +68,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     getCurrentUser().then((userId) {
       setState(() {
         _authStatus =
-            userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+        userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
       });
-    }).whenComplete(() {
-      String displayName = googleSignIn.currentUser.displayName;
-      Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text('User $displayName is signed in!')));
     });
+//        .whenComplete(() {
+//      String displayName = googleSignIn.currentUser.displayName;
+//      Scaffold.of(context).showSnackBar(
+//          SnackBar(content: Text('User $displayName is signed in!')));
+//    });
     _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
     _firebaseMessaging.getToken();
     _firebaseMessaging.subscribeToTopic('all');
@@ -121,6 +121,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Sungkawa',
           style: TextStyle(color: Colors.white),
@@ -131,55 +132,56 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onPressed: () {
               showCupertinoModalPopup(
                   context: context,
-                  builder: (context) => CupertinoActionSheet(
-                      title: const Text(
-                        'Pilihan menu',
-                      ),
-                      actions: <Widget>[
-                        CupertinoActionSheetAction(
-                          onPressed: () {
-                            switch (_authStatus) {
-                              case AuthStatus.notSignedIn:
-                                handleSignIn().then((_) {
+                  builder: (context) =>
+                      CupertinoActionSheet(
+                          title: const Text(
+                            'Pilihan menu',
+                          ),
+                          actions: <Widget>[
+                            CupertinoActionSheetAction(
+                              onPressed: () {
+                                switch (_authStatus) {
+                                  case AuthStatus.notSignedIn:
+                                    handleSignIn().then((_) {
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Profil()));
+                                    });
+                                    break;
+                                  case AuthStatus.signedIn:
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Profil()));
+                                    break;
+                                }
+                              },
+                              child: Text('Profil'),
+                            ),
+                            CupertinoActionSheetAction(
+                                onPressed: () {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Profil()));
-                                });
-                                break;
-                              case AuthStatus.signedIn:
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Profil()));
-                                break;
-                            }
-                          },
-                          child: Text('Profil'),
-                        ),
-                        CupertinoActionSheetAction(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => About()));
-                            },
-                            child: Text('Tentang Kami')),
-                        CupertinoActionSheetAction(
-                            isDestructiveAction: true,
-                            onPressed: signOut,
-                            child: Text(
-                              'Sign Out',
-                            )),
-                      ],
-                      cancelButton: CupertinoActionSheetAction(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'Cancel',
-                            style: TextStyle(color: Colors.red),
-                          ))));
+                                          builder: (context) => About()));
+                                },
+                                child: Text('Tentang Kami')),
+                            CupertinoActionSheetAction(
+                                isDestructiveAction: true,
+                                onPressed: signOut,
+                                child: Text(
+                                  'Sign Out',
+                                )),
+                          ],
+                          cancelButton: CupertinoActionSheetAction(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                'Cancel',
+                                style: TextStyle(color: Colors.red),
+                              ))));
             },
           )
         ],
@@ -190,16 +192,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void signOut() async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString("nama",'');
+    prefs.setString("email",'');
+    prefs.setString("userId",'');
+
     FirebaseAuth.instance.signOut();
     googleSignIn.signOut();
     _authStatus = AuthStatus.notSignedIn;
-    SnackBar(
-      content: Text('Signed Out'),
-      duration: Duration(seconds: 2),
-    );
 
+    Navigator.pop(context);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (BuildContext context) => Login()));
+
   }
 
   void checkConnectivity() async {
