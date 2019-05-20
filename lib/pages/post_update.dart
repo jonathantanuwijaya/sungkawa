@@ -373,6 +373,17 @@ class _UpdatePostState extends State<UpdatePost> {
       return SizedBox();
   }
 
+  void checkDeity(String agama) {
+    if (agama == 'Islam') {
+      tuhan = 'Allah SWT';
+    } else if (agama == 'Kristen' || agama == 'Katolik')
+      tuhan = 'Allah';
+    else if (agama == 'Buddha')
+      tuhan = 'Sanghyang Adi Buddha';
+    else
+      tuhan = 'Tuhan';
+  }
+
   void getImageCamera() async {
     try {
       imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
@@ -408,7 +419,6 @@ class _UpdatePostState extends State<UpdatePost> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     readLocal();
     postRef = FirebaseDatabase.instance
@@ -461,17 +471,6 @@ class _UpdatePostState extends State<UpdatePost> {
     userId = prefs.getString('userId');
   }
 
-  void checkDeity(String agama) {
-    if (agama == 'Islam') {
-      tuhan = 'Allah SWT';
-    } else if (agama == 'Kristen' || agama == 'Katolik')
-      tuhan = 'Allah';
-    else if (agama == 'Buddha')
-      tuhan = 'Sanghyang Adi Buddha';
-    else
-      tuhan = 'Tuhan';
-  }
-
   void updatePost() async {
     print('Mencoba Update Posting');
 
@@ -519,6 +518,7 @@ class _UpdatePostState extends State<UpdatePost> {
       return true;
     } else {
       print('Posting tidak valid');
+
       return false;
     }
   }
@@ -529,6 +529,7 @@ class _UpdatePostState extends State<UpdatePost> {
         updatePost();
       } catch (e) {
         print('Error $e');
+        Scaffold.of(context).showSnackBar(SnackBar(content: Text(e)));
       }
     } else {
       formKey.currentState.reset();
