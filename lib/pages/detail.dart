@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:Sungkawa/model/comment.dart';
-import 'package:Sungkawa/model/posting.dart';
-import 'package:Sungkawa/pages/comment_page.dart';
-import 'package:Sungkawa/utilities/utilities.dart';
+import 'package:sungkawa/model/comment.dart';
+import 'package:sungkawa/model/posting.dart';
+import 'package:sungkawa/pages/comment_page.dart';
+import 'package:sungkawa/utilities/utilities.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -165,7 +165,7 @@ class _DetailState extends State<Detail> {
                         ' di ' +
                         widget.post.tempatMakam +
                         ' pada ' +
-                        widget.post.tanggalSemayam +
+                        widget.post.tanggalDimakamkan +
                         ' pukul ' +
                         widget.post.waktuDimakamkan,
                     style: TextStyle(fontSize: 16.0),

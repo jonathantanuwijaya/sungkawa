@@ -1,4 +1,4 @@
-import 'package:Sungkawa/model/user.dart';
+import 'package:sungkawa/model/user.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class Comment {
@@ -12,7 +12,7 @@ class Comment {
   String _displayName;
 
   Comment(this._key, this._userName, this._comment, this._userId,
-       this._timestamp, this._user);
+      this._timestamp, this._user);
 
   String get displayName => _displayName;
 

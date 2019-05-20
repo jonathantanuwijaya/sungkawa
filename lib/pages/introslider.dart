@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:Sungkawa/main.dart';
+import 'package:sungkawa/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intro_views_flutter/Models/page_view_model.dart';
 import 'package:intro_views_flutter/intro_views_flutter.dart';
