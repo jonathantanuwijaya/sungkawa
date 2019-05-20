@@ -167,7 +167,7 @@ class _DetailState extends State<Detail> {
                         ' pada ' +
                         widget.post.tanggalSemayam +
                         ' pukul ' +
-                        widget.post.waktuSemayam,
+                        widget.post.waktuDimakamkan,
                     style: TextStyle(fontSize: 16.0),
                   ),
                   Divider(
