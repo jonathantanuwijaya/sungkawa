@@ -1,12 +1,13 @@
 import 'dart:async';
-import 'package:sungkawa/main.dart';
-import 'package:sungkawa/utilities/crud.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sungkawa/main.dart';
+import 'package:sungkawa/utilities/crud.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -19,10 +20,23 @@ class _LoginState extends State<Login> {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   SharedPreferences prefs;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  Future addToDatabase(GoogleSignInAccount googleAccount) async {
+    print('Adding to database');
+    FirebaseDatabase.instance
+        .reference()
+        .child('users')
+        .child(googleAccount.id)
+        .once()
+        .then((snapshot) {
+      if (snapshot.value == null) {
+        print('Added to database');
+        crud.addUser(googleAccount.id, {
+          'userid': googleAccount.id,
+          'nama': googleAccount.displayName,
+          'email': googleAccount.email
+        });
+      }
+    });
   }
 
   @override
@@ -98,22 +112,9 @@ class _LoginState extends State<Login> {
     });
   }
 
-  Future addToDatabase(GoogleSignInAccount googleAccount) async {
-    print('Adding to database');
-    FirebaseDatabase.instance
-        .reference()
-        .child('users')
-        .child(googleAccount.id)
-        .once()
-        .then((snapshot) {
-      if (snapshot.value == null) {
-        print('Added to database');
-        crud.addUser(googleAccount.id, {
-          'userid': googleAccount.id,
-          'nama': googleAccount.displayName,
-          'email': googleAccount.email
-        });
-      }
-    });
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 }

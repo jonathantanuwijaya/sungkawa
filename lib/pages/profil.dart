@@ -1,10 +1,10 @@
-import 'package:sungkawa/model/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sungkawa/model/user.dart';
 
 class Profil extends StatefulWidget {
   final User pengguna;
@@ -28,26 +28,6 @@ class _ProfilState extends State<Profil> {
   final FocusNode focusNodeUsername = new FocusNode();
   final FocusNode focusNodeEmail = new FocusNode();
   final formkey = GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    readLocal();
-  }
-
-  void readLocal() async {
-    prefs = await SharedPreferences.getInstance();
-    userid = prefs.getString('userId') ?? '';
-    username = prefs.getString('nama') ?? '';
-    email = prefs.getString('email') ?? '';
-    print('username = $username');
-    setState(() {
-      usernameController = new TextEditingController(text: username);
-      emailController = new TextEditingController(text: email);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,6 +135,26 @@ class _ProfilState extends State<Profil> {
           backgroundColor: Colors.black,
           textColor: Colors.white,
           fontSize: 16.0);
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    readLocal();
+  }
+
+  void readLocal() async {
+    prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString('userId') ?? '';
+    username = prefs.getString('nama') ?? '';
+    email = prefs.getString('email') ?? '';
+    print('username = $username');
+    setState(() {
+      usernameController = new TextEditingController(text: username);
+      emailController = new TextEditingController(text: email);
     });
   }
 }

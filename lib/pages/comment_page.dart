@@ -1,9 +1,5 @@
 import 'dart:async';
 
-import 'package:sungkawa/model/comment.dart';
-import 'package:sungkawa/model/posting.dart';
-import 'package:sungkawa/utilities/crud.dart';
-import 'package:sungkawa/utilities/utilities.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,17 +7,21 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sungkawa/model/comment.dart';
+import 'package:sungkawa/model/posting.dart';
+import 'package:sungkawa/utilities/crud.dart';
+import 'package:sungkawa/utilities/utilities.dart';
+
+enum AuthStatus { signedIn, notSignedIn }
 
 class CommentPage extends StatefulWidget {
-  CommentPage(this.post);
+  final Post post;
 
-  final Posting post;
+  CommentPage(this.post);
 
   @override
   _CommentPageState createState() => _CommentPageState();
 }
-
-enum AuthStatus { signedIn, notSignedIn }
 
 class _CommentPageState extends State<CommentPage> {
   CRUD crud = new CRUD();
@@ -40,69 +40,23 @@ class _CommentPageState extends State<CommentPage> {
   StreamSubscription<Event> _onCommentChangedSubscription;
   StreamSubscription<Event> _onCommentRemovedSubscription;
 
-  _onCommentAdded(Event event) {
-    setState(() {
-      _commentList.add(Comment.fromSnapshot(event.snapshot));
-    });
-  }
-
-  _onCommentChanged(Event event) {
-    var oldEntry = _commentList.singleWhere((entry) {
-      return entry.key == event.snapshot.key;
-    });
-
-    setState(() {
-      _commentList[_commentList.indexOf(oldEntry)] =
-          Comment.fromSnapshot(event.snapshot);
-    });
-  }
-
-  _onCommentRemoved(Event event) {
-    var deletedEntry = _commentList.singleWhere((entry) {
-      return entry.key == event.snapshot.key;
-    });
-    print('on child removed called');
-    setState(() {
-      _commentList.remove(deletedEntry);
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _commentRef = FirebaseDatabase.instance
+  Future addToDatabase(GoogleSignInAccount googleAccount) async {
+    print('Adding to database');
+    FirebaseDatabase.instance
         .reference()
-        .child('comments')
-        .child(widget.post.key)
-        .orderByChild('timestamp');
-    readLocal();
-//    getCurrentUser();
-    getCurrentUser().then((userId) {
-      setState(() {
-        _authStatus =
-        userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
-      });
+        .child('users')
+        .child(googleAccount.id)
+        .once()
+        .then((snapshot) {
+      if (snapshot.value == null) {
+        print('Added to database');
+        crud.addUser(googleAccount.id, {
+          'userid': googleAccount.id,
+          'nama': googleAccount.displayName,
+          'email': googleAccount.email
+        });
+      }
     });
-    _commentList.clear();
-
-    _onCommentAddedSubscription =
-        _commentRef.onChildAdded.listen(_onCommentAdded);
-    _onCommentChangedSubscription =
-        _commentRef.onChildChanged.listen(_onCommentChanged);
-    _onCommentRemovedSubscription =
-        _commentRef.onChildRemoved.listen(_onCommentRemoved);
-
-    isEmpty = crud.checkCommentEmpty(widget.post.key);
-    print(isEmpty);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _commentList.clear();
-    _onCommentAddedSubscription.cancel();
-    _onCommentChangedSubscription.cancel();
-    _onCommentRemovedSubscription.cancel();
   }
 
   @override
@@ -173,6 +127,60 @@ class _CommentPageState extends State<CommentPage> {
     );
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _commentList.clear();
+    _onCommentAddedSubscription.cancel();
+    _onCommentChangedSubscription.cancel();
+    _onCommentRemovedSubscription.cancel();
+  }
+
+  Future<String> getCurrentUser() async {
+    try {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      return user != null ? user.uid : null;
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _commentRef = FirebaseDatabase.instance
+        .reference()
+        .child('comments')
+        .child(widget.post.key)
+        .orderByChild('timestamp');
+    readLocal();
+//    getCurrentUser();
+    getCurrentUser().then((userId) {
+      setState(() {
+        _authStatus =
+        userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+      });
+    });
+    _commentList.clear();
+
+    _onCommentAddedSubscription =
+        _commentRef.onChildAdded.listen(_onCommentAdded);
+    _onCommentChangedSubscription =
+        _commentRef.onChildChanged.listen(_onCommentChanged);
+    _onCommentRemovedSubscription =
+        _commentRef.onChildRemoved.listen(_onCommentRemoved);
+
+    isEmpty = crud.checkCommentEmpty(widget.post.key);
+    print(isEmpty);
+  }
+
+  void readLocal() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    fullName = prefs.getString('nama');
+    userId = prefs.getString('userId');
+  }
+
 
   void sendComment() async {
     String fullName, userId;
@@ -204,16 +212,6 @@ class _CommentPageState extends State<CommentPage> {
           commentNode.unfocus();
         });
       });
-    }
-  }
-
-  Future<String> getCurrentUser() async {
-    try {
-      FirebaseUser user = await FirebaseAuth.instance.currentUser();
-      return user != null ? user.uid : null;
-    } catch (e) {
-      print('Error: $e');
-      return null;
     }
   }
 
@@ -261,28 +259,30 @@ class _CommentPageState extends State<CommentPage> {
     }
   }
 
-  Future addToDatabase(GoogleSignInAccount googleAccount) async {
-    print('Adding to database');
-    FirebaseDatabase.instance
-        .reference()
-        .child('users')
-        .child(googleAccount.id)
-        .once()
-        .then((snapshot) {
-      if (snapshot.value == null) {
-        print('Added to database');
-        crud.addUser(googleAccount.id, {
-          'userid': googleAccount.id,
-          'nama': googleAccount.displayName,
-          'email': googleAccount.email
-        });
-      }
+  _onCommentAdded(Event event) {
+    setState(() {
+      _commentList.add(Comment.fromSnapshot(event.snapshot));
     });
   }
 
-  void readLocal() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    fullName = prefs.getString('nama');
-    userId = prefs.getString('userId');
+  _onCommentChanged(Event event) {
+    var oldEntry = _commentList.singleWhere((entry) {
+      return entry.key == event.snapshot.key;
+    });
+
+    setState(() {
+      _commentList[_commentList.indexOf(oldEntry)] =
+          Comment.fromSnapshot(event.snapshot);
+    });
+  }
+
+  _onCommentRemoved(Event event) {
+    var deletedEntry = _commentList.singleWhere((entry) {
+      return entry.key == event.snapshot.key;
+    });
+    print('on child removed called');
+    setState(() {
+      _commentList.remove(deletedEntry);
+    });
   }
 }

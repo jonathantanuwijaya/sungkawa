@@ -1,8 +1,3 @@
-import 'package:sungkawa/pages/about.dart';
-import 'package:sungkawa/pages/introslider.dart';
-import 'package:sungkawa/pages/login.dart';
-import 'package:sungkawa/pages/profil.dart';
-import 'package:sungkawa/pages/user_home.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -12,6 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sungkawa/pages/about.dart';
+import 'package:sungkawa/pages/introslider.dart';
+import 'package:sungkawa/pages/login.dart';
+import 'package:sungkawa/pages/profil.dart';
+import 'package:sungkawa/pages/user_home.dart';
+
 import 'model/Notifikasi.dart';
 
 void main() {
@@ -21,9 +22,14 @@ void main() {
   });
 }
 
-enum Pilihan { about, signOut, profil }
-
 final GoogleSignIn googleSignIn = GoogleSignIn();
+
+enum AuthStatus { signedIn, notSignedIn }
+
+class DashboardScreen extends StatefulWidget {
+  @override
+  _DashboardScreenState createState() => _DashboardScreenState();
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -42,12 +48,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class DashboardScreen extends StatefulWidget {
-  @override
-  _DashboardScreenState createState() => _DashboardScreenState();
-}
-
-enum AuthStatus { signedIn, notSignedIn }
+enum Pilihan { about, signOut, profil }
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -60,61 +61,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
   var connectionStatus;
   final List<Notifikasi> notif = [];
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    checkConnectivity();
-    getCurrentUser().then((userId) {
-      setState(() {
-        _authStatus =
-        userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
-      });
+  Future addToDatabase(GoogleSignInAccount googleAccount) async {
+    print('Adding to database');
+    FirebaseDatabase.instance
+        .reference()
+        .child('users')
+        .child(googleAccount.id)
+        .once()
+        .then((snapshot) {
+      if (snapshot.value == null) {
+        print('Added to database');
+        crud.addUser(googleAccount.id, {
+          'userid': googleAccount.id,
+          'nama': googleAccount.displayName,
+          'email': googleAccount.email
+        });
+      }
     });
-//        .whenComplete(() {
-//      String displayName = googleSignIn.currentUser.displayName;
-//      Scaffold.of(context).showSnackBar(
-//          SnackBar(content: Text('User $displayName is signed in!')));
-//    });
-    _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
-    _firebaseMessaging.getToken();
-    _firebaseMessaging.subscribeToTopic('all');
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-        final notification = message['notification'];
-        setState(() {
-          notif.add(Notifikasi(
-            title: notification['title'],
-            nama: notification['body'],
-          ));
-        });
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-
-        final notification = message['data'];
-        setState(() {
-          notif.add(Notifikasi(
-            title: '${notification['title']}',
-            nama: '${notification['body']}',
-          ));
-        });
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-      },
-    );
-  }
-
-  Future<String> getCurrentUser() async {
-    try {
-      FirebaseUser user = await FirebaseAuth.instance.currentUser();
-      return user != null ? user.uid : null;
-    } catch (e) {
-      print('Error: $e');
-      return null;
-    }
   }
 
   @override
@@ -191,22 +154,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  void signOut() async {
-    prefs = await SharedPreferences.getInstance();
-    prefs.setString("nama",'');
-    prefs.setString("email",'');
-    prefs.setString("userId",'');
-
-    FirebaseAuth.instance.signOut();
-    googleSignIn.signOut();
-    _authStatus = AuthStatus.notSignedIn;
-
-    Navigator.pop(context);
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (BuildContext context) => Login()));
-
-  }
-
   void checkConnectivity() async {
     try {
       var connectivityResult = await (Connectivity().checkConnectivity());
@@ -222,6 +169,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
       }
     } catch (e) {
       print('Error: $e');
+    }
+  }
+
+  Future<String> getCurrentUser() async {
+    try {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      return user != null ? user.uid : null;
+    } catch (e) {
+      print('Error: $e');
+      return null;
     }
   }
 
@@ -246,26 +203,69 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
-  Future addToDatabase(GoogleSignInAccount googleAccount) async {
-    print('Adding to database');
-    FirebaseDatabase.instance
-        .reference()
-        .child('users')
-        .child(googleAccount.id)
-        .once()
-        .then((snapshot) {
-      if (snapshot.value == null) {
-        print('Added to database');
-        crud.addUser(googleAccount.id, {
-          'userid': googleAccount.id,
-          'nama': googleAccount.displayName,
-          'email': googleAccount.email
-        });
-      }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkConnectivity();
+    getCurrentUser().then((userId) {
+      setState(() {
+        _authStatus =
+        userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+      });
     });
+//        .whenComplete(() {
+//      String displayName = googleSignIn.currentUser.displayName;
+//      Scaffold.of(context).showSnackBar(
+//          SnackBar(content: Text('User $displayName is signed in!')));
+//    });
+    _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
+    _firebaseMessaging.getToken();
+    _firebaseMessaging.subscribeToTopic('all');
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        final notification = message['notification'];
+        setState(() {
+          notif.add(Notifikasi(
+            title: notification['title'],
+            nama: notification['body'],
+          ));
+        });
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+
+        final notification = message['data'];
+        setState(() {
+          notif.add(Notifikasi(
+            title: '${notification['title']}',
+            nama: '${notification['body']}',
+          ));
+        });
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    );
   }
 
   void sendTokenToServer(String fcm) {
     print('Token : $fcm');
+  }
+
+  void signOut() async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString("nama", '');
+    prefs.setString("email", '');
+    prefs.setString("userId", '');
+
+    FirebaseAuth.instance.signOut();
+    googleSignIn.signOut();
+    _authStatus = AuthStatus.notSignedIn;
+
+    Navigator.pop(context);
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (BuildContext context) => Login()));
   }
 }

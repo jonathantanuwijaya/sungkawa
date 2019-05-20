@@ -1,5 +1,5 @@
-import 'package:sungkawa/model/user.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:sungkawa/model/user.dart';
 
 class Comment {
   String _key;
@@ -13,21 +13,6 @@ class Comment {
 
   Comment(this._key, this._userName, this._comment, this._userId,
       this._timestamp, this._user);
-
-  String get displayName => _displayName;
-
-
-  int get timestamp => _timestamp;
-
-  String get userId => _userId;
-
-  String get comment => _comment;
-
-  String get userName => _userName;
-
-  String get key => _key;
-
-  User get user => _user;
 
   Comment.fromSnapshot(DataSnapshot snapshot) {
     _key = snapshot.key;
@@ -45,4 +30,19 @@ class Comment {
       _displayName = snapshot.value['username'];
     });
   }
+
+
+  String get comment => _comment;
+
+  String get displayName => _displayName;
+
+  String get key => _key;
+
+  int get timestamp => _timestamp;
+
+  User get user => _user;
+
+  String get userId => _userId;
+
+  String get userName => _userName;
 }

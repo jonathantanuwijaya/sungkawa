@@ -1,52 +1,23 @@
 import 'dart:async';
 
-import 'package:sungkawa/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intro_views_flutter/Models/page_view_model.dart';
 import 'package:intro_views_flutter/intro_views_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sungkawa/main.dart';
 
 SharedPreferences prefs;
-
-class Opening extends StatefulWidget {
-  @override
-  _OpeningState createState() => _OpeningState();
-}
-
-class _OpeningState extends State<Opening> {
-  Future checkFirstScreen() async {
-    prefs = await SharedPreferences.getInstance();
-
-    bool _cek = (prefs.getBool('cek') ?? false);
-
-    if (_cek) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => DashboardScreen()));
-    } else {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => IntroSliderScreen()));
-    }
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    checkFirstScreen();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
 
 class IntroSliderScreen extends StatefulWidget {
   static TextStyle style = TextStyle(fontSize: 28.0);
 
   @override
   _IntroSliderScreenState createState() => _IntroSliderScreenState();
+}
+
+class Opening extends StatefulWidget {
+  @override
+  _OpeningState createState() => _OpeningState();
 }
 
 class _IntroSliderScreenState extends State<IntroSliderScreen> {
@@ -109,5 +80,34 @@ class _IntroSliderScreenState extends State<IntroSliderScreen> {
                     TextStyle(color: Colors.white, fontSize: 18.0),
               )),
     );
+  }
+}
+
+class _OpeningState extends State<Opening> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+
+  Future checkFirstScreen() async {
+    prefs = await SharedPreferences.getInstance();
+
+    bool _cek = (prefs.getBool('cek') ?? false);
+
+    if (_cek) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => DashboardScreen()));
+    } else {
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => IntroSliderScreen()));
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    checkFirstScreen();
   }
 }

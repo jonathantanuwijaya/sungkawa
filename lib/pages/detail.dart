@@ -1,15 +1,15 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 import 'package:sungkawa/model/comment.dart';
 import 'package:sungkawa/model/posting.dart';
 import 'package:sungkawa/pages/comment_page.dart';
 import 'package:sungkawa/utilities/utilities.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
 
 class Detail extends StatefulWidget {
-  final Posting post;
+  final Post post;
 
   Detail(this.post);
 
@@ -25,62 +25,6 @@ class _DetailState extends State<Detail> {
   StreamSubscription<Event> _onCommentAddedSubscription;
   StreamSubscription<Event> _onCommentChangedSubscription;
   StreamSubscription<Event> _onCommentRemovedSubscription;
-
-  _onCommentAdded(Event event) {
-    setState(() {
-      _commentList.add(Comment.fromSnapshot(event.snapshot));
-    });
-  }
-
-  _onCommentChanged(Event event) {
-    var oldEntry = _commentList.singleWhere((entry) {
-      return entry.key == event.snapshot.key;
-    });
-
-    setState(() {
-      _commentList[_commentList.indexOf(oldEntry)] =
-          Comment.fromSnapshot(event.snapshot);
-    });
-  }
-
-  _onCommentRemoved(Event event) {
-    var deletedEntry = _commentList.singleWhere((entry) {
-      return entry.key == event.snapshot.key;
-    });
-    print('on child removed called');
-    setState(() {
-      _commentList.remove(deletedEntry);
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _commentRef = FirebaseDatabase.instance
-        .reference()
-        .child('comments')
-        .child(widget.post.key)
-        .orderByChild('timestamp');
-    _commentList.clear();
-    _onCommentAddedSubscription =
-        _commentRef.onChildAdded.listen(_onCommentAdded);
-    _onCommentChangedSubscription =
-        _commentRef.onChildChanged.listen(_onCommentChanged);
-    _onCommentRemovedSubscription =
-        _commentRef.onChildRemoved.listen(_onCommentRemoved);
-    _onCommentRemovedSubscription =
-        _commentRef.onChildRemoved.listen(_onCommentRemoved);
-//    keterangancontroller = widget.post.keterangan;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _onCommentAddedSubscription.cancel();
-    _onCommentChangedSubscription.cancel();
-    _onCommentRemovedSubscription.cancel();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -211,6 +155,48 @@ class _DetailState extends State<Detail> {
     );
   }
 
+  buildKeluarga() {
+    if (widget.post.keterangan == '') {
+      return Text('');
+    } else {
+      return Column(
+        children: <Widget>[
+          Text('Keterangan :\n' + widget.post.keterangan,
+            style: TextStyle(fontSize: 16.0),),
+        ],
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _onCommentAddedSubscription.cancel();
+    _onCommentChangedSubscription.cancel();
+    _onCommentRemovedSubscription.cancel();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _commentRef = FirebaseDatabase.instance
+        .reference()
+        .child('comments')
+        .child(widget.post.key)
+        .orderByChild('timestamp');
+    _commentList.clear();
+    _onCommentAddedSubscription =
+        _commentRef.onChildAdded.listen(_onCommentAdded);
+    _onCommentChangedSubscription =
+        _commentRef.onChildChanged.listen(_onCommentChanged);
+    _onCommentRemovedSubscription =
+        _commentRef.onChildRemoved.listen(_onCommentRemoved);
+    _onCommentRemovedSubscription =
+        _commentRef.onChildRemoved.listen(_onCommentRemoved);
+//    keterangancontroller = widget.post.keterangan;
+  }
+
   Widget sampleComment() {
     if (_commentList.length == 0) {
       return Text('');
@@ -228,15 +214,30 @@ class _DetailState extends State<Detail> {
     }
   }
 
-  buildKeluarga() {
-    if (widget.post.keterangan == '') {
-      return Text('');
-    } else {
-      return Column(
-        children: <Widget>[
-          Text('Keterangan :\n'+widget.post.keterangan,style: TextStyle(fontSize: 16.0),),
-        ],
-      );
-    }
+  _onCommentAdded(Event event) {
+    setState(() {
+      _commentList.add(Comment.fromSnapshot(event.snapshot));
+    });
+  }
+
+  _onCommentChanged(Event event) {
+    var oldEntry = _commentList.singleWhere((entry) {
+      return entry.key == event.snapshot.key;
+    });
+
+    setState(() {
+      _commentList[_commentList.indexOf(oldEntry)] =
+          Comment.fromSnapshot(event.snapshot);
+    });
+  }
+
+  _onCommentRemoved(Event event) {
+    var deletedEntry = _commentList.singleWhere((entry) {
+      return entry.key == event.snapshot.key;
+    });
+    print('on child removed called');
+    setState(() {
+      _commentList.remove(deletedEntry);
+    });
   }
 }

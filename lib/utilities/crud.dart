@@ -10,8 +10,10 @@ class CRUD {
   DatabaseReference userRef =
   FirebaseDatabase.instance.reference().child('users');
 
-  Future<void> addUser(String adminId, adminData) async {
-    userRef.child(adminId).set(adminData);
+  Future<void> addComment(postId, commentData) async {
+    commentRef.child(postId).push().set(commentData).catchError((e) {
+      print(e);
+    });
   }
 
   Future<void> addPost(postData) async {
@@ -20,26 +22,10 @@ class CRUD {
     });
   }
 
-  Future<void> addComment(postId, commentData) async {
-    commentRef.child(postId).push().set(commentData).catchError((e) {
-      print(e);
-    });
+  Future<void> addUser(String adminId, adminData) async {
+    userRef.child(adminId).set(adminData);
   }
 
-  checkPostEmpty() {
-    bool isEmpty;
-    postRef.orderByKey().once().then((snapshot) {
-      if (snapshot.value == null)
-        isEmpty = true;
-      else
-        isEmpty = false;
-    }).whenComplete(() {
-      print(isEmpty);
-      return isEmpty;
-    });
-  }
-
-  // ignore: missing_return
   Future<bool> checkCommentEmpty(postId) async {
     bool isEmpty;
     commentRef.child(postId).orderByKey().once().then((snapshot) {
@@ -53,14 +39,22 @@ class CRUD {
     });
   }
 
-  updatePost(postId, postData) {
-    postRef.child(postId).update(postData).catchError((e) {
-      print(e);
+  // ignore: missing_return
+  checkPostEmpty() {
+    bool isEmpty;
+    postRef.orderByKey().once().then((snapshot) {
+      if (snapshot.value == null)
+        isEmpty = true;
+      else
+        isEmpty = false;
+    }).whenComplete(() {
+      print(isEmpty);
+      return isEmpty;
     });
   }
 
-  updateComment(commentId, commentData) {
-    commentRef.child(commentId).update(commentData).catchError((e) {
+  deleteComment(postId, commentId) {
+    commentRef.child(postId).child(commentId).remove().catchError((e) {
       print(e);
     });
   }
@@ -71,8 +65,14 @@ class CRUD {
     });
   }
 
-  deleteComment(postId, commentId) {
-    commentRef.child(postId).child(commentId).remove().catchError((e) {
+  updateComment(commentId, commentData) {
+    commentRef.child(commentId).update(commentData).catchError((e) {
+      print(e);
+    });
+  }
+
+  updatePost(postId, postData) {
+    postRef.child(postId).update(postData).catchError((e) {
       print(e);
     });
   }
