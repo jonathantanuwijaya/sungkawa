@@ -31,6 +31,7 @@ class _UpdatePostState extends State<UpdatePost> {
       lokasiSemayam,
       keterangan,
       tempatMakam;
+  String tuhan;
   double _progress;
   bool isChanged = false;
   var postRef;
@@ -60,7 +61,20 @@ class _UpdatePostState extends State<UpdatePost> {
             icon: Icon(Icons.check),
             onPressed: (isLoading != true)
                 ? () {
-                    validateAndSubmit();
+              checkDeity(agama);
+
+              if (image == null) {
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text("Photo wajib ada"),
+                  duration: Duration(seconds: 2),
+                ));
+              } else if (tanggalMeninggal.isAfter(DateTime.now())) {
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text("Jangan mendahului $tuhan!"),
+                  duration: Duration(seconds: 2),
+                ));
+              } else
+                validateAndSubmit();
                   }
                 : null,
           ),
@@ -445,6 +459,17 @@ class _UpdatePostState extends State<UpdatePost> {
   void readLocal() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userId = prefs.getString('userId');
+  }
+
+  void checkDeity(String agama) {
+    if (agama == 'Islam') {
+      tuhan = 'Allah SWT';
+    } else if (agama == 'Kristen' || agama == 'Katolik')
+      tuhan = 'Allah';
+    else if (agama == 'Buddha')
+      tuhan = 'Sanghyang Adi Buddha';
+    else
+      tuhan = 'Tuhan';
   }
 
   void updatePost() async {
