@@ -222,6 +222,4 @@ class _HomePageState extends State<HomePage> {
         style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
       );
   }
-
-  _onPostRemoved(Event event) {}
 }
