@@ -5,11 +5,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sung/model/posting.dart';
-import 'package:sung/pages/detail.dart';
-import 'package:sung/pages/post_update.dart';
-import 'package:sung/utilities/crud.dart';
-import 'package:sung/utilities/utilities.dart';
+import 'package:admin_sungkawa/model/posting.dart';
+import 'package:admin_sungkawa/pages/detail.dart';
+import 'package:admin_sungkawa/pages/post_update.dart';
+import 'package:admin_sungkawa/utilities/crud.dart';
+import 'package:admin_sungkawa/utilities/utilities.dart';
 
 class HomePage extends StatefulWidget {
   @override

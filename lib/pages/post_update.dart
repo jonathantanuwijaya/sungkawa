@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:sung/model/posting.dart';
-import 'package:sung/utilities/constants.dart';
-import 'package:sung/utilities/crud.dart';
+import 'package:admin_sungkawa/model/posting.dart';
+import 'package:admin_sungkawa/utilities/constants.dart';
+import 'package:admin_sungkawa/utilities/crud.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -57,9 +57,10 @@ class _UpdatePostState extends State<UpdatePost> {
     keterangan = widget.post.keterangan;
     lokasiSemayam = widget.post.lokasiSemayam;
     tempatMakam = widget.post.tempatMakam;
+    tanggalSemayam = dateFormat.parse(widget.post.tanggalSemayam);
   }
 
-  DateTime tanggalDimakamkan, waktuDimakamkan, tanggalMeninggal;
+  DateTime tanggalDimakamkan, waktuDimakamkan, tanggalMeninggal, tanggalSemayam;
 
   var radioValue;
   int timestamp;
@@ -166,7 +167,7 @@ class _UpdatePostState extends State<UpdatePost> {
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5))),
                 validator: (value) =>
-                value.isNotEmpty ? null : 'Agama Wajib di isi',
+                    value.isNotEmpty ? null : 'Agama Wajib di isi',
                 value: agama,
                 items: Constants.agama.map((String value) {
                   return DropdownMenuItem(
@@ -187,6 +188,7 @@ class _UpdatePostState extends State<UpdatePost> {
                 height: 12.0,
               ),
               DateTimePickerFormField(
+                initialValue: tanggalSemayam,
                 inputType: InputType.date,
                 editable: false,
                 format: dateFormat,
@@ -197,9 +199,10 @@ class _UpdatePostState extends State<UpdatePost> {
                   ),
                 ),
                 validator: (value) =>
-                value != null ? null : 'Tanggal wajib diisi',
+                    value != null ? null : 'Tanggal wajib diisi',
                 onChanged: (value) => setState(() => tanggalDimakamkan = value),
               ),
+              SizedBox(height: 15),
               DateTimePickerFormField(
                 initialValue: tanggalMeninggal,
                 inputType: InputType.date,

@@ -4,10 +4,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sung/model/comment.dart';
-import 'package:sung/model/posting.dart';
-import 'package:sung/utilities/crud.dart';
-import 'package:sung/utilities/utilities.dart';
+import 'package:admin_sungkawa/model/comment.dart';
+import 'package:admin_sungkawa/model/posting.dart';
+import 'package:admin_sungkawa/utilities/crud.dart';
+import 'package:admin_sungkawa/utilities/utilities.dart';
 
 class CommentPage extends StatefulWidget {
   CommentPage(this.post);

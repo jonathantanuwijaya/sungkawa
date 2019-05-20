@@ -8,10 +8,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:sung/API/ApiService.dart';
-import 'package:sung/main.dart';
-import 'package:sung/utilities/constants.dart';
-import 'package:sung/utilities/crud.dart';
+import 'package:admin_sungkawa/API/ApiService.dart';
+import 'package:admin_sungkawa/main.dart';
+import 'package:admin_sungkawa/utilities/constants.dart';
+import 'package:admin_sungkawa/utilities/crud.dart';
 
 class PostAdd extends StatefulWidget {
   @override

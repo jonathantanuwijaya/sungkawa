@@ -6,8 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sung/main.dart';
-import 'package:sung/utilities/crud.dart';
+import 'package:admin_sungkawa/main.dart';
+import 'package:admin_sungkawa/utilities/crud.dart';
 
 class Login extends StatefulWidget {
   @override

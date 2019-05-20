@@ -1,5 +1,10 @@
 import 'dart:async';
 
+import 'package:admin_sungkawa/pages/about.dart';
+import 'package:admin_sungkawa/pages/admin_home.dart';
+import 'package:admin_sungkawa/pages/introslider.dart';
+import 'package:admin_sungkawa/pages/login.dart';
+import 'package:admin_sungkawa/pages/post_add.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -8,11 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sung/pages/about.dart';
-import 'package:sung/pages/admin_home.dart';
-import 'package:sung/pages/introslider.dart';
-import 'package:sung/pages/login.dart';
-import 'package:sung/pages/post_add.dart';
 
 import 'model/Notifikasi.dart';
 
@@ -67,7 +67,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     getCurrentUser().then((userId) {
       setState(() {
         _authStatus =
-        userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+            userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
       });
 //      if (_authStatus == AuthStatus.signedIn) {
 //        String displayName = user.currentUser.displayName;

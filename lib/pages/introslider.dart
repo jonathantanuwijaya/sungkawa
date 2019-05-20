@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intro_views_flutter/Models/page_view_model.dart';
 import 'package:intro_views_flutter/intro_views_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sung/main.dart';
+import 'package:admin_sungkawa/main.dart';
 
 SharedPreferences prefs;
 

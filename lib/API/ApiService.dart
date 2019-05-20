@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 
 class ApiService {
   static const String serverKey =
-      'AAAAT3fyzbc:APA91bFE7txvrXjyJoVx7S3q-zoTArUrrDuaY2X_iPR8HIK2H6Ry_exwBzdDBv_Cd1P2tn1e3WHo4xKpM7g9CNtQQ1Ug2de_EY1iF87D2DZiJ_kfJ2z-7gidICdgMJY4gGXyRyTcbXKK';
+      'AAAAi82Y9Do:APA91bFy6oFBsNyvLcxklu6wAUeWnC8NWP8gzLeR7Jyz37neUBIza1UvdakV6MGINnWQcvO8bAvqMgp311rabqX8ZSVJMM-3fVu5mZJoqh6rnuOfxzA5huH_4ySBSSkAHAbK8hJhxT9V';
   static final Client client = Client();
 
   static Future<Response> sendToAll({
@@ -14,9 +14,10 @@ class ApiService {
   }) =>
       sendToTopic(title: title, body: body, topic: 'all');
 
-  static Future<Response> sendToTopic({@required String title,
-    @required String body,
-    @required String topic}) =>
+  static Future<Response> sendToTopic(
+          {@required String title,
+          @required String body,
+          @required String topic}) =>
       sendTo(title: title, body: body, fcmToken: '/topics/$topic');
 
   static Future<Response> sendTo({

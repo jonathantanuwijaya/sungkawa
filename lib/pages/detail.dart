@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:sung/model/comment.dart';
-import 'package:sung/model/posting.dart';
-import 'package:sung/pages/comment_page.dart';
-import 'package:sung/utilities/utilities.dart';
+import 'package:admin_sungkawa/model/comment.dart';
+import 'package:admin_sungkawa/model/posting.dart';
+import 'package:admin_sungkawa/pages/comment_page.dart';
+import 'package:admin_sungkawa/utilities/utilities.dart';
 
 class Detail extends StatefulWidget {
   final Post post;
