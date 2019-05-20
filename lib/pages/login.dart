@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:Sungkawa/main.dart';
-import 'package:Sungkawa/utilities/crud.dart';
+import 'package:sungkawa/main.dart';
+import 'package:sungkawa/utilities/crud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';

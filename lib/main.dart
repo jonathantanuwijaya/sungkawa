@@ -1,8 +1,8 @@
-import 'package:Sungkawa/pages/about.dart';
-import 'package:Sungkawa/pages/introslider.dart';
-import 'package:Sungkawa/pages/login.dart';
-import 'package:Sungkawa/pages/profil.dart';
-import 'package:Sungkawa/pages/user_home.dart';
+import 'package:sungkawa/pages/about.dart';
+import 'package:sungkawa/pages/introslider.dart';
+import 'package:sungkawa/pages/login.dart';
+import 'package:sungkawa/pages/profil.dart';
+import 'package:sungkawa/pages/user_home.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'model/Notifikasi.dart';
 
 void main() {
@@ -30,7 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'SUNGKAWA',
+      title: 'Sungkawa',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: Colors.lightBlue,
@@ -54,7 +53,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
-//  FirebaseUser currentUser;
   SharedPreferences prefs;
   bool isLoading;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -194,31 +192,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void signOut() async {
-//    prefs.setString("nama", '');
-//    prefs.setString("email", '');
-//    prefs.setString("userId", '');
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString("nama",'');
+    prefs.setString("email",'');
+    prefs.setString("userId",'');
 
     FirebaseAuth.instance.signOut();
     googleSignIn.signOut();
     _authStatus = AuthStatus.notSignedIn;
 
-//    SnackBar(
-//      content: Text('Signed Out'),
-//      duration: Duration(seconds: 2),
-//    );
     Navigator.pop(context);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (BuildContext context) => Login()));
-//      .whenComplete((){
-//      Fluttertoast.showToast(
-//          msg: "Signed Out",
-//          toastLength: Toast.LENGTH_SHORT,
-//          gravity: ToastGravity.CENTER,
-//          timeInSecForIos: 1,
-//          backgroundColor: Colors.black,
-//          textColor: Colors.white,
-//          fontSize: 16.0);
-//    });
+
   }
 
   void checkConnectivity() async {

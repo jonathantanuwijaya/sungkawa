@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:Sungkawa/model/posting.dart';
-import 'package:Sungkawa/pages/detail.dart';
-import 'package:Sungkawa/utilities/crud.dart';
-import 'package:Sungkawa/utilities/utilities.dart';
+import 'package:sungkawa/model/posting.dart';
+import 'package:sungkawa/pages/detail.dart';
+import 'package:sungkawa/utilities/crud.dart';
+import 'package:sungkawa/utilities/utilities.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,7 +27,6 @@ class _HomePageState extends State<HomePage> {
 
   StreamSubscription<Event> _onPostAddedSubscription;
   StreamSubscription<Event> _onPostChangedSubscription;
-  StreamSubscription<Event> _onPostRemovedSubscription;
 
   _onPostAdded(Event event) {
     setState(() {
@@ -47,23 +46,12 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  _onPostRemoved(Event event) {
-    var deletedEntry = _postList.singleWhere((entry) {
-      return entry.key == event.snapshot.key;
-    });
-    print('on child removed called');
-    setState(() {
-      _postList.remove(deletedEntry);
-    });
-  }
-
   @override
   void initState() {
     super.initState();
     _postList.clear();
     _onPostAddedSubscription = _postRef.onChildAdded.listen(_onPostAdded);
     _onPostChangedSubscription = _postRef.onChildChanged.listen(_onPostChanged);
-    _onPostRemovedSubscription = _postRef.onChildRemoved.listen(_onPostRemoved);
     _postList.sort((a, b) => b.timestamp.compareTo(a.timestamp));
   }
 
@@ -73,7 +61,6 @@ class _HomePageState extends State<HomePage> {
     _postList.clear();
     _onPostAddedSubscription.cancel();
     _onPostChangedSubscription.cancel();
-    _onPostRemovedSubscription.cancel();
   }
 
   @override
