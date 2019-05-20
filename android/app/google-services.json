@@ -1,50 +1,42 @@
 {
   "project_info": {
-    "project_number": "341314817463",
-    "firebase_url": "https://sungkawa-new.firebaseio.com",
-    "project_id": "sungkawa-new",
-    "storage_bucket": "sungkawa-new.appspot.com"
+    "project_number": "600449807418",
+    "firebase_url": "https://sungkawa-8416b.firebaseio.com",
+    "project_id": "sungkawa-8416b",
+    "storage_bucket": "sungkawa-8416b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:341314817463:android:81b7093e02661573",
+        "mobilesdk_app_id": "1:600449807418:android:223c7761b8f9df27",
         "android_client_info": {
-          "package_name": "com.example.sung"
+          "package_name": "com.example.admin_sungkawa"
         }
       },
       "oauth_client": [
         {
-          "client_id": "341314817463-1se89v0k2mrm01cos44e51htbkbdtja0.apps.googleusercontent.com",
+          "client_id": "600449807418-t2dukmiu739uj0s8voo4jgipf55i0668.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.sung",
+            "package_name": "com.example.admin_sungkawa",
             "certificate_hash": "b406cabae02e99d783215413b17466c749aa2219"
           }
         },
         {
-          "client_id": "341314817463-uj8kgg5mqo4j9mm72e3qfirfhe06jb7k.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.sung",
-            "certificate_hash": "cfc383dea68a3448d723eedfee4f0ea3146398a2"
-          }
-        },
-        {
-          "client_id": "341314817463-4hfpf27p2jpe4eerum2i24560k0f2dqj.apps.googleusercontent.com",
+          "client_id": "600449807418-pcl0at6gfgqtpccm1hbl3okf5eibjrdl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA6o27JazqSZDAc9LtOqD8xLxiPK9XcRLE"
+          "current_key": "AIzaSyCIHF4m-seQO0mrrVIRAlbHhk4ccS9uVYM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "341314817463-4hfpf27p2jpe4eerum2i24560k0f2dqj.apps.googleusercontent.com",
+              "client_id": "600449807418-pcl0at6gfgqtpccm1hbl3okf5eibjrdl.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -53,43 +45,35 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:341314817463:android:a1a86f7e80cd8067",
+        "mobilesdk_app_id": "1:600449807418:android:96225ddbd5b2778f",
         "android_client_info": {
-          "package_name": "com.mdpic.sungkawa_user"
+          "package_name": "com.example.sungkawa"
         }
       },
       "oauth_client": [
         {
-          "client_id": "341314817463-dp28ei3gbmr3p05hc1l19dnjar43fnif.apps.googleusercontent.com",
+          "client_id": "600449807418-oqqr5j5665vsjnfq1es9tgamh6l8hfgm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.mdpic.sungkawa_user",
-            "certificate_hash": "b406cabae02e99d783215413b17466c749aa2219"
-          }
-        },
-        {
-          "client_id": "341314817463-gkr2gm08un9o2701li53umnshm4bfkml.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.mdpic.sungkawa_user",
+            "package_name": "com.example.sungkawa",
             "certificate_hash": "cfc383dea68a3448d723eedfee4f0ea3146398a2"
           }
         },
         {
-          "client_id": "341314817463-4hfpf27p2jpe4eerum2i24560k0f2dqj.apps.googleusercontent.com",
+          "client_id": "600449807418-pcl0at6gfgqtpccm1hbl3okf5eibjrdl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA6o27JazqSZDAc9LtOqD8xLxiPK9XcRLE"
+          "current_key": "AIzaSyCIHF4m-seQO0mrrVIRAlbHhk4ccS9uVYM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "341314817463-4hfpf27p2jpe4eerum2i24560k0f2dqj.apps.googleusercontent.com",
+              "client_id": "600449807418-pcl0at6gfgqtpccm1hbl3okf5eibjrdl.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
