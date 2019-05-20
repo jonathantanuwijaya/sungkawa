@@ -18,6 +18,7 @@ final _postRef = FirebaseDatabase.instance
     .reference()
     .child('posts')
     .orderByChild('timestamp');
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -53,60 +54,65 @@ class _HomePageState extends State<HomePage> {
             },
             onLongPress: () {
               showCupertinoModalPopup(
-                  context: context,
-                  builder: (context) => CupertinoActionSheet(
-                    title: Text("Apa yang ingin anda lakukan?"),
-                    actions: <Widget>[
-                      CupertinoActionSheetAction(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        UpdatePost(_postList[index])));
-                          },
-                          child: Text('Update')),
-                      CupertinoActionSheetAction(
+                context: context,
+                builder: (context) =>
+                    CupertinoActionSheet(
+                      title: Text("Apa yang ingin anda lakukan?"),
+                      actions: <Widget>[
+                        CupertinoActionSheetAction(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          UpdatePost(_postList[index])));
+                            },
+                            child: Text('Update')),
+                        CupertinoActionSheetAction(
                           isDestructiveAction: true,
                           child: Text('Delete'),
                           onPressed: () {
                             Navigator.pop(context);
                             showCupertinoDialog(
-                                context: context,
-                                builder: (context) =>
-                                    CupertinoAlertDialog(
-                                      content: Text(
-                                          'Anda yakin dengan pilihan ini'),
-                                      actions: <Widget>[
-                                        FlatButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(
-                                              'Batal',
-                                              style: TextStyle(
-                                                  color: Colors.blue,
-                                                  fontWeight:
-                                                  FontWeight.bold),
-                                            )),
-                                        FlatButton(
-                                            onPressed: () {
-                                              crud.deletePost(
-                                                  _postList[index].key);
-                                              setState(() {
-                                                _postList.removeAt(index);
-                                                Navigator.pop(context);
-                                              });
-                                            },
-                                            child: Text('Ya',
-                                                style: TextStyle(
-                                                  color: Colors.red,
-                                                ))),
-                                      ],
-                                    ));
-                          })
-                    ],
-                  ));
+                              context: context,
+                              builder: (context) =>
+                                  CupertinoAlertDialog(
+                                    content:
+                                    Text('Anda yakin dengan pilihan ini'),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text(
+                                            'Batal',
+                                            style: TextStyle(
+                                                color: Colors.blue,
+                                                fontWeight: FontWeight.bold),
+                                          )),
+                                      FlatButton(
+                                        onPressed: () {
+                                          crud.deletePost(_postList[index].key);
+                                          setState(() {
+                                            _postList.removeAt(index);
+                                            Navigator.pop(context);
+                                          });
+                                        },
+                                        child: Text(
+                                          'Ya',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                            );
+                          },
+                        )
+                      ],
+                    ),
+              );
             },
             child: Card(
               shape: RoundedRectangleBorder(
@@ -151,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                     child: Row(
                       children: <Widget>[
                         Text(
-                          'Usia : ' + _postList[index].usia + ' tahun',
+                          'Usia : ${_postList[index].usia} tahun',
                           style: TextStyle(
                             fontSize: 14.0,
                             color: Colors.grey,
@@ -212,25 +218,33 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildStatusText(data) {
+  Widget buildStatusText(Post post) {
     final dateFormat = DateFormat('dd/MM/yyyy');
 
-    DateTime tanggalMeninggal = dateFormat.parse(data.tanggalMeninggal);
+    DateTime tanggalMeninggal = dateFormat.parse(post.tanggalMeninggal);
+    DateTime tanggalSemayam = dateFormat.parse(post.tanggalSemayam);
+    DateTime tanggalDimakamkan = dateFormat.parse(post.tanggalDimakamkan);
 
     var now = DateTime.now();
 
     print('tanggal = $now');
 
-    if (now.isAfter(tanggalMeninggal))
+    if (now.isAfter(tanggalDimakamkan))
       return Text(
-        'Akan ${data.prosesi}',
+        'Telah ${post.prosesi}',
         style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
       );
-    else
+    else if (now.isAfter(tanggalSemayam))
       return Text(
-        'Telah ${data.prosesi}',
+        'Akan ${post.prosesi}',
         style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
       );
+    else if (now.isAfter(tanggalMeninggal))
+      return Text(
+        'Akan Disemayamkan',
+        style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+      );
+    return Text('');
   }
 
   @override

@@ -53,7 +53,7 @@ class _PostAddState extends State<PostAdd> {
   bool isLoading = false;
   String kubur, agama;
   CRUD crud = new CRUD();
-
+  String tuhan;
   Constants constants = new Constants();
   var radioValue;
 
@@ -73,7 +73,20 @@ class _PostAddState extends State<PostAdd> {
                 icon: Icon(Icons.check),
                 onPressed: isLoading != true
                     ? () {
-                        image == null ? showErrorMessage() : savePost();
+                  checkDeity(agama);
+
+                  if (image == null) {
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text("Photo wajib ada"),
+                      duration: Duration(seconds: 2),
+                    ));
+                  } else if (tanggalMeninggal.isAfter(DateTime.now())) {
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text("Jangan mendahului $tuhan!"),
+                      duration: Duration(seconds: 2),
+                    ));
+                  } else
+                    savePost();
                       }
                     : null);
           })
@@ -365,6 +378,17 @@ class _PostAddState extends State<PostAdd> {
     );
   }
 
+  void checkDeity(String agama) {
+    if (agama == 'Islam') {
+      tuhan = 'Allah SWT';
+    } else if (agama == 'Kristen' || agama == 'Katolik')
+      tuhan = 'Allah';
+    else if (agama == 'Buddha')
+      tuhan = 'Sanghyang Adi Buddha';
+    else
+      tuhan = 'Tuhan';
+  }
+
   void getImageCamera() async {
     try {
       imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
@@ -401,7 +425,6 @@ class _PostAddState extends State<PostAdd> {
     // TODO: implement initState
     super.initState();
     _prosesi = 'Dimakamkan';
-    tanggalMeninggal = DateTime.now();
   }
 
   void savePost() async {
@@ -480,13 +503,6 @@ class _PostAddState extends State<PostAdd> {
 
   void sendTokenToServer(String fcmtoken) {
     print('Token : $fcmtoken');
-  }
-
-  void showErrorMessage() {
-    Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text("Photo wajib ada"),
-      duration: Duration(seconds: 2),
-    ));
   }
 
   Future<String> uploadImage(var imageFile) async {

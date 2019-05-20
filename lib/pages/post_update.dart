@@ -80,6 +80,7 @@ class _UpdatePostState extends State<UpdatePost> {
                       placeholder: (context, url) =>
                           CircularProgressIndicator(),
                       errorWidget: (context, url, error) => Icon(Icons.warning),
+                fit: BoxFit.fill,
                     )
                   : buildImage(),
               SizedBox(
@@ -168,22 +169,6 @@ class _UpdatePostState extends State<UpdatePost> {
                 height: 12.0,
               ),
               DateTimePickerFormField(
-                initialValue: tanggalSemayam,
-                inputType: InputType.date,
-                editable: false,
-                format: dateFormat,
-                decoration: InputDecoration(
-                  labelText: 'Tanggal Disemayamkan',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                ),
-                validator: (value) =>
-                    value != null ? null : 'Tanggal wajib diisi',
-                onChanged: (value) => setState(() => tanggalDimakamkan = value),
-              ),
-              SizedBox(height: 15),
-              DateTimePickerFormField(
                 initialValue: tanggalMeninggal,
                 inputType: InputType.date,
                 editable: false,
@@ -195,6 +180,22 @@ class _UpdatePostState extends State<UpdatePost> {
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                 ),
+              ),
+              SizedBox(height: 15),
+              DateTimePickerFormField(
+                initialValue: tanggalSemayam,
+                inputType: InputType.date,
+                editable: false,
+                format: dateFormat,
+                decoration: InputDecoration(
+                  labelText: 'Tanggal Disemayamkan',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                ),
+                validator: (value) =>
+                value != null ? null : 'Tanggal wajib diisi',
+                onChanged: (value) => setState(() => tanggalSemayam = value),
               ),
               SizedBox(
                 height: 10.0,
@@ -401,7 +402,7 @@ class _UpdatePostState extends State<UpdatePost> {
         .child('posts')
         .child(widget.post.key);
     _prosesi = widget.post.prosesi;
-    tanggalDimakamkan = dateFormat.parse(widget.post.tanggalSemayam);
+    tanggalDimakamkan = dateFormat.parse(widget.post.tanggalDimakamkan);
     tanggalMeninggal = dateFormat.parse(widget.post.tanggalMeninggal);
     waktuDimakamkan = timeFormat.parse(widget.post.waktuDimakamkan);
     nama = widget.post.nama;
@@ -422,15 +423,15 @@ class _UpdatePostState extends State<UpdatePost> {
         'usia': usia,
         'agama': agama,
         'photo': _url,
-        'timestamp': timestamp,
+        'timestamp': widget.post.timestamp,
         'userId': userId,
         'tanggalMeninggal': dateFormat.format(tanggalMeninggal),
         'alamat': alamat,
         'prosesi': _prosesi.toString(),
         'tempatMakam': tempatMakam,
-        'tanggalSemayam': dateFormat.format(tanggalDimakamkan),
+        'tanggalDimakamkan': dateFormat.format(tanggalDimakamkan),
         'lokasiSemayam': lokasiSemayam,
-        'waktuSemayam': timeFormat.format(waktuDimakamkan),
+        'waktuDimakamkan': timeFormat.format(waktuDimakamkan),
         'keterangan': keterangan
       });
     } catch (e) {
@@ -448,7 +449,6 @@ class _UpdatePostState extends State<UpdatePost> {
 
   void updatePost() async {
     print('Mencoba Update Posting');
-    timestamp = DateTime.now().millisecondsSinceEpoch;
 
     if (isChanged == true) {
       uploadImage(image).then((_url) {
@@ -463,9 +463,12 @@ class _UpdatePostState extends State<UpdatePost> {
   }
 
   Future<String> uploadImage(var imageFile) async {
+    timestamp = DateTime
+        .now()
+        .millisecondsSinceEpoch;
     String fileName = timestamp.toString() + 'jpg';
     StorageReference storageRef =
-        FirebaseStorage.instance.ref().child('image').child(fileName);
+    FirebaseStorage.instance.ref().child('image').child(fileName);
     StorageUploadTask task = storageRef.putFile(image);
 
     task.events.listen((event) {
