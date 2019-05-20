@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 
 class ApiService {
   static const String serverKey =
-      'AAAA0Cg1n0E:APA91bElz_2ptsE8WRkaXJhg9ZB77wzYcoC2Rn-m7g9onREbmWvuDQcSyapSuq_ZdZr-TGhiSDSXdrCJAYOtgf0MYRQua3bmRGUzwCzMuoi-MT2c6VHiOjx6zTPU9M2PjrU9yupdH_nv';
+      'AAAAT3fyzbc:APA91bFE7txvrXjyJoVx7S3q-zoTArUrrDuaY2X_iPR8HIK2H6Ry_exwBzdDBv_Cd1P2tn1e3WHo4xKpM7g9CNtQQ1Ug2de_EY1iF87D2DZiJ_kfJ2z-7gidICdgMJY4gGXyRyTcbXKK';
   static final Client client = Client();
 
   static Future<Response> sendToAll({
