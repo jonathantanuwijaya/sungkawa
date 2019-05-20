@@ -37,32 +37,10 @@ class _UpdatePostState extends State<UpdatePost> {
   CRUD crud = new CRUD();
   SharedPreferences prefs;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    readLocal();
-    postRef = FirebaseDatabase.instance
-        .reference()
-        .child('posts')
-        .child(widget.post.key);
-    _prosesi = widget.post.prosesi;
-    tanggalDimakamkan = dateFormat.parse(widget.post.tanggalSemayam);
-    tanggalMeninggal = dateFormat.parse(widget.post.tanggalMeninggal);
-    waktuDimakamkan = timeFormat.parse(widget.post.waktuDimakamkan);
-    nama = widget.post.nama;
-    agama = widget.post.agama;
-    usia = widget.post.usia;
-    alamat = widget.post.alamat;
-    keterangan = widget.post.keterangan;
-    lokasiSemayam = widget.post.lokasiSemayam;
-    tempatMakam = widget.post.tempatMakam;
-    tanggalSemayam = dateFormat.parse(widget.post.tanggalSemayam);
-  }
-
   DateTime tanggalDimakamkan, waktuDimakamkan, tanggalMeninggal, tanggalSemayam;
 
   var radioValue;
+
   int timestamp;
   File image;
   var imageFile, _prosesi;
@@ -80,9 +58,11 @@ class _UpdatePostState extends State<UpdatePost> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.check),
-            onPressed: () {
-              validateAndSubmit();
-            },
+            onPressed: (isLoading != true)
+                ? () {
+                    validateAndSubmit();
+                  }
+                : null,
           ),
         ],
         backgroundColor: Colors.green,
@@ -354,13 +334,6 @@ class _UpdatePostState extends State<UpdatePost> {
     );
   }
 
-  void handleProsesi(value) {
-    print('Process type : $value');
-    setState(() {
-      _prosesi = value;
-    });
-  }
-
   Widget buildImage() {
     return Container(
       child: Image.file(
@@ -372,17 +345,17 @@ class _UpdatePostState extends State<UpdatePost> {
     );
   }
 
-  void getImageGallery() async {
-    try {
-      imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-      print('imageFile : $imageFile');
-      setState(() {
-        image = imageFile;
-        isChanged = true;
-      });
-    } catch (e) {
-      print('Error $e');
-    }
+  Widget buildProgressIndicator() {
+    if (isUploading == true)
+      return Expanded(
+          child: LinearProgressIndicator(
+        value: _progress,
+      ));
+    else if (isLoading == true)
+      return Container(
+          width: 20, height: 20, child: CircularProgressIndicator());
+    else
+      return SizedBox();
   }
 
   void getImageCamera() async {
@@ -398,65 +371,47 @@ class _UpdatePostState extends State<UpdatePost> {
     }
   }
 
-  Future<String> uploadImage(var imageFile) async {
-    String fileName = timestamp.toString() + 'jpg';
-    StorageReference storageRef =
-        FirebaseStorage.instance.ref().child('image').child(fileName);
-    StorageUploadTask task = storageRef.putFile(image);
-
-    task.events.listen((event) {
+  void getImageGallery() async {
+    try {
+      imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+      print('imageFile : $imageFile');
       setState(() {
-        isUploading = true;
-        _progress = event.snapshot.bytesTransferred.toDouble() /
-            event.snapshot.totalByteCount.toDouble();
+        image = imageFile;
+        isChanged = true;
       });
+    } catch (e) {
+      print('Error $e');
+    }
+  }
+
+  void handleProsesi(value) {
+    print('Process type : $value');
+    setState(() {
+      _prosesi = value;
     });
-
-    var downloadUrl = await (await task.onComplete).ref.getDownloadURL();
-    String _url = downloadUrl.toString();
-    return _url;
   }
 
-  void updatePost() async {
-    print('Mencoba Update Posting');
-    timestamp = DateTime.now().millisecondsSinceEpoch;
-
-    if (isChanged == true) {
-      uploadImage(image).then((_url) {
-        pushData(_url);
-      });
-    } else {
-      setState(() {
-        isLoading = true;
-      });
-      pushData(widget.post.photo);
-    }
-  }
-
-  bool validateAndSave() {
-    final form = formKey.currentState;
-
-    form.save();
-
-    if (form.validate()) {
-      print('Posting valid');
-      return true;
-    } else {
-      print('Posting tidak valid');
-      return false;
-    }
-  }
-
-  void validateAndSubmit() async {
-    if (validateAndSave()) {
-      try {
-        updatePost();
-      } catch (e) {
-        print('Error $e');
-      }
-    } else {
-      formKey.currentState.reset();
-    }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    readLocal();
+    postRef = FirebaseDatabase.instance
+        .reference()
+        .child('posts')
+        .child(widget.post.key);
+    _prosesi = widget.post.prosesi;
+    tanggalDimakamkan = dateFormat.parse(widget.post.tanggalSemayam);
+    tanggalMeninggal = dateFormat.parse(widget.post.tanggalMeninggal);
+    waktuDimakamkan = timeFormat.parse(widget.post.waktuDimakamkan);
+    nama = widget.post.nama;
+    agama = widget.post.agama;
+    usia = widget.post.usia;
+    alamat = widget.post.alamat;
+    keterangan = widget.post.keterangan;
+    lokasiSemayam = widget.post.lokasiSemayam;
+    tempatMakam = widget.post.tempatMakam;
+    tanggalSemayam = dateFormat.parse(widget.post.tanggalSemayam);
   }
 
   void pushData(_url) {
@@ -486,21 +441,69 @@ class _UpdatePostState extends State<UpdatePost> {
     }
   }
 
-  Widget buildProgressIndicator() {
-    if (isUploading == true)
-      return Expanded(
-          child: LinearProgressIndicator(
-        value: _progress,
-      ));
-    else if (isLoading == true)
-      return Container(
-          width: 20, height: 20, child: CircularProgressIndicator());
-    else
-      return SizedBox();
-  }
-
   void readLocal() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userId = prefs.getString('userId');
+  }
+
+  void updatePost() async {
+    print('Mencoba Update Posting');
+    timestamp = DateTime.now().millisecondsSinceEpoch;
+
+    if (isChanged == true) {
+      uploadImage(image).then((_url) {
+        pushData(_url);
+      });
+    } else {
+      setState(() {
+        isLoading = true;
+      });
+      pushData(widget.post.photo);
+    }
+  }
+
+  Future<String> uploadImage(var imageFile) async {
+    String fileName = timestamp.toString() + 'jpg';
+    StorageReference storageRef =
+        FirebaseStorage.instance.ref().child('image').child(fileName);
+    StorageUploadTask task = storageRef.putFile(image);
+
+    task.events.listen((event) {
+      setState(() {
+        isUploading = true;
+        _progress = event.snapshot.bytesTransferred.toDouble() /
+            event.snapshot.totalByteCount.toDouble();
+      });
+    });
+
+    var downloadUrl = await (await task.onComplete).ref.getDownloadURL();
+    String _url = downloadUrl.toString();
+    return _url;
+  }
+
+  bool validateAndSave() {
+    final form = formKey.currentState;
+
+    form.save();
+
+    if (form.validate()) {
+      print('Posting valid');
+      return true;
+    } else {
+      print('Posting tidak valid');
+      return false;
+    }
+  }
+
+  void validateAndSubmit() async {
+    if (validateAndSave()) {
+      try {
+        updatePost();
+      } catch (e) {
+        print('Error $e');
+      }
+    } else {
+      formKey.currentState.reset();
+    }
   }
 }

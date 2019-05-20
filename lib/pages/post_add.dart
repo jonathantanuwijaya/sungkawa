@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:admin_sungkawa/API/ApiService.dart';
+import 'package:admin_sungkawa/main.dart';
+import 'package:admin_sungkawa/utilities/constants.dart';
+import 'package:admin_sungkawa/utilities/crud.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -8,10 +12,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:admin_sungkawa/API/ApiService.dart';
-import 'package:admin_sungkawa/main.dart';
-import 'package:admin_sungkawa/utilities/constants.dart';
-import 'package:admin_sungkawa/utilities/crud.dart';
 
 class PostAdd extends StatefulWidget {
   @override
@@ -47,7 +47,6 @@ class _PostAddState extends State<PostAdd> {
   DateTime tanggalMeninggal;
   DateTime tanggalSemayam;
   DateTime waktuSemayam;
-  BuildContext _snackBarContext;
 
   File image;
   var imageFile, _prosesi;
@@ -70,13 +69,13 @@ class _PostAddState extends State<PostAdd> {
         actions: <Widget>[
           Builder(builder: (BuildContext context) {
             return IconButton(
-              color: Colors.black,
-              icon: Icon(Icons.check),
-              onPressed: () {
-                _snackBarContext = context;
-                image == null ? showErrorMessage() : savePost();
-              },
-            );
+                color: Colors.black,
+                icon: Icon(Icons.check),
+                onPressed: isLoading != true
+                    ? () {
+                        image == null ? showErrorMessage() : savePost();
+                      }
+                    : null);
           })
         ],
       ),
@@ -105,7 +104,7 @@ class _PostAddState extends State<PostAdd> {
                     controller: namaController,
                     textCapitalization: TextCapitalization.words,
                     validator: (value) =>
-                    value.isNotEmpty ? null : 'Nama wajib diisi',
+                        value.isNotEmpty ? null : 'Nama wajib diisi',
                   ),
                   SizedBox(
                     height: 8.0,
@@ -125,7 +124,7 @@ class _PostAddState extends State<PostAdd> {
                     controller: umurController,
                     textCapitalization: TextCapitalization.words,
                     validator: (value) =>
-                    value.isNotEmpty ? null : 'Usia wajib diisi',
+                        value.isNotEmpty ? null : 'Usia wajib diisi',
                   ),
                   SizedBox(
                     height: 8.0,
@@ -136,7 +135,7 @@ class _PostAddState extends State<PostAdd> {
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5))),
                     validator: (value) =>
-                    value != null ? null : 'Agama Wajib di isi',
+                        value != null ? null : 'Agama Wajib di isi',
                     value: agama,
                     items: Constants.agama.map((String value) {
                       return DropdownMenuItem(
@@ -160,15 +159,15 @@ class _PostAddState extends State<PostAdd> {
                     inputType: InputType.date,
                     editable: false,
                     format: dateFormat,
-                    controller: tanggalDisemayamkanController,
+                    controller: tanggalMeninggalController,
                     decoration: InputDecoration(
-                      labelText: 'Tanggal Disemayamkan',
+                      labelText: 'Tanggal Meninggal',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                     ),
                     validator: (value) =>
-                    value != null ? null : 'Tanggal wajib diisi',
+                        value != null ? null : 'Tanggal wajib diisi',
                     onChanged: (value) => setState(() => date = value),
                   ),
                   SizedBox(
@@ -178,15 +177,15 @@ class _PostAddState extends State<PostAdd> {
                     inputType: InputType.date,
                     editable: false,
                     format: dateFormat,
-                    controller: tanggalMeninggalController,
+                    controller: tanggalDisemayamkanController,
                     decoration: InputDecoration(
-                      labelText: 'Tanggal Meninggal',
+                      labelText: 'Tanggal Disemayamkan',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                     ),
                     validator: (value) =>
-                    value != null ? null : 'Tanggal wajib diisi',
+                        value != null ? null : 'Tanggal wajib diisi',
                     onChanged: (value) => setState(() => date = value),
                   ),
                   SizedBox(
@@ -201,7 +200,7 @@ class _PostAddState extends State<PostAdd> {
                       ),
                     ),
                     validator: (value) =>
-                    value.isNotEmpty ? null : 'Alamat wajib diisi',
+                        value.isNotEmpty ? null : 'Alamat wajib diisi',
                     maxLength: 50,
                     maxLines: 1,
                     controller: alamatController,
@@ -246,8 +245,7 @@ class _PostAddState extends State<PostAdd> {
                       maxLines: 1,
                       controller: tempatSemayamController,
                       textCapitalization: TextCapitalization.words,
-                      validator: (value) =>
-                      value.isNotEmpty
+                      validator: (value) => value.isNotEmpty
                           ? null
                           : 'Tempat persemayaman wajib diisi.'),
                   TextFormField(
@@ -263,7 +261,7 @@ class _PostAddState extends State<PostAdd> {
                     controller: tempatProsesiController,
                     textCapitalization: TextCapitalization.words,
                     validator: (value) =>
-                    value.isNotEmpty ? null : 'Tempat Prosesi wajib diisi.',
+                        value.isNotEmpty ? null : 'Tempat Prosesi wajib diisi.',
                   ),
                   DateTimePickerFormField(
                     inputType: InputType.date,
@@ -271,7 +269,7 @@ class _PostAddState extends State<PostAdd> {
                     format: dateFormat,
                     controller: tanggalProsesiController,
                     validator: (value) =>
-                    value != null ? null : 'Tanggal wajib diisi',
+                        value != null ? null : 'Tanggal wajib diisi',
                     decoration: InputDecoration(
                       labelText: 'Tanggal Pemakaman/Kremasi',
                       border: OutlineInputBorder(
@@ -291,7 +289,7 @@ class _PostAddState extends State<PostAdd> {
                     editable: false,
                     format: timeFormat,
                     validator: (value) =>
-                    value != null ? null : 'Jam wajib diisi',
+                        value != null ? null : 'Jam wajib diisi',
                     controller: waktuDimakamkanController,
                     decoration: InputDecoration(
                       labelText: 'Jam Pemakaman/Kremasi',
@@ -346,16 +344,6 @@ class _PostAddState extends State<PostAdd> {
     );
   }
 
-  Widget buildProgressBar() {
-    return Expanded(
-      child: isUploading == true
-          ? LinearProgressIndicator(
-        value: _progress,
-      )
-          : SizedBox(),
-    );
-  }
-
   Widget buildImage() {
     return Container(
       child: Image.file(
@@ -367,16 +355,14 @@ class _PostAddState extends State<PostAdd> {
     );
   }
 
-  void getImageGallery() async {
-    try {
-      imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-      print('imageFile : $imageFile');
-      setState(() {
-        image = imageFile;
-      });
-    } catch (e) {
-      print('Error $e');
-    }
+  Widget buildProgressBar() {
+    return Expanded(
+      child: isUploading == true
+          ? LinearProgressIndicator(
+              value: _progress,
+            )
+          : SizedBox(),
+    );
   }
 
   void getImageCamera() async {
@@ -391,25 +377,31 @@ class _PostAddState extends State<PostAdd> {
     }
   }
 
-  Future<String> uploadImage(var imageFile) async {
-    timestamp = DateTime.now().millisecondsSinceEpoch;
-    String fileName = timestamp.toString() + 'jpg';
-    StorageReference storageRef =
-    FirebaseStorage.instance.ref().child('image').child(fileName);
-    StorageUploadTask task = storageRef.putFile(image);
-
-    task.events.listen((event) {
+  void getImageGallery() async {
+    try {
+      imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+      print('imageFile : $imageFile');
       setState(() {
-        isUploading = true;
-        _progress = event.snapshot.bytesTransferred.toDouble() /
-            event.snapshot.totalByteCount.toDouble();
+        image = imageFile;
       });
+    } catch (e) {
+      print('Error $e');
+    }
+  }
+
+  void handleProsesi(value) {
+    print('Process type : $value');
+    setState(() {
+      _prosesi = value;
     });
+  }
 
-    var downloadUrl = await (await task.onComplete).ref.getDownloadURL();
-    String _url = downloadUrl.toString();
-
-    return _url;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _prosesi = 'Dimakamkan';
+    tanggalMeninggal = DateTime.now();
   }
 
   void savePost() async {
@@ -469,32 +461,6 @@ class _PostAddState extends State<PostAdd> {
     }
   }
 
-  void handleProsesi(value) {
-    print('Process type : $value');
-    setState(() {
-      _prosesi = value;
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _prosesi = 'Dimakamkan';
-    tanggalMeninggal = DateTime.now();
-  }
-
-  void showErrorMessage() {
-    Scaffold.of(_snackBarContext).showSnackBar(SnackBar(
-      content: Text("Photo wajib ada"),
-      duration: Duration(seconds: 2),
-    ));
-  }
-
-  void sendTokenToServer(String fcmtoken) {
-    print('Token : $fcmtoken');
-  }
-
   Future sendNotification() async {
     final response = await ApiService.sendToAll(
         title: 'Berita Duka Cita',
@@ -507,8 +473,40 @@ class _PostAddState extends State<PostAdd> {
     if (response.statusCode != 200) {
       Scaffold.of(context).showSnackBar(SnackBar(
         content:
-        Text('[${response.statusCode}] Error message: ${response.body}'),
+            Text('[${response.statusCode}] Error message: ${response.body}'),
       ));
     }
+  }
+
+  void sendTokenToServer(String fcmtoken) {
+    print('Token : $fcmtoken');
+  }
+
+  void showErrorMessage() {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text("Photo wajib ada"),
+      duration: Duration(seconds: 2),
+    ));
+  }
+
+  Future<String> uploadImage(var imageFile) async {
+    timestamp = DateTime.now().millisecondsSinceEpoch;
+    String fileName = timestamp.toString() + 'jpg';
+    StorageReference storageRef =
+        FirebaseStorage.instance.ref().child('image').child(fileName);
+    StorageUploadTask task = storageRef.putFile(image);
+
+    task.events.listen((event) {
+      setState(() {
+        isUploading = true;
+        _progress = event.snapshot.bytesTransferred.toDouble() /
+            event.snapshot.totalByteCount.toDouble();
+      });
+    });
+
+    var downloadUrl = await (await task.onComplete).ref.getDownloadURL();
+    String _url = downloadUrl.toString();
+
+    return _url;
   }
 }

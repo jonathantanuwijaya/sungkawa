@@ -1,68 +1,33 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:admin_sungkawa/model/posting.dart';
 import 'package:admin_sungkawa/pages/detail.dart';
 import 'package:admin_sungkawa/pages/post_update.dart';
 import 'package:admin_sungkawa/utilities/crud.dart';
 import 'package:admin_sungkawa/utilities/utilities.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
+CRUD crud = new CRUD();
 
+Utilities util = new Utilities();
 final _postRef = FirebaseDatabase.instance
     .reference()
     .child('posts')
     .orderByChild('timestamp');
-Utilities util = new Utilities();
-CRUD crud = new CRUD();
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
 
 class _HomePageState extends State<HomePage> {
   List<Post> _postList = new List();
 
   StreamSubscription<Event> _onPostAddedSubscription;
   StreamSubscription<Event> _onPostChangedSubscription;
-
-  _onPostAdded(Event event) {
-    setState(() {
-      _postList.add(Post.fromSnapshot(event.snapshot));
-      _postList.sort((a, b) => b.timestamp.compareTo(a.timestamp));
-    });
-  }
-
-  _onPostChanged(Event event) {
-    var oldEntry = _postList.singleWhere((entry) {
-      return entry.key == event.snapshot.key;
-    });
-
-    setState(() {
-      _postList[_postList.indexOf(oldEntry)] =
-          Post.fromSnapshot(event.snapshot);
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _postList.clear();
-    _onPostAddedSubscription = _postRef.onChildAdded.listen(_onPostAdded);
-    _onPostChangedSubscription = _postRef.onChildChanged.listen(_onPostChanged);
-    _postList.sort((a, b) => b.timestamp.compareTo(a.timestamp));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _postList.clear();
-    _onPostAddedSubscription.cancel();
-    _onPostChangedSubscription.cancel();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -266,5 +231,40 @@ class _HomePageState extends State<HomePage> {
         'Telah ${data.prosesi}',
         style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
       );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _postList.clear();
+    _onPostAddedSubscription.cancel();
+    _onPostChangedSubscription.cancel();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _postList.clear();
+    _onPostAddedSubscription = _postRef.onChildAdded.listen(_onPostAdded);
+    _onPostChangedSubscription = _postRef.onChildChanged.listen(_onPostChanged);
+    _postList.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+  }
+
+  _onPostAdded(Event event) {
+    setState(() {
+      _postList.add(Post.fromSnapshot(event.snapshot));
+      _postList.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+    });
+  }
+
+  _onPostChanged(Event event) {
+    var oldEntry = _postList.singleWhere((entry) {
+      return entry.key == event.snapshot.key;
+    });
+
+    setState(() {
+      _postList[_postList.indexOf(oldEntry)] =
+          Post.fromSnapshot(event.snapshot);
+    });
   }
 }

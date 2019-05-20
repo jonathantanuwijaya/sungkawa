@@ -11,16 +11,6 @@ class Comment {
   Comment(
       this._key, this._fullName, this._comment, this._postId, this._timestamp);
 
-  int get timestamp => _timestamp;
-
-  String get postId => _postId;
-
-  String get comment => _comment;
-
-  String get fullName => _fullName;
-
-  String get key => _key;
-
   Comment.fromSnapshot(DataSnapshot snapshot) {
     _key = snapshot.key;
     _fullName = snapshot.value['fullName'];
@@ -28,4 +18,14 @@ class Comment {
     _timestamp = snapshot.value['timestamp'];
     _postId = snapshot.value['postId'];
   }
+
+  String get comment => _comment;
+
+  String get fullName => _fullName;
+
+  String get key => _key;
+
+  String get postId => _postId;
+
+  int get timestamp => _timestamp;
 }

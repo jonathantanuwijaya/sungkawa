@@ -23,9 +23,14 @@ void main() {
   });
 }
 
-enum Pilihan { about, signOut }
-
 final GoogleSignIn googleSignIn = GoogleSignIn();
+
+enum AuthStatus { signedIn, notSignedIn }
+
+class DashboardScreen extends StatefulWidget {
+  @override
+  _DashboardScreenState createState() => _DashboardScreenState();
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -44,12 +49,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class DashboardScreen extends StatefulWidget {
-  @override
-  _DashboardScreenState createState() => _DashboardScreenState();
-}
-
-enum AuthStatus { signedIn, notSignedIn }
+enum Pilihan { about, signOut }
 
 class _DashboardScreenState extends State<DashboardScreen> {
   AuthStatus _authStatus;
@@ -58,64 +58,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   GoogleSignIn user;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final List<Notifikasi> notif = [];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    checkConnectivity();
-    getCurrentUser().then((userId) {
-      setState(() {
-        _authStatus =
-            userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
-      });
-//      if (_authStatus == AuthStatus.signedIn) {
-//        String displayName = user.currentUser.displayName;
-//
-//        Scaffold.of(context).showSnackBar(
-//            SnackBar(content: Text('User $displayName signed in!')));
-//      }
-    });
-    _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
-    _firebaseMessaging.getToken();
-    _firebaseMessaging.subscribeToTopic('all');
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-        final notification = message['notification'];
-        setState(() {
-          notif.add(Notifikasi(
-            title: notification['title'],
-            nama: notification['body'],
-          ));
-        });
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-
-        final notification = message['data'];
-        setState(() {
-          notif.add(Notifikasi(
-            title: '${notification['title']}',
-            nama: '${notification['body']}',
-          ));
-        });
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-      },
-    );
-  }
-
-  Future<String> getCurrentUser() async {
-    try {
-      FirebaseUser user = await FirebaseAuth.instance.currentUser();
-      return user.uid;
-    } catch (e) {
-      print('Error: $e');
-      return null;
-    }
-  }
 
   @override
   // ignore: missing_return
@@ -190,6 +132,64 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
+  Future<String> getCurrentUser() async {
+    try {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      return user.uid;
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkConnectivity();
+    getCurrentUser().then((userId) {
+      setState(() {
+        _authStatus =
+            userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+      });
+//      if (_authStatus == AuthStatus.signedIn) {
+//        String displayName = user.currentUser.displayName;
+//
+//        Scaffold.of(context).showSnackBar(
+//            SnackBar(content: Text('User $displayName signed in!')));
+//      }
+    });
+    _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
+    _firebaseMessaging.getToken();
+    _firebaseMessaging.subscribeToTopic('all');
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        final notification = message['notification'];
+        setState(() {
+          notif.add(Notifikasi(
+            title: notification['title'],
+            nama: notification['body'],
+          ));
+        });
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+
+        final notification = message['data'];
+        setState(() {
+          notif.add(Notifikasi(
+            title: '${notification['title']}',
+            nama: '${notification['body']}',
+          ));
+        });
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    );
+  }
+
 //  void selectedAction(Pilihan value) {
 //    print('You choose : $value');
 //    if (value == Pilihan.about) {
@@ -200,6 +200,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 //      signOut();
 //    }
 //  }
+
+  void sendTokenToServer(String fcm) {
+    print('Token : $fcm');
+  }
 
   void signOut() async {
     FirebaseAuth.instance.signOut();
@@ -229,9 +233,5 @@ class _DashboardScreenState extends State<DashboardScreen> {
       print('Connectivity Result: not connected');
       return false;
     }
-  }
-
-  void sendTokenToServer(String fcm) {
-    print('Token : $fcm');
   }
 }

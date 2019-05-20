@@ -1,18 +1,19 @@
 import 'dart:async';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:admin_sungkawa/model/comment.dart';
 import 'package:admin_sungkawa/model/posting.dart';
 import 'package:admin_sungkawa/utilities/crud.dart';
 import 'package:admin_sungkawa/utilities/utilities.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CommentPage extends StatefulWidget {
-  CommentPage(this.post);
-
   final Post post;
+
+  CommentPage(this.post);
 
   @override
   _CommentPageState createState() => _CommentPageState();
@@ -32,64 +33,6 @@ class _CommentPageState extends State<CommentPage> {
   StreamSubscription<Event> _onCommentAddedSubscription;
   StreamSubscription<Event> _onCommentChangedSubscription;
   StreamSubscription<Event> _onCommentRemovedSubscription;
-
-  _onCommentAdded(Event event) {
-    setState(() {
-      _commentList.add(Comment.fromSnapshot(event.snapshot));
-    });
-  }
-
-  _onCommentChanged(Event event) {
-    var oldEntry = _commentList.singleWhere((entry) {
-      return entry.key == event.snapshot.key;
-    });
-
-    setState(() {
-      _commentList[_commentList.indexOf(oldEntry)] =
-          Comment.fromSnapshot(event.snapshot);
-    });
-  }
-
-  _onCommentRemoved(Event event) {
-    var deletedEntry = _commentList.singleWhere((entry) {
-      return entry.key == event.snapshot.key;
-    });
-    print('on child removed called');
-    setState(() {
-      _commentList.remove(deletedEntry);
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _commentRef = FirebaseDatabase.instance
-        .reference()
-        .child('comments')
-        .child(widget.post.key)
-        .orderByChild('timestamp');
-    readLocal();
-    _commentList.clear();
-
-    _onCommentAddedSubscription =
-        _commentRef.onChildAdded.listen(_onCommentAdded);
-    _onCommentChangedSubscription =
-        _commentRef.onChildChanged.listen(_onCommentChanged);
-    _onCommentRemovedSubscription =
-        _commentRef.onChildRemoved.listen(_onCommentRemoved);
-
-    isEmpty = crud.checkCommentEmpty(widget.post.key);
-    print(isEmpty);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _commentList.clear();
-    _onCommentAddedSubscription.cancel();
-    _onCommentChangedSubscription.cancel();
-    _onCommentRemovedSubscription.cancel();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -172,6 +115,43 @@ class _CommentPageState extends State<CommentPage> {
     );
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _commentList.clear();
+    _onCommentAddedSubscription.cancel();
+    _onCommentChangedSubscription.cancel();
+    _onCommentRemovedSubscription.cancel();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _commentRef = FirebaseDatabase.instance
+        .reference()
+        .child('comments')
+        .child(widget.post.key)
+        .orderByChild('timestamp');
+    readLocal();
+    _commentList.clear();
+
+    _onCommentAddedSubscription =
+        _commentRef.onChildAdded.listen(_onCommentAdded);
+    _onCommentChangedSubscription =
+        _commentRef.onChildChanged.listen(_onCommentChanged);
+    _onCommentRemovedSubscription =
+        _commentRef.onChildRemoved.listen(_onCommentRemoved);
+
+    isEmpty = crud.checkCommentEmpty(widget.post.key);
+    print(isEmpty);
+  }
+
+  void readLocal() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    fullName = prefs.getString('nama');
+    userId = prefs.getString('userId');
+  }
+
   void sendComment() {
     print('Comment : ' + commentController.text);
 
@@ -203,9 +183,30 @@ class _CommentPageState extends State<CommentPage> {
     }
   }
 
-  void readLocal() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    fullName = prefs.getString('nama');
-    userId = prefs.getString('userId');
+  _onCommentAdded(Event event) {
+    setState(() {
+      _commentList.add(Comment.fromSnapshot(event.snapshot));
+    });
+  }
+
+  _onCommentChanged(Event event) {
+    var oldEntry = _commentList.singleWhere((entry) {
+      return entry.key == event.snapshot.key;
+    });
+
+    setState(() {
+      _commentList[_commentList.indexOf(oldEntry)] =
+          Comment.fromSnapshot(event.snapshot);
+    });
+  }
+
+  _onCommentRemoved(Event event) {
+    var deletedEntry = _commentList.singleWhere((entry) {
+      return entry.key == event.snapshot.key;
+    });
+    print('on child removed called');
+    setState(() {
+      _commentList.remove(deletedEntry);
+    });
   }
 }
