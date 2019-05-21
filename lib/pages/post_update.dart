@@ -9,6 +9,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -183,6 +184,13 @@ class _UpdatePostState extends State<UpdatePost> {
                 height: 12.0,
               ),
               DateTimePickerFormField(
+                validator: (value) {
+                  if (value.isAfter(tanggalSemayam) ||
+                      value.isAfter(tanggalDimakamkan))
+                    return "Urutan tanggal salah";
+                  else
+                    return null;
+                },
                 initialValue: tanggalMeninggal,
                 inputType: InputType.date,
                 editable: false,
@@ -197,6 +205,13 @@ class _UpdatePostState extends State<UpdatePost> {
               ),
               SizedBox(height: 15),
               DateTimePickerFormField(
+                validator: (value) {
+                  if (value.isBefore(tanggalMeninggal) ||
+                      value.isAfter(tanggalDimakamkan))
+                    return 'Urutan Tanggal salah';
+                  else
+                    return null;
+                },
                 initialValue: tanggalSemayam,
                 inputType: InputType.date,
                 editable: false,
@@ -207,8 +222,6 @@ class _UpdatePostState extends State<UpdatePost> {
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                 ),
-                validator: (value) =>
-                value != null ? null : 'Tanggal wajib diisi',
                 onChanged: (value) => setState(() => tanggalSemayam = value),
               ),
               SizedBox(
@@ -291,13 +304,17 @@ class _UpdatePostState extends State<UpdatePost> {
                 textCapitalization: TextCapitalization.words,
               ),
               DateTimePickerFormField(
+                validator: (value) {
+                  if (value.isBefore(tanggalSemayam) ||
+                      value.isBefore(tanggalMeninggal))
+                    return "Urutan tanggal salah";
+                  else
+                    return null;
+                },
                 inputType: InputType.date,
                 editable: false,
                 format: dateFormat,
                 initialValue: tanggalDimakamkan,
-                validator: (value) => value.isBefore(tanggalMeninggal)
-                    ? 'Tanggal Prosesi harus sesudah Tanggal Meninggal'
-                    : null,
                 onSaved: (value) => tanggalDimakamkan = value,
                 decoration: InputDecoration(
                   labelText: 'Tanggal Pemakaman/Kremasi',
@@ -310,6 +327,7 @@ class _UpdatePostState extends State<UpdatePost> {
                 height: 10.0,
               ),
               DateTimePickerFormField(
+                validator: (value) => value != null ? null : 'Jam wajib diisi',
                 inputType: InputType.time,
                 editable: false,
                 format: timeFormat,
@@ -518,6 +536,18 @@ class _UpdatePostState extends State<UpdatePost> {
       return true;
     } else {
       print('Posting tidak valid');
+      if (!(tanggalMeninggal.isAfter(DateTime.now()) &&
+          tanggalSemayam.isAfter(tanggalMeninggal) &&
+          tanggalDimakamkan.isAfter(tanggalSemayam))) {
+        Fluttertoast.showToast(
+            msg: "Tanggal yang diinput tidak logis",
+            gravity: ToastGravity.CENTER,
+            toastLength: Toast.LENGTH_SHORT,
+            timeInSecForIos: 1,
+            backgroundColor: Colors.black,
+            fontSize: 16,
+            textColor: Colors.white);
+      }
 
       return false;
     }
