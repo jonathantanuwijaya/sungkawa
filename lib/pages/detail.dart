@@ -38,7 +38,7 @@ class _DetailState extends State<Detail> {
             pinned: true,
             snap: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(widget.post.nama),
+              title: Text(widget.post.nama,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
               centerTitle: true,
               background: CachedNetworkImage(
                 imageUrl: widget.post.photo,

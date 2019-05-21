@@ -130,16 +130,24 @@ class _HomePageState extends State<HomePage> {
                     ),
                     child: Row(
                       children: <Widget>[
-                        Text(
-                          _postList[index].nama,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18.0,
+                        Flexible(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                             _postList[index].nama,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
+                          flex: 3,
+                          fit: FlexFit.tight,
                         ),
-                        Expanded(
-                          child: SizedBox(),
-                        ),
+//                        Expanded(
+//                          child: SizedBox(),
+//                        ),
                         Text(
                           util.convertPostTimestamp(
                             _postList[index].timestamp,
@@ -179,11 +187,26 @@ class _HomePageState extends State<HomePage> {
                     ),
                     child: Row(
                       children: <Widget>[
+                    Flexible(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Alamat : ' + _postList[index].alamat,
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.grey,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    flex: 3,
+                    fit: FlexFit.tight,
+                  ),
                         Flexible(
                           fit: FlexFit.tight,
                           flex: 2,
                           child: Align(
-                            alignment: Alignment.centerLeft,
+                            alignment: Alignment.centerRight,
                             child: Text(
                               "Agama : ${_postList[index].agama}",
                               style:
@@ -191,24 +214,8 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-//                        Expanded(
-//                          child: SizedBox(),
-//                        ),
-                        Flexible(
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              'Alamat : ' + _postList[index].alamat,
-                              style: TextStyle(
-                                fontSize: 14.0,
-                                color: Colors.grey,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          flex: 3,
-                          fit: FlexFit.tight,
-                        )
+
+
                       ],
                     ),
                   ),
