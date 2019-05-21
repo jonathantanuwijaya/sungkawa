@@ -39,7 +39,7 @@ class _PostAddState extends State<PostAdd> {
   final keluargaController = TextEditingController();
   final tempatsemyamController = TextEditingController();
   final keteranganController = TextEditingController();
-  final tanggalProsesiController = TextEditingController();
+  final tanggalDimakamkanController = TextEditingController();
   final waktuDimakamkanController = TextEditingController();
   final dateFormat = DateFormat('dd/MM/yyyy');
   final timeFormat = DateFormat('hh:mm a');
@@ -56,6 +56,7 @@ class _PostAddState extends State<PostAdd> {
   String tuhan;
   Constants constants = new Constants();
   var radioValue;
+  DateTime tanggalDimakamkan;
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +87,7 @@ class _PostAddState extends State<PostAdd> {
                       duration: Duration(seconds: 2),
                     ));
                   } else
-                    savePost();
+                    checkPost();
                       }
                     : null);
           })
@@ -179,9 +180,14 @@ class _PostAddState extends State<PostAdd> {
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                     ),
-                    validator: (value) =>
-                        value != null ? null : 'Tanggal wajib diisi',
-                    onChanged: (value) => setState(() => date = value),
+                    validator: (value) {
+                      if (value.isAfter(tanggalSemayam) ||
+                          value.isAfter(tanggalDimakamkan))
+                        return "Urutan tanggal salah";
+                      else
+                        return null;
+                    },
+                    onChanged: (value) => tanggalSemayam = value,
                   ),
                   SizedBox(
                     height: 20,
@@ -197,8 +203,13 @@ class _PostAddState extends State<PostAdd> {
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                     ),
-                    validator: (value) =>
-                        value != null ? null : 'Tanggal wajib diisi',
+                    validator: (value) {
+                      if (value.isBefore(tanggalMeninggal) ||
+                          value.isAfter(tanggalDimakamkan))
+                        return 'Urutan Tanggal salah';
+                      else
+                        return null;
+                    },
                     onChanged: (value) => setState(() => date = value),
                   ),
                   SizedBox(
@@ -277,12 +288,13 @@ class _PostAddState extends State<PostAdd> {
                         value.isNotEmpty ? null : 'Tempat Prosesi wajib diisi.',
                   ),
                   DateTimePickerFormField(
+                    onChanged: (value) => tanggalDimakamkan = value,
                     inputType: InputType.date,
                     editable: false,
                     format: dateFormat,
-                    controller: tanggalProsesiController,
+                    controller: tanggalDimakamkanController,
                     validator: (value) =>
-                        value != null ? null : 'Tanggal wajib diisi',
+                    value != null ? null : 'Tanggal wajib diisi',
                     decoration: InputDecoration(
                       labelText: 'Tanggal Pemakaman/Kremasi',
                       border: OutlineInputBorder(
@@ -389,6 +401,22 @@ class _PostAddState extends State<PostAdd> {
       tuhan = 'Tuhan';
   }
 
+  void checkPost() {
+    _formKey.currentState.save();
+    if (_formKey.currentState.validate()) {
+      try {
+        savePost();
+      } catch (e) {
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text(e),
+          duration: Duration(seconds: 2),
+        ));
+      }
+    } else {
+      print("Failed to Validate");
+    }
+  }
+
   void getImageCamera() async {
     try {
       imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
@@ -454,7 +482,7 @@ class _PostAddState extends State<PostAdd> {
               'alamat': alamatController.text,
               'prosesi': _prosesi.toString(),
               'tempatMakam': tempatProsesiController.text,
-              'tanggalDimakamkan': tanggalProsesiController.text,
+              'tanggalDimakamkan': tanggalDimakamkanController.text,
               'lokasiSemayam': tempatSemayamController.text,
               'waktuDimakamkan': waktuDimakamkanController.text,
               'keterangan': keteranganController.text
