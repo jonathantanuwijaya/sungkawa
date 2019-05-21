@@ -180,31 +180,34 @@ class _HomePageState extends State<HomePage> {
                     child: Row(
                       children: <Widget>[
                         Flexible(
-                          child: Text(
-                            'Alamat : ' + _postList[index].alamat,
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.grey,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          flex: 3,
-                          fit: FlexFit.tight,
-                        ),
-//                        Expanded(
-//                          child: SizedBox(),
-//                        ),
-                        Flexible(
                           fit: FlexFit.tight,
                           flex: 2,
                           child: Align(
-                            alignment: Alignment.centerRight,
+                            alignment: Alignment.centerLeft,
                             child: Text(
                               "Agama : ${_postList[index].agama}",
                               style:
                               TextStyle(fontSize: 14.0, color: Colors.grey),
                             ),
                           ),
+                        ),
+//                        Expanded(
+//                          child: SizedBox(),
+//                        ),
+                        Flexible(
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              'Alamat : ' + _postList[index].alamat,
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.grey,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          flex: 3,
+                          fit: FlexFit.tight,
                         )
                       ],
                     ),
