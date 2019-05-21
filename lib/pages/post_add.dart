@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -24,7 +25,6 @@ class _PostAddState extends State<PostAdd> {
   InputType inputType = InputType.date;
   bool editable = true;
   bool isUploading = false;
-  DateTime date = DateTime.now();
   int timestamp;
 
   final _formKey = GlobalKey<FormState>();
@@ -187,7 +187,7 @@ class _PostAddState extends State<PostAdd> {
                       else
                         return null;
                     },
-                    onChanged: (value) => tanggalSemayam = value,
+                    onChanged: (value) => tanggalMeninggal = value,
                   ),
                   SizedBox(
                     height: 20,
@@ -210,7 +210,7 @@ class _PostAddState extends State<PostAdd> {
                       else
                         return null;
                     },
-                    onChanged: (value) => setState(() => date = value),
+                    onChanged: (value) => tanggalSemayam = value,
                   ),
                   SizedBox(
                     height: 10.0,
@@ -293,18 +293,19 @@ class _PostAddState extends State<PostAdd> {
                     editable: false,
                     format: dateFormat,
                     controller: tanggalDimakamkanController,
-                    validator: (value) =>
-                    value != null ? null : 'Tanggal wajib diisi',
+                    validator: (value) {
+                      if (value.isBefore(tanggalSemayam) ||
+                          value.isBefore(tanggalMeninggal))
+                        return "Urutan tanggal salah";
+                      else
+                        return null;
+                    },
                     decoration: InputDecoration(
                       labelText: 'Tanggal Pemakaman/Kremasi',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                     ),
-//                    validator: (value) =>
-//                    value.isBefore(tanggalMeninggal)
-//                        ? null
-//                        : 'Tanggal Prosesi tidak boleh diisi sebelum Tanggal Meninggal',
                   ),
                   SizedBox(
                     height: 8.0,
@@ -414,6 +415,18 @@ class _PostAddState extends State<PostAdd> {
       }
     } else {
       print("Failed to Validate");
+      if (!(tanggalMeninggal.isAfter(DateTime.now()) &&
+          tanggalSemayam.isAfter(tanggalMeninggal) &&
+          tanggalDimakamkan.isAfter(tanggalSemayam))) {
+        Fluttertoast.showToast(
+            msg: "Tanggal yang diinput tidak logis",
+            gravity: ToastGravity.CENTER,
+            toastLength: Toast.LENGTH_SHORT,
+            timeInSecForIos: 1,
+            backgroundColor: Colors.black,
+            fontSize: 16,
+            textColor: Colors.white);
+      }
     }
   }
 
