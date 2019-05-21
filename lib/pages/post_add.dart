@@ -41,6 +41,7 @@ class _PostAddState extends State<PostAdd> {
   final keteranganController = TextEditingController();
   final tanggalDimakamkanController = TextEditingController();
   final waktuDimakamkanController = TextEditingController();
+
   final dateFormat = DateFormat('dd/MM/yyyy');
   final timeFormat = DateFormat('hh:mm a');
 
@@ -74,16 +75,9 @@ class _PostAddState extends State<PostAdd> {
                 icon: Icon(Icons.check),
                 onPressed: isLoading != true
                     ? () {
-                  checkDeity(agama);
-
                   if (image == null) {
                     Scaffold.of(context).showSnackBar(SnackBar(
                       content: Text("Photo wajib ada"),
-                      duration: Duration(seconds: 2),
-                    ));
-                  } else if (tanggalMeninggal.isAfter(DateTime.now())) {
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text("Jangan mendahului $tuhan!"),
                       duration: Duration(seconds: 2),
                     ));
                   } else
@@ -389,17 +383,6 @@ class _PostAddState extends State<PostAdd> {
             )
           : SizedBox(),
     );
-  }
-
-  void checkDeity(String agama) {
-    if (agama == 'Islam') {
-      tuhan = 'Allah SWT';
-    } else if (agama == 'Kristen' || agama == 'Katolik')
-      tuhan = 'Allah';
-    else if (agama == 'Buddha')
-      tuhan = 'Sanghyang Adi Buddha';
-    else
-      tuhan = 'Tuhan';
   }
 
   void checkPost() {

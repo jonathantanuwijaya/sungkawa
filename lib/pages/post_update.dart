@@ -48,8 +48,10 @@ class _UpdatePostState extends State<UpdatePost> {
   var imageFile, _prosesi;
   bool isLoading = false;
   bool isUploading = false;
+
   final dateFormat = DateFormat('dd/MM/yyyy');
   final timeFormat = DateFormat('hh:mm a');
+
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -58,26 +60,17 @@ class _UpdatePostState extends State<UpdatePost> {
       appBar: AppBar(
         title: Text("Edit Posting"),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.check),
-            onPressed: (isLoading != true)
-                ? () {
-              checkDeity(agama);
-
-              if (image == null) {
-                Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text("Photo wajib ada"),
-                  duration: Duration(seconds: 2),
-                ));
-              } else if (tanggalMeninggal.isAfter(DateTime.now())) {
-                Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text("Jangan mendahului $tuhan!"),
-                  duration: Duration(seconds: 2),
-                ));
-              } else
-                validateAndSubmit();
-                  }
-                : null,
+          Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: Icon(Icons.check),
+                onPressed: (isLoading != true)
+                    ? () {
+                  validateAndSubmit();
+                }
+                    : null,
+              );
+            },
           ),
         ],
         backgroundColor: Colors.green,
@@ -195,7 +188,7 @@ class _UpdatePostState extends State<UpdatePost> {
                 inputType: InputType.date,
                 editable: false,
                 format: dateFormat,
-                onSaved: (value) => tanggalMeninggal = value,
+                onChanged: (value) => tanggalMeninggal = value,
                 decoration: InputDecoration(
                   labelText: 'Tanggal Meninggal',
                   border: OutlineInputBorder(
@@ -315,7 +308,7 @@ class _UpdatePostState extends State<UpdatePost> {
                 editable: false,
                 format: dateFormat,
                 initialValue: tanggalDimakamkan,
-                onSaved: (value) => tanggalDimakamkan = value,
+                onChanged: (value) => tanggalDimakamkan = value,
                 decoration: InputDecoration(
                   labelText: 'Tanggal Pemakaman/Kremasi',
                   border: OutlineInputBorder(
@@ -332,7 +325,7 @@ class _UpdatePostState extends State<UpdatePost> {
                 editable: false,
                 format: timeFormat,
                 initialValue: waktuDimakamkan,
-                onSaved: (value) => waktuDimakamkan = value,
+                onChanged: (value) => waktuDimakamkan = value,
                 decoration: InputDecoration(
                   labelText: 'Jam Pemakaman/Kremasi',
                   border: OutlineInputBorder(
@@ -389,17 +382,6 @@ class _UpdatePostState extends State<UpdatePost> {
           width: 20, height: 20, child: CircularProgressIndicator());
     else
       return SizedBox();
-  }
-
-  void checkDeity(String agama) {
-    if (agama == 'Islam') {
-      tuhan = 'Allah SWT';
-    } else if (agama == 'Kristen' || agama == 'Katolik')
-      tuhan = 'Allah';
-    else if (agama == 'Buddha')
-      tuhan = 'Sanghyang Adi Buddha';
-    else
-      tuhan = 'Tuhan';
   }
 
   void getImageCamera() async {

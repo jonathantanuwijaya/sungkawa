@@ -53,7 +53,7 @@ class CRUD {
     });
   }
 
-  updatePost(postId, postData) {
+  updatePost(postId, postData) async {
     postRef.child(postId).update(postData).catchError((e) {
       print(e);
     });
