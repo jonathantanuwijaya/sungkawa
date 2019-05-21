@@ -179,19 +179,32 @@ class _HomePageState extends State<HomePage> {
                     ),
                     child: Row(
                       children: <Widget>[
-                        Text(
-                          'Alamat : ' + _postList[index].alamat,
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.grey,
+                        Flexible(
+                          child: Text(
+                            'Alamat : ' + _postList[index].alamat,
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.grey,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
+                          flex: 3,
+                          fit: FlexFit.tight,
                         ),
-                        Expanded(
-                          child: SizedBox(),
-                        ),
-                        Text(
-                          "Agama : ${_postList[index].agama}",
-                          style: TextStyle(fontSize: 14.0, color: Colors.grey),
+//                        Expanded(
+//                          child: SizedBox(),
+//                        ),
+                        Flexible(
+                          fit: FlexFit.tight,
+                          flex: 2,
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              "Agama : ${_postList[index].agama}",
+                              style:
+                              TextStyle(fontSize: 14.0, color: Colors.grey),
+                            ),
+                          ),
                         )
                       ],
                     ),
@@ -282,6 +295,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _postList[_postList.indexOf(oldEntry)] =
           Post.fromSnapshot(event.snapshot);
+      _postList.sort((a, b) => b.timestamp.compareTo(a.timestamp));
     });
   }
 

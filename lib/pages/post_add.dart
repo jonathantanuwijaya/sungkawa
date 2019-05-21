@@ -69,22 +69,26 @@ class _PostAddState extends State<PostAdd> {
         ),
         backgroundColor: Colors.green,
         actions: <Widget>[
-          Builder(builder: (BuildContext context) {
-            return IconButton(
-                color: Colors.black,
-                icon: Icon(Icons.check),
-                onPressed: isLoading != true
-                    ? () {
-                  if (image == null) {
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text("Photo wajib ada"),
-                      duration: Duration(seconds: 2),
-                    ));
-                  } else
-                    checkPost();
-                      }
-                    : null);
-          })
+          Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                  color: Colors.black,
+                  icon: Icon(Icons.check),
+                  onPressed: isLoading != true
+                      ? () {
+                    if (image == null) {
+                      Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Photo wajib ada"),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    } else
+                      checkPost();
+                  }
+                      : null);
+            },
+          ),
         ],
       ),
       body: Container(
@@ -93,7 +97,6 @@ class _PostAddState extends State<PostAdd> {
           padding: EdgeInsets.only(top: 8.0),
           children: <Widget>[
             Form(
-//              autovalidate: true,
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
