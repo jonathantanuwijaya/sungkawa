@@ -449,6 +449,7 @@ class _UpdatePostState extends State<UpdatePost> {
         'photo': _url,
         'timestamp': widget.post.timestamp,
         'userId': userId,
+        'tanggalSemayam': dateFormat.format(tanggalSemayam),
         'tanggalMeninggal': dateFormat.format(tanggalMeninggal),
         'alamat': alamat,
         'prosesi': _prosesi.toString(),
