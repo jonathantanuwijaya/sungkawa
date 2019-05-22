@@ -421,22 +421,30 @@ class _UpdatePostState extends State<UpdatePost> {
   void initState() {
     super.initState();
     readLocal();
+
     postRef = FirebaseDatabase.instance
         .reference()
         .child('posts')
         .child(widget.post.key);
-    _prosesi = widget.post.prosesi;
-    tanggalDimakamkan = dateFormat.parse(widget.post.tanggalDimakamkan);
-    tanggalMeninggal = dateFormat.parse(widget.post.tanggalMeninggal);
-    waktuDimakamkan = timeFormat.parse(widget.post.waktuDimakamkan);
-    nama = widget.post.nama;
-    agama = widget.post.agama;
-    usia = widget.post.usia;
-    alamat = widget.post.alamat;
-    keterangan = widget.post.keterangan;
-    lokasiSemayam = widget.post.lokasiSemayam;
-    tempatMakam = widget.post.tempatMakam;
-    tanggalSemayam = dateFormat.parse(widget.post.tanggalSemayam);
+
+    initVariables();
+  }
+
+  void initVariables() {
+    {
+      _prosesi = widget.post.prosesi;
+      tanggalDimakamkan = dateFormat.parse(widget.post.tanggalDimakamkan);
+      tanggalMeninggal = dateFormat.parse(widget.post.tanggalMeninggal);
+      waktuDimakamkan = timeFormat.parse(widget.post.waktuDimakamkan);
+      nama = widget.post.nama;
+      agama = widget.post.agama;
+      usia = widget.post.usia;
+      alamat = widget.post.alamat;
+      keterangan = widget.post.keterangan;
+      lokasiSemayam = widget.post.lokasiSemayam;
+      tempatMakam = widget.post.tempatMakam;
+      tanggalSemayam = dateFormat.parse(widget.post.tanggalSemayam);
+    }
   }
 
   void pushData(_url) {
