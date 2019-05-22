@@ -135,7 +135,9 @@ class _UpdatePostState extends State<UpdatePost> {
               TextFormField(
                 initialValue: usia,
                 validator: (value) =>
-                    value.isEmpty ? 'Umur tidak boleh kosong' : null,
+                (value.isEmpty || int.parse(value) == 0)
+                    ? 'Umur tidak boleh kosong'
+                    : null,
                 onSaved: (value) => usia = value,
                 decoration: InputDecoration(
                   labelText: 'Usia',
@@ -448,11 +450,12 @@ class _UpdatePostState extends State<UpdatePost> {
         'agama': agama,
         'photo': _url,
         'timestamp': widget.post.timestamp,
-        'userId': userId,
+        'userId': widget.post.userId,
         'tanggalMeninggal': dateFormat.format(tanggalMeninggal),
         'alamat': alamat,
         'prosesi': _prosesi.toString(),
         'tempatMakam': tempatMakam,
+        'tanggalSemayam': dateFormat.format(tanggalSemayam),
         'tanggalDimakamkan': dateFormat.format(tanggalDimakamkan),
         'lokasiSemayam': lokasiSemayam,
         'waktuDimakamkan': timeFormat.format(waktuDimakamkan),
