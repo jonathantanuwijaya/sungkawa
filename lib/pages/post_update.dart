@@ -135,7 +135,9 @@ class _UpdatePostState extends State<UpdatePost> {
               TextFormField(
                 initialValue: usia,
                 validator: (value) =>
-                    value.isEmpty ? 'Umur tidak boleh kosong' : null,
+                (value.isEmpty || int.parse(value) == 0)
+                    ? 'Umur tidak boleh kosong'
+                    : null,
                 onSaved: (value) => usia = value,
                 decoration: InputDecoration(
                   labelText: 'Usia',
@@ -215,7 +217,7 @@ class _UpdatePostState extends State<UpdatePost> {
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                 ),
-                onChanged: (value) => setState(() => tanggalSemayam = value),
+                onChanged: (value) => tanggalSemayam = value,
               ),
               SizedBox(
                 height: 10.0,
@@ -527,9 +529,25 @@ class _UpdatePostState extends State<UpdatePost> {
       return true;
     } else {
       print('Posting tidak valid');
-      if (!(tanggalMeninggal.isAfter(DateTime.now()) &&
-          tanggalSemayam.isAfter(tanggalMeninggal) &&
-          tanggalDimakamkan.isAfter(tanggalSemayam))) {
+      var statement1 = tanggalMeninggal.isAfter(DateTime.now());
+      var statement2 = tanggalSemayam.isAfter(tanggalMeninggal);
+      var statement3 = tanggalDimakamkan.isAfter(tanggalSemayam);
+
+      print(DateTime.now());
+      print(tanggalMeninggal.compareTo(DateTime.now()));
+
+      print(statement1);
+      print(statement2);
+      print(statement3);
+
+      var results = !(statement1 && statement2 && statement3);
+      print(results);
+
+      if (results) {
+        print('Tanggal meninggal : $tanggalMeninggal');
+        print('Tanggal semayam : $tanggalSemayam');
+        print('Tanggal Dimakamkan : $tanggalDimakamkan');
+
         Fluttertoast.showToast(
             msg: "Tanggal yang diinput tidak logis",
             gravity: ToastGravity.CENTER,

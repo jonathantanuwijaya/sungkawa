@@ -401,9 +401,13 @@ class _PostAddState extends State<PostAdd> {
       }
     } else {
       print("Failed to Validate");
-      if (!(tanggalMeninggal.isAfter(DateTime.now()) &&
-          tanggalSemayam.isAfter(tanggalMeninggal) &&
-          tanggalDimakamkan.isAfter(tanggalSemayam))) {
+      var statement1 = tanggalMeninggal.isAfter(DateTime.now());
+      var statement2 = tanggalSemayam.isAfter(tanggalMeninggal);
+      var statement3 = tanggalDimakamkan.isAfter(tanggalSemayam);
+
+      var results = !(statement1 && statement2 && statement3);
+
+      if (results) {
         Fluttertoast.showToast(
             msg: "Tanggal yang diinput tidak logis",
             gravity: ToastGravity.CENTER,
