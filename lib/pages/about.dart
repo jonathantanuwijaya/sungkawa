@@ -67,47 +67,29 @@ class About extends StatelessWidget {
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '1. Ericco Andreas',
+              '1. Jonathan Tanuwijaya',
               style: TextStyle(
                 fontSize: 16.0,
               ),
             ),
             Text(
-              '2. Jonathan Tanuwijaya',
+              '2. Stephen Suhendra Kohar',
               style: TextStyle(
                 fontSize: 16.0,
               ),
             ),
             Text(
-              '3. Stephen Suhendra Kohar',
+              '3. Alvin Leonardo Djoni',
               style: TextStyle(
                 fontSize: 16.0,
               ),
             ),
             Text(
-              '4. Felix Antony',
+              '4. Ericco Andreas',
               style: TextStyle(
                 fontSize: 16.0,
               ),
-            ),
-            Text(
-              '5. Ricky',
-              style: TextStyle(
-                fontSize: 16.0,
-              ),
-            ),
-            Text(
-              '6. Steven',
-              style: TextStyle(
-                fontSize: 16.0,
-              ),
-            ),
-            Text(
-              '7. Alvin Leonardo Djoni',
-              style: TextStyle(
-                fontSize: 16.0,
-              ),
-            ),
+            )
           ],
         ),
       ),
