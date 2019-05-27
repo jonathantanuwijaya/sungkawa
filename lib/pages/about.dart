@@ -35,7 +35,9 @@ class About extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 Text("Jalan Rajawali No 14, Palembang"),
-                SizedBox(height: 5,),
+                SizedBox(
+                  height: 5,
+                ),
                 Text('www.mdp.ac.id'),
                 SizedBox(
                   height: 20,
@@ -71,10 +73,7 @@ class About extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 60.0,
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width - 100,
+                  width: MediaQuery.of(context).size.width - 100,
                   child: Divider(
                     color: Colors.green,
                   ),
