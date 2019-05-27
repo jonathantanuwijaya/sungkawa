@@ -61,6 +61,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+    - assets/images/gedung_mdp.jpg
     - assets/images/not_connected.png
     - assets/images/phone.png
     - assets/images/speed.png

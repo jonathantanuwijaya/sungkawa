@@ -101,7 +101,7 @@ class _LoginState extends State<Login> {
     prefs.setString('email', googleAccount.email);
 
     firebaseAuth.signInWithCredential(credential).whenComplete(() {
-      addToDatabase(googleAccount);
+//      addToDatabase(googleAccount);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => DashboardScreen()));
     });

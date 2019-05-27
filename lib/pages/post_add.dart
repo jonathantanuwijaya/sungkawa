@@ -7,6 +7,7 @@ import 'package:admin_sungkawa/utilities/constants.dart';
 import 'package:admin_sungkawa/utilities/crud.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class _PostAddState extends State<PostAdd> {
   bool editable = true;
   bool isUploading = false;
   int timestamp;
-
+  String tempat;
   final _formKey = GlobalKey<FormState>();
 
   final namaController = TextEditingController();
@@ -255,6 +256,8 @@ class _PostAddState extends State<PostAdd> {
                     height: 8.0,
                   ),
                   TextFormField(
+                      enabled: false,
+                      initialValue: tempat,
                       decoration: InputDecoration(
                         labelText: 'Tempat disemayamkan',
                         alignLabelWithHint: true,
@@ -456,14 +459,26 @@ class _PostAddState extends State<PostAdd> {
     // TODO: implement initState
     super.initState();
     _prosesi = 'Dimakamkan';
+    getUserID();
+    checkAdminPlaceInfo();
+  }
+
+  void checkAdminPlaceInfo() {
+    getUserID();
+    FirebaseDatabase.instance
+        .reference()
+        .child('admins')
+        .child(userId)
+        .once()
+        .then((snapshot) {
+      if (snapshot.value['tempat'] != null)
+        tempat = snapshot.value['tempat'];
+      else
+        tempat = '';
+    });
   }
 
   void savePost() async {
-    await FirebaseAuth.instance.currentUser().then((user) {
-      setState(() {
-        userId = user.uid;
-      });
-    });
     if (image != null) {
       setState(() {
         isLoading = true;
@@ -513,6 +528,14 @@ class _PostAddState extends State<PostAdd> {
     } else {
       isLoading = false;
     }
+  }
+
+  Future getUserID() async {
+    await FirebaseAuth.instance.currentUser().then((user) {
+      setState(() {
+        userId = user.uid;
+      });
+    });
   }
 
   Future sendNotification() async {
