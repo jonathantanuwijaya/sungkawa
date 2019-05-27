@@ -6,12 +6,12 @@ import 'package:admin_sungkawa/main.dart';
 import 'package:admin_sungkawa/utilities/constants.dart';
 import 'package:admin_sungkawa/utilities/crud.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -29,6 +29,7 @@ class _PostAddState extends State<PostAdd> {
   int timestamp;
   String tempat;
   final _formKey = GlobalKey<FormState>();
+  final gsa = GoogleSignIn();
 
   final namaController = TextEditingController();
   final umurController = TextEditingController();
@@ -459,12 +460,12 @@ class _PostAddState extends State<PostAdd> {
     // TODO: implement initState
     super.initState();
     _prosesi = 'Dimakamkan';
-    getUserID();
     checkAdminPlaceInfo();
   }
 
-  void checkAdminPlaceInfo() {
-    getUserID();
+  Future checkAdminPlaceInfo() async {
+    userId = gsa.currentUser.id;
+    print(userId);
     FirebaseDatabase.instance
         .reference()
         .child('admins')
@@ -472,9 +473,14 @@ class _PostAddState extends State<PostAdd> {
         .once()
         .then((snapshot) {
       if (snapshot.value['tempat'] != null)
-        tempat = snapshot.value['tempat'];
+        setState(() {
+          tempat = snapshot.value['tempat'];
+        });
       else
-        tempat = '';
+        setState(() {
+          tempat = '';
+        });
+      print(tempat);
     });
   }
 
@@ -501,7 +507,7 @@ class _PostAddState extends State<PostAdd> {
               'prosesi': _prosesi.toString(),
               'tempatMakam': tempatProsesiController.text,
               'tanggalDimakamkan': tanggalDimakamkanController.text,
-              'lokasiSemayam': tempatSemayamController.text,
+              'lokasiSemayam': tempat,
               'waktuDimakamkan': waktuDimakamkanController.text,
               'keterangan': keteranganController.text
             }).whenComplete(() {
@@ -517,7 +523,7 @@ class _PostAddState extends State<PostAdd> {
               tanggalMeninggalController.clear();
               umurController.clear();
               tanggalMeninggalController.clear();
-              tempatSemayamController.clear();
+//              tempatSemayamController.clear();
             });
           } catch (e) {
             print('error : $e');
@@ -528,14 +534,6 @@ class _PostAddState extends State<PostAdd> {
     } else {
       isLoading = false;
     }
-  }
-
-  Future getUserID() async {
-    await FirebaseAuth.instance.currentUser().then((user) {
-      setState(() {
-        userId = user.uid;
-      });
-    });
   }
 
   Future sendNotification() async {

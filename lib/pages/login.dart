@@ -33,7 +33,8 @@ class _LoginState extends State<Login> {
         crud.addAdmin(googleAccount.id, {
           'userid': googleAccount.id,
           'nama': googleAccount.displayName,
-          'email': googleAccount.email
+          'email': googleAccount.email,
+          'tempat': ''
         });
       }
     });
@@ -101,7 +102,7 @@ class _LoginState extends State<Login> {
     prefs.setString('email', googleAccount.email);
 
     firebaseAuth.signInWithCredential(credential).whenComplete(() {
-//      addToDatabase(googleAccount);
+      addToDatabase(googleAccount);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => DashboardScreen()));
     });

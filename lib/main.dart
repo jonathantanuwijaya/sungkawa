@@ -55,7 +55,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   AuthStatus _authStatus;
   var connectionStatus;
   SharedPreferences prefs;
-  GoogleSignIn user;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final List<Notifikasi> notif = [];
 

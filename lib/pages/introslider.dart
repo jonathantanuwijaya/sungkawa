@@ -29,10 +29,10 @@ class _IntroSliderScreenState extends State<IntroSliderScreen> {
           maxLines: 1,
           softWrap: false,
         ),
-        bubble: Image.asset('assets/images/wlcome.png'),
+        bubble: Image.asset('assets/images/welcome.png'),
         pageColor: Colors.blue,
         body: Text('Welcome to Sungkawa '),
-        mainImage: Image.asset('assets/images/wlcome.png'),
+        mainImage: Image.asset('assets/images/welcome.png'),
         textStyle: TextStyle(color: Colors.white)),
     PageViewModel(
         title: Text(
