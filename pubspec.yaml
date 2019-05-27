@@ -67,12 +67,12 @@ flutter:
     - assets/images/phone.png
     - assets/images/speed.png
     - assets/images/icon.png
-    - assets/images/icon200.png
     - assets/images/splash.png
     - assets/images/welcome.png
     - assets/images/icon_android.png
     - assets/images/icon_ios.png
     - assets/images/logo_mdp.png
+    - assets/images/gedung_mdp.jpg
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg
