@@ -14,6 +14,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PostAdd extends StatefulWidget {
   @override
@@ -30,14 +31,14 @@ class _PostAddState extends State<PostAdd> {
   String tempat;
   final _formKey = GlobalKey<FormState>();
   final gsa = GoogleSignIn();
-
+  SharedPreferences prefs;
   final namaController = TextEditingController();
   final umurController = TextEditingController();
   final alamatController = TextEditingController();
   final tempatProsesiController = TextEditingController();
   final tanggalMeninggalController = TextEditingController();
   final tanggalDisemayamkanController = TextEditingController();
-  final tempatSemayamController = TextEditingController();
+  TextEditingController tempatSemayamController;
   final keluargaController = TextEditingController();
   final tempatsemyamController = TextEditingController();
   final keteranganController = TextEditingController();
@@ -258,7 +259,6 @@ class _PostAddState extends State<PostAdd> {
                   ),
                   TextFormField(
                       enabled: false,
-                      initialValue: tempat,
                       decoration: InputDecoration(
                         labelText: 'Tempat disemayamkan',
                         alignLabelWithHint: true,
@@ -464,8 +464,11 @@ class _PostAddState extends State<PostAdd> {
   }
 
   Future checkAdminPlaceInfo() async {
-    userId = gsa.currentUser.id;
+    prefs = await SharedPreferences.getInstance();
+
+    userId = prefs.getString('userId');
     print(userId);
+
     FirebaseDatabase.instance
         .reference()
         .child('admins')
@@ -475,10 +478,11 @@ class _PostAddState extends State<PostAdd> {
       if (snapshot.value['tempat'] != null)
         setState(() {
           tempat = snapshot.value['tempat'];
+          tempatSemayamController = TextEditingController(text: tempat);
         });
       else
         setState(() {
-          tempat = '';
+          tempat = ' ';
         });
       print(tempat);
     });
