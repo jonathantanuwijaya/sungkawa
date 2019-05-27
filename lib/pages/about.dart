@@ -35,6 +35,7 @@ class About extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 Text("Jalan Rajawali No 14, Palembang"),
+                SizedBox(height: 5,),
                 Text('www.mdp.ac.id'),
                 SizedBox(
                   height: 20,
