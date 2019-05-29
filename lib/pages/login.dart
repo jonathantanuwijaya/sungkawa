@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,9 +20,16 @@ class _LoginState extends State<Login> {
   CRUD crud = new CRUD();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   SharedPreferences prefs;
+  GoogleSignInAuthentication googleAuth;
 
-  Future addToDatabase(GoogleSignInAccount googleAccount) async {
-    print('Adding to database');
+  AuthCredential get credential =>
+      GoogleAuthProvider.getCredential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+  Future checkAdmin(GoogleSignInAccount googleAccount) async {
+    print('Check database');
     FirebaseDatabase.instance
         .reference()
         .child('users')
@@ -29,14 +37,25 @@ class _LoginState extends State<Login> {
         .once()
         .then((snapshot) {
       if (snapshot.value == null) {
+        Fluttertoast.showToast(msg: 'Anda tidak terdaftar sebagai admin');
+      } else {
+        //TODO : Jangan sampe menimpa data yang sudah ada
         print('Added to database');
-        crud.addAdmin(googleAccount.id, {
-          'userid': googleAccount.id,
+        crud.addAdminTemp(googleAccount.id, {
           'nama': googleAccount.displayName,
           'email': googleAccount.email,
-          'tempat': ''
+//          'tempat': ''
         });
       }
+    }).whenComplete(() {
+      prefs.setString('userId', googleAccount.id);
+      prefs.setString('nama', googleAccount.displayName);
+      prefs.setString('email', googleAccount.email);
+
+      firebaseAuth.signInWithCredential(credential).whenComplete(() {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => DashboardScreen()));
+      });
     });
   }
 
@@ -89,23 +108,13 @@ class _LoginState extends State<Login> {
 
   Future handleSignIn() async {
     GoogleSignInAccount googleAccount = await googleSignIn.signIn();
-    GoogleSignInAuthentication googleAuth = await googleAccount.authentication;
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
     prefs = await SharedPreferences.getInstance();
 
-    prefs.setString('userId', googleAccount.id);
-    prefs.setString('nama', googleAccount.displayName);
-    prefs.setString('email', googleAccount.email);
+    googleAuth = await googleAccount.authentication;
 
-    firebaseAuth.signInWithCredential(credential).whenComplete(() {
-      addToDatabase(googleAccount);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => DashboardScreen()));
-    });
+    //TODO : Balikkan Proses Login
+
+    checkAdmin(googleAccount);
   }
 
   @override

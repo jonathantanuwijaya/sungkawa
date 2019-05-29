@@ -76,4 +76,15 @@ class CRUD {
       print(e);
     });
   }
+
+  void addAdminTemp(String id, Map<String, String> map) {
+    FirebaseDatabase.instance
+        .reference()
+        .child('admintemp')
+        .child(id)
+        .set(map)
+        .catchError((e) {
+      print(e);
+    });
+  }
 }

@@ -43,9 +43,6 @@ dev_dependencies:
     sdk: flutter
   flutter_launcher_icons: "^0.7.0"
 
-dependency_overrides:
-  image: 2.0.7
-
 flutter_icons:
   image_path: "assets/images/icon1024.png"
   android: true

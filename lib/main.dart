@@ -151,13 +151,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         _authStatus =
             userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
       });
-//      if (_authStatus == AuthStatus.signedIn) {
-//        String displayName = user.currentUser.displayName;
-//
-//        Scaffold.of(context).showSnackBar(
-//            SnackBar(content: Text('User $displayName signed in!')));
-//      }
     });
+    initFCM();
+  }
+
+  void initFCM() {
     _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
     _firebaseMessaging.getToken();
     _firebaseMessaging.subscribeToTopic('all');
@@ -188,17 +186,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       },
     );
   }
-
-//  void selectedAction(Pilihan value) {
-//    print('You choose : $value');
-//    if (value == Pilihan.about) {
-//      Navigator.push(context,
-//          MaterialPageRoute(builder: (BuildContext context) => About()));
-//    }
-//    if (value == Pilihan.signOut) {
-//      signOut();
-//    }
-//  }
 
   void sendTokenToServer(String fcm) {
     print('Token : $fcm');

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "600449807418",
-    "firebase_url": "https://sungkawa-8416b.firebaseio.com",
-    "project_id": "sungkawa-8416b",
-    "storage_bucket": "sungkawa-8416b.appspot.com"
+    "project_number": "1041227975257",
+    "firebase_url": "https://sungkawa-8add2.firebaseio.com",
+    "project_id": "sungkawa-8add2",
+    "storage_bucket": "sungkawa-8add2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:600449807418:android:223c7761b8f9df27",
+        "mobilesdk_app_id": "1:1041227975257:android:223c7761b8f9df27",
         "android_client_info": {
           "package_name": "com.example.admin_sungkawa"
         }
       },
       "oauth_client": [
         {
-          "client_id": "600449807418-t2dukmiu739uj0s8voo4jgipf55i0668.apps.googleusercontent.com",
+          "client_id": "1041227975257-rdn1nrdlpqrhh6sol9l6a7ukv3up50c0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.admin_sungkawa",
@@ -23,20 +23,20 @@
           }
         },
         {
-          "client_id": "600449807418-pcl0at6gfgqtpccm1hbl3okf5eibjrdl.apps.googleusercontent.com",
+          "client_id": "1041227975257-6iihptosq6bn7abggc9cm12ot7hhaj6a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCIHF4m-seQO0mrrVIRAlbHhk4ccS9uVYM"
+          "current_key": "AIzaSyDe4WrQd4JHuTM37P-ZtIbt2_D_nw4LWpw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "600449807418-pcl0at6gfgqtpccm1hbl3okf5eibjrdl.apps.googleusercontent.com",
+              "client_id": "1041227975257-6iihptosq6bn7abggc9cm12ot7hhaj6a.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -45,14 +45,14 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:600449807418:android:96225ddbd5b2778f",
+        "mobilesdk_app_id": "1:1041227975257:android:96225ddbd5b2778f",
         "android_client_info": {
           "package_name": "com.example.sungkawa"
         }
       },
       "oauth_client": [
         {
-          "client_id": "600449807418-oqqr5j5665vsjnfq1es9tgamh6l8hfgm.apps.googleusercontent.com",
+          "client_id": "1041227975257-q601sbbvkddu6gopktd3bj7cbrapfclf.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.sungkawa",
@@ -60,20 +60,20 @@
           }
         },
         {
-          "client_id": "600449807418-pcl0at6gfgqtpccm1hbl3okf5eibjrdl.apps.googleusercontent.com",
+          "client_id": "1041227975257-6iihptosq6bn7abggc9cm12ot7hhaj6a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCIHF4m-seQO0mrrVIRAlbHhk4ccS9uVYM"
+          "current_key": "AIzaSyDe4WrQd4JHuTM37P-ZtIbt2_D_nw4LWpw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "600449807418-pcl0at6gfgqtpccm1hbl3okf5eibjrdl.apps.googleusercontent.com",
+              "client_id": "1041227975257-6iihptosq6bn7abggc9cm12ot7hhaj6a.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
