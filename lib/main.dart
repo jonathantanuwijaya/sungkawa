@@ -153,6 +153,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       });
     });
     initFCM();
+//    checkSuperAdmin();
   }
 
   void initFCM() {

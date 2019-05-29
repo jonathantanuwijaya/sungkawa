@@ -21,6 +21,7 @@ class _LoginState extends State<Login> {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   SharedPreferences prefs;
   GoogleSignInAuthentication googleAuth;
+  bool isNotAdmin;
 
   AuthCredential get credential =>
       GoogleAuthProvider.getCredential(
@@ -32,30 +33,40 @@ class _LoginState extends State<Login> {
     print('Check database');
     FirebaseDatabase.instance
         .reference()
-        .child('users')
+        .child('admins')
         .child(googleAccount.id)
         .once()
         .then((snapshot) {
-      if (snapshot.value == null) {
-        Fluttertoast.showToast(msg: 'Anda tidak terdaftar sebagai admin');
+      if (snapshot.key != null) {
+        print('Role : ${snapshot.value['role']}');
+        if (snapshot.value['role'].toString() == 'Superadmin') {
+          prefs.setBool('isSuperAdmin', true);
+        } else
+          prefs.setBool('isSuperAdmin', false);
+        isNotAdmin = false;
       } else {
-        //TODO : Jangan sampe menimpa data yang sudah ada
-        print('Added to database');
+        isNotAdmin = true;
+        print(snapshot.value);
+      }
+    }).whenComplete(() {
+      print('Super admin : ${prefs.getBool('isSuperAdmin')}');
+      prefs.setString('userId', googleAccount.id);
+      prefs.setString('nama', googleAccount.displayName);
+      prefs.setString('email', googleAccount.email);
+
+      if (isNotAdmin == false) {
+        firebaseAuth.signInWithCredential(credential).whenComplete(() {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => DashboardScreen()));
+        });
+      } else {
+        Fluttertoast.showToast(msg: 'Anda tidak terdaftar sebagai admin');
         crud.addAdminTemp(googleAccount.id, {
           'nama': googleAccount.displayName,
           'email': googleAccount.email,
 //          'tempat': ''
         });
       }
-    }).whenComplete(() {
-      prefs.setString('userId', googleAccount.id);
-      prefs.setString('nama', googleAccount.displayName);
-      prefs.setString('email', googleAccount.email);
-
-      firebaseAuth.signInWithCredential(credential).whenComplete(() {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => DashboardScreen()));
-      });
     });
   }
 

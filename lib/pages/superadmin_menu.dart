@@ -36,7 +36,11 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
                                 FirebaseDatabase.instance
                                     .reference()
                                     .child('admins')
-                                    .set(list[index]);
+                                    .set({
+                                  'userName': list[index]['userName'],
+                                  'email': list[index]['email'],
+                                  'role': 'Admin'
+                                });
                                 FirebaseDatabase.instance
                                     .reference()
                                     .child('admintemp')
