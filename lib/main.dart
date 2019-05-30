@@ -5,6 +5,7 @@ import 'package:admin_sungkawa/pages/admin_home.dart';
 import 'package:admin_sungkawa/pages/introslider.dart';
 import 'package:admin_sungkawa/pages/login.dart';
 import 'package:admin_sungkawa/pages/post_add.dart';
+import 'package:admin_sungkawa/pages/superadmin_menu.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -58,6 +59,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final List<Notifikasi> notif = [];
 
+  bool isSuperAdmin;
+
   @override
   // ignore: missing_return
   Widget build(BuildContext context) {
@@ -81,34 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 onPressed: () {
                   showCupertinoModalPopup(
                       context: context,
-                      builder: (context) => CupertinoActionSheet(
-                          title: const Text(
-                            'Pilihan menu',
-                          ),
-                          actions: <Widget>[
-                            CupertinoActionSheetAction(
-                                onPressed: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => About()));
-                                },
-                                child: Text('Tentang Kami')),
-                            CupertinoActionSheetAction(
-                                isDestructiveAction: true,
-                                onPressed: signOut,
-                                child: Text(
-                                  'Sign Out',
-                                )),
-                          ],
-                          cancelButton: CupertinoActionSheetAction(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                'Cancel',
-                                style: TextStyle(color: Colors.red),
-                              ))));
+                      builder: (context) => buildCupertinoActionSheet(context));
                 },
               )
             ],
@@ -129,6 +105,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: CircularProgressIndicator(),
         );
     }
+  }
+
+  CupertinoActionSheet buildCupertinoActionSheet(BuildContext context) {
+    return CupertinoActionSheet(
+        title: const Text(
+          'Pilihan menu',
+        ),
+        actions: <Widget>[
+          CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context, MaterialPageRoute(builder: (context) => About()));
+              },
+              child: Text('Tentang Kami')),
+          if (isSuperAdmin == true)
+            CupertinoActionSheetAction(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SuperAdminMenu()));
+                },
+                child: Text('Super Admin Menu')),
+          CupertinoActionSheetAction(
+              isDestructiveAction: true,
+              onPressed: signOut,
+              child: Text(
+                'Sign Out',
+              )),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: Colors.red),
+            )));
   }
 
   Future<String> getCurrentUser() async {
@@ -153,7 +167,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       });
     });
     initFCM();
-//    checkSuperAdmin();
+    checkSuperAdmin();
   }
 
   void initFCM() {
@@ -197,8 +211,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     googleSignIn.signOut();
     _authStatus = AuthStatus.notSignedIn;
 
-    prefs = await SharedPreferences.getInstance();
-
     prefs.remove('userId');
     prefs.remove('nama');
     prefs.remove('email');
@@ -220,5 +232,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       print('Connectivity Result: not connected');
       return false;
     }
+  }
+
+  Future checkSuperAdmin() async {
+    prefs = await SharedPreferences.getInstance();
+    isSuperAdmin = prefs.getBool('isSuperAdmin');
   }
 }

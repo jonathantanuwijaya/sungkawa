@@ -101,16 +101,17 @@ class _LoginState extends State<Login> {
 //      prefs.setString('nama', googleAccount.displayName);
       prefs.setString('email', googleAccount.email);
 
-      if (isNotAdmin == false) {
-        firebaseAuth.signInWithCredential(credential).whenComplete(() {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => DashboardScreen()));
-        });
-      } else {
+      if (isNotAdmin == true) {
         Fluttertoast.showToast(msg: 'Anda tidak terdaftar sebagai admin');
         crud.addAdminTemp(googleAccount.id, {
           'tempat': '',
           'email': googleAccount.email,
+        });
+        googleSignIn.signOut();
+      } else {
+        firebaseAuth.signInWithCredential(credential).whenComplete(() {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => DashboardScreen()));
         });
       }
     });
