@@ -29,47 +29,6 @@ class _LoginState extends State<Login> {
         idToken: googleAuth.idToken,
       );
 
-  Future checkAdmin(GoogleSignInAccount googleAccount) async {
-    print('Check database');
-    FirebaseDatabase.instance
-        .reference()
-        .child('admins')
-        .child(googleAccount.id)
-        .once()
-        .then((snapshot) {
-      if (snapshot.key != null) {
-        print('Role : ${snapshot.value['role']}');
-        if (snapshot.value['role'].toString() == 'Superadmin') {
-          prefs.setBool('isSuperAdmin', true);
-        } else
-          prefs.setBool('isSuperAdmin', false);
-        isNotAdmin = false;
-      } else {
-        isNotAdmin = true;
-        print(snapshot.value);
-      }
-    }).whenComplete(() {
-      print('Super admin : ${prefs.getBool('isSuperAdmin')}');
-      prefs.setString('userId', googleAccount.id);
-      prefs.setString('nama', googleAccount.displayName);
-      prefs.setString('email', googleAccount.email);
-
-      if (isNotAdmin == false) {
-        firebaseAuth.signInWithCredential(credential).whenComplete(() {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => DashboardScreen()));
-        });
-      } else {
-        Fluttertoast.showToast(msg: 'Anda tidak terdaftar sebagai admin');
-        crud.addAdminTemp(googleAccount.id, {
-          'nama': googleAccount.displayName,
-          'email': googleAccount.email,
-//          'tempat': ''
-        });
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -115,6 +74,46 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  Future checkAdmin(GoogleSignInAccount googleAccount) async {
+    print('Check database');
+    FirebaseDatabase.instance
+        .reference()
+        .child('admins')
+        .child(googleAccount.id)
+        .once()
+        .then((snapshot) {
+      if (snapshot.key != null) {
+        print('Role : ${snapshot.value['role']}');
+        if (snapshot.value['role'].toString() == 'Superadmin') {
+          prefs.setBool('isSuperAdmin', true);
+        } else
+          prefs.setBool('isSuperAdmin', false);
+        isNotAdmin = false;
+      } else {
+        isNotAdmin = true;
+        print(snapshot.value);
+      }
+    }).whenComplete(() {
+      print('Super admin : ${prefs.getBool('isSuperAdmin')}');
+      prefs.setString('userId', googleAccount.id);
+//      prefs.setString('nama', googleAccount.displayName);
+      prefs.setString('email', googleAccount.email);
+
+      if (isNotAdmin == false) {
+        firebaseAuth.signInWithCredential(credential).whenComplete(() {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => DashboardScreen()));
+        });
+      } else {
+        Fluttertoast.showToast(msg: 'Anda tidak terdaftar sebagai admin');
+        crud.addAdminTemp(googleAccount.id, {
+          'tempat': '',
+          'email': googleAccount.email,
+        });
+      }
+    });
   }
 
   Future handleSignIn() async {
