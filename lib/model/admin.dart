@@ -1,23 +1,27 @@
 import 'package:firebase_database/firebase_database.dart';
 
 class Admin {
-  String _userName;
+  String _nama;
   String _email;
-  String _superAdmin;
-
-  // ignore: unused_field
+  String _role;
+  String _tempat;
   String _uid;
 
   Admin.fromSnapshot(DataSnapshot snapshot) {
     _uid = snapshot.key;
-    _userName = snapshot.value['username'];
+    _nama = snapshot.value['nama'];
     _email = snapshot.value['email'];
-    _superAdmin = snapshot.value['superAdmin'];
+    _role = snapshot.value['role'];
+    _tempat = snapshot.value['tempat'];
   }
 
   String get email => _email;
 
-  String get superAdmin => _superAdmin;
+  String get nama => _nama;
 
-  String get userName => _userName;
+  String get role => _role;
+
+  String get tempat => _tempat;
+
+  String get uid => _uid;
 }

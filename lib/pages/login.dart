@@ -26,6 +26,8 @@ class _LoginState extends State<Login> {
   bool isSuperAdmin;
   bool isNewAdmin;
 
+  bool adminFound;
+
   AuthCredential get credential =>
       GoogleAuthProvider.getCredential(
         accessToken: googleAuth.accessToken,
@@ -82,83 +84,6 @@ class _LoginState extends State<Login> {
   Future checkAdmin(GoogleSignInAccount googleAccount) async {
     DatabaseReference adminTempRef;
     DatabaseReference adminRef;
-//
-//    try {
-//      try {
-//        adminTempRef = FirebaseDatabase.instance.reference().child('admintemp');
-//      } finally {
-//        if (adminTempRef != null) {
-//          print('Data exists in Admin Temp');
-//          adminTempRef.once().then((snapshot) {
-//            if (snapshot.key != null) {
-//              crud.addAdmin(googleAccount.id, {
-//                'tempat': snapshot.value['tempat'],
-//                'userId': googleAccount.id,
-//                'email': googleAccount.email,
-//                'nama': googleAccount.displayName,
-//                'role': 'Admin'
-//              });
-//              isNotAdmin = false;
-//              isNewAdmin = true;
-//            } else {}
-//          }).catchError((e) {
-//            print(e);
-//          });
-//        }
-//      }
-//
-//      try {
-//        adminRef = FirebaseDatabase.instance
-//            .reference()
-//            .child('admins')
-//            .child(googleAccount.id);
-//      } finally {
-//        if (adminRef != null) {
-//          adminRef.once().then((snapshot) {
-//            if (snapshot.key != null) {
-//              if (snapshot.value['superAdmin'] == true) {
-//                isSuperAdmin = true;
-//              } else {
-//                isSuperAdmin = false;
-//                isNotAdmin = false;
-//              }
-//            } else {
-//              isNotAdmin = true;
-//              print(snapshot.value);
-//            }
-//          }).catchError((e) {
-//            print(e);
-//          });
-//        }
-//      }
-//    } finally {
-//      print('Is Not Admin : $isNotAdmin');
-//      print('is New Admin : $isNewAdmin');
-//      print('Super Admin : $isSuperAdmin');
-//
-//      prefs.setString('userId', googleAccount.id);
-//      prefs.setString('email', googleAccount.email);
-//      prefs.setBool('isSuperAdmin', isSuperAdmin);
-//
-//      if (isNewAdmin == true) adminTempRef.remove();
-//
-//      if (isNotAdmin == true) {
-//        Fluttertoast.showToast(msg: 'Anda tidak terdaftar sebagai admin');
-//        googleSignIn.signOut();
-//      } else {
-//        firebaseAuth.signInWithCredential(credential).whenComplete(() {
-//          if (isNewAdmin == true) {
-//            Navigator.pushReplacement(context,
-//                MaterialPageRoute(builder: (context) => DashboardScreen()),
-//                result: 'Welcome to Sungkawa ${googleAccount.displayName}');
-//          } else {
-//            Navigator.pushReplacement(context,
-//                MaterialPageRoute(builder: (context) => DashboardScreen()),
-//                result: 'Welcome back, ${googleAccount.displayName}');
-//          }
-//        });
-//      }
-//    }
 
     adminRef = FirebaseDatabase.instance
         .reference()
@@ -174,34 +99,32 @@ class _LoginState extends State<Login> {
           } else if (snapshot.value['role'] == 'Superadmin') {
             prefs.setBool('isSuperAdmin', true);
           }
-          isNotAdmin = false;
+          adminFound = true;
         } else {
-          isNotAdmin = true;
+          adminFound = false;
         }
       }).catchError((e) {
         print(e);
-      });
-      adminTempRef.once().then((snapshot) {
-        if (snapshot.value['email'] == googleAccount.email) {
-          isNotAdmin = false;
-          prefs.setBool('isSuperAdmin', false);
+      }).whenComplete(() {
+        if (adminFound == true) {
+          signInToMainMenu();
+        } else {
+          adminTempRef.once().then((snapshot) {
+            if (snapshot.value['email'] == googleAccount.email) {
+              adminFound = true;
+              prefs.setBool('isSuperAdmin', false);
+            } else {
+              adminFound = false;
+            }
+          }).catchError((e) {
+            print(e);
+          }).whenComplete(() {
+            signInToMainMenu();
+          });
         }
-      }).catchError((e) {
-        print(e);
       });
-    } finally {
-      print('Admin : ${!isNotAdmin}');
-      print('Super Admin : ${prefs.getBool('isSuperAdmin')}');
-
-      if (isNotAdmin = true) {
-        Fluttertoast.showToast(msg: 'Anda tidak terdaftar sebagai admin');
-        googleSignIn.signOut();
-      } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => DashboardScreen()),
-        );
-      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -212,5 +135,22 @@ class _LoginState extends State<Login> {
     googleAuth = await googleAccount.authentication;
 
     checkAdmin(googleAccount);
+  }
+
+  void signInToMainMenu() {
+    print('Admin : $adminFound}');
+    print('Super Admin : ${prefs.getBool('isSuperAdmin')}');
+
+    if (adminFound == true) {
+      FirebaseAuth.instance.signInWithCredential(credential).whenComplete(() {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => DashboardScreen()),
+        );
+      });
+    } else {
+      Fluttertoast.showToast(msg: 'Anda tidak terdaftar sebagai admin');
+      googleSignIn.signOut();
+    }
   }
 }
