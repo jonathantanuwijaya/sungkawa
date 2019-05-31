@@ -14,11 +14,7 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
       appBar: AppBar(
         title: Text('Super Admin Menu'),
       ),
-      body: PageView(
-        children: <Widget>[ListView.builder(itemBuilder: (context, index) {})],
-        scrollDirection: Axis.horizontal,
-        onPageChanged: (int) {},
-      ),
+      body: ListView.builder(itemBuilder: (context, index) {}),
     );
   }
 }

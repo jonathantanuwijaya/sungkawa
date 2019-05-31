@@ -22,6 +22,8 @@ class _LoginState extends State<Login> {
   SharedPreferences prefs;
   GoogleSignInAuthentication googleAuth;
   bool isNotAdmin;
+  bool isSuperAdmin;
+  bool isNewAdmin;
 
   AuthCredential get credential =>
       GoogleAuthProvider.getCredential(
@@ -77,44 +79,89 @@ class _LoginState extends State<Login> {
   }
 
   Future checkAdmin(GoogleSignInAccount googleAccount) async {
-    print('Check database');
-    FirebaseDatabase.instance
-        .reference()
-        .child('admins')
-        .child(googleAccount.id)
-        .once()
-        .then((snapshot) {
-      if (snapshot.key != null) {
-        print('Role : ${snapshot.value['role']}');
-        if (snapshot.value['role'].toString() == 'Superadmin') {
-          prefs.setBool('isSuperAdmin', true);
-        } else
-          prefs.setBool('isSuperAdmin', false);
-        isNotAdmin = false;
-      } else {
-        isNotAdmin = true;
-        print(snapshot.value);
+    DatabaseReference adminTempRef;
+    DatabaseReference adminRef;
+
+    try {
+      try {
+        adminTempRef = FirebaseDatabase.instance
+            .reference()
+            .child('admintemp')
+            .child(googleAccount.email);
+      } finally {
+        if (adminTempRef != null) {
+          print('Data exists in Admin Temp');
+          adminTempRef.once().then((snapshot) {
+            if (snapshot.key != null) {
+              crud.addAdmin(googleAccount.id, {
+                'tempat': snapshot.value['tempat'],
+                'userId': googleAccount.id,
+                'email': googleAccount.email,
+                'nama': googleAccount.displayName,
+                'superAdmin': false,
+                'role': 'Admin'
+              });
+              isNotAdmin = false;
+              isNewAdmin = true;
+            } else {}
+          }).catchError((e) {
+            print(e);
+          });
+        }
       }
-    }).whenComplete(() {
-      print('Super admin : ${prefs.getBool('isSuperAdmin')}');
+
+      try {
+        adminRef = FirebaseDatabase.instance
+            .reference()
+            .child('admins')
+            .child(googleAccount.id);
+      } finally {
+        if (adminRef != null) {
+          adminRef.once().then((snapshot) {
+            if (snapshot.key != null) {
+              if (snapshot.value['superAdmin'] == true) {
+                isSuperAdmin = true;
+              } else {
+                isSuperAdmin = false;
+                isNotAdmin = false;
+              }
+            } else {
+              isNotAdmin = true;
+              print(snapshot.value);
+            }
+          }).catchError((e) {
+            print(e);
+          });
+        }
+      }
+    } finally {
+      print('Is Not Admin : $isNotAdmin');
+      print('is New Admin : $isNewAdmin');
+      print('Super Admin : $isSuperAdmin');
+
       prefs.setString('userId', googleAccount.id);
-//      prefs.setString('nama', googleAccount.displayName);
       prefs.setString('email', googleAccount.email);
+      prefs.setBool('isSuperAdmin', isSuperAdmin);
+
+      if (isNewAdmin == true) adminTempRef.remove();
 
       if (isNotAdmin == true) {
         Fluttertoast.showToast(msg: 'Anda tidak terdaftar sebagai admin');
-        crud.addAdminTemp(googleAccount.id, {
-          'tempat': '',
-          'email': googleAccount.email,
-        });
         googleSignIn.signOut();
       } else {
         firebaseAuth.signInWithCredential(credential).whenComplete(() {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => DashboardScreen()));
+          if (isNewAdmin == true) {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => DashboardScreen()),
+                result: 'Welcome to Sungkawa ${googleAccount.displayName}');
+          } else {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => DashboardScreen()),
+                result: 'Welcome back, ${googleAccount.displayName}');
+          }
         });
       }
-    });
+    }
   }
 
   Future handleSignIn() async {
@@ -123,14 +170,6 @@ class _LoginState extends State<Login> {
 
     googleAuth = await googleAccount.authentication;
 
-    //TODO : Balikkan Proses Login
-
     checkAdmin(googleAccount);
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
   }
 }
