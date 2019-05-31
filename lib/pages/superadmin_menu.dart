@@ -12,7 +12,7 @@ class SuperAdminMenu extends StatefulWidget {
 class _SuperAdminMenuState extends State<SuperAdminMenu> {
   List<Admin> _adminList = new List();
   DatabaseReference _adminRef =
-  FirebaseDatabase.instance.reference().child('admins');
+      FirebaseDatabase.instance.reference().child('admins');
 
   StreamSubscription<Event> _onAdminAddedSubscription;
   StreamSubscription<Event> _onAdminChangedSubscription;

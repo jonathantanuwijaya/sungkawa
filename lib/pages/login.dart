@@ -28,8 +28,7 @@ class _LoginState extends State<Login> {
 
   bool adminFound;
 
-  AuthCredential get credential =>
-      GoogleAuthProvider.getCredential(
+  AuthCredential get credential => GoogleAuthProvider.getCredential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
