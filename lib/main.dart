@@ -71,6 +71,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       case AuthStatus.signedIn:
         return Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             title: Text(
               'Sungkawa',
               textAlign: TextAlign.center,
@@ -158,7 +159,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
     checkConnectivity();
     getCurrentUser().then((userId) {
       setState(() {
@@ -168,6 +168,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
     initFCM();
     checkSuperAdmin();
+    super.initState();
   }
 
   void initFCM() {
