@@ -79,16 +79,16 @@ class _PostAddState extends State<PostAdd> {
                   icon: Icon(Icons.check),
                   onPressed: isLoading != true
                       ? () {
-                    if (image == null) {
-                      Scaffold.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Photo wajib ada"),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                    } else
-                      checkPost();
-                  }
+                          if (image == null) {
+                            Scaffold.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Photo wajib ada"),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                          } else
+                            checkPost();
+                        }
                       : null);
             },
           ),
@@ -123,7 +123,7 @@ class _PostAddState extends State<PostAdd> {
                   controller: namaController,
                   textCapitalization: TextCapitalization.words,
                   validator: (value) =>
-                  value.isNotEmpty ? null : 'Nama wajib diisi',
+                      value.isNotEmpty ? null : 'Nama wajib diisi',
                 ),
                 SizedBox(
                   height: 8.0,
@@ -143,7 +143,7 @@ class _PostAddState extends State<PostAdd> {
                   controller: umurController,
                   textCapitalization: TextCapitalization.words,
                   validator: (value) =>
-                  value.isNotEmpty ? null : 'Usia wajib diisi',
+                      value.isNotEmpty ? null : 'Usia wajib diisi',
                 ),
                 SizedBox(
                   height: 8.0,
@@ -154,7 +154,7 @@ class _PostAddState extends State<PostAdd> {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5))),
                   validator: (value) =>
-                  value != null ? null : 'Agama Wajib di isi',
+                      value != null ? null : 'Agama Wajib di isi',
                   value: agama,
                   items: Constants.agama.map((String value) {
                     return DropdownMenuItem(
@@ -229,7 +229,7 @@ class _PostAddState extends State<PostAdd> {
                     ),
                   ),
                   validator: (value) =>
-                  value.isNotEmpty ? null : 'Alamat wajib diisi',
+                      value.isNotEmpty ? null : 'Alamat wajib diisi',
                   maxLength: 50,
                   maxLines: 1,
                   controller: alamatController,
@@ -274,8 +274,7 @@ class _PostAddState extends State<PostAdd> {
                     maxLines: 1,
                     controller: tempatSemayamController,
                     textCapitalization: TextCapitalization.words,
-                    validator: (value) =>
-                    value.isNotEmpty
+                    validator: (value) => value.isNotEmpty
                         ? null
                         : 'Tempat persemayaman wajib diisi.'),
                 TextFormField(
@@ -291,7 +290,7 @@ class _PostAddState extends State<PostAdd> {
                   controller: tempatProsesiController,
                   textCapitalization: TextCapitalization.words,
                   validator: (value) =>
-                  value.isNotEmpty ? null : 'Tempat Prosesi wajib diisi.',
+                      value.isNotEmpty ? null : 'Tempat Prosesi wajib diisi.',
                 ),
                 DateTimePickerFormField(
                   onChanged: (value) => tanggalDimakamkan = value,
@@ -321,7 +320,7 @@ class _PostAddState extends State<PostAdd> {
                   editable: false,
                   format: timeFormat,
                   validator: (value) =>
-                  value != null ? null : 'Jam wajib diisi',
+                      value != null ? null : 'Jam wajib diisi',
                   controller: waktuDimakamkanController,
                   decoration: InputDecoration(
                     labelText: 'Jam Pemakaman/Kremasi',
