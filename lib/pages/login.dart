@@ -93,8 +93,8 @@ class _LoginState extends State<Login> {
       adminRef.orderByKey().once().then((snapshot) {
         print('${snapshot.key}');
         if (snapshot.key != null) {
-          if (snapshot.value['role'] == 'Admin') {} else
-          if (snapshot.value['role'] == 'Superadmin') {
+          if (snapshot.value['role'] == 'Admin') {
+          } else if (snapshot.value['role'] == 'Superadmin') {
             prefs.setBool('isSuperAdmin', true);
           }
           adminFound = true;
