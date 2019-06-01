@@ -22,9 +22,6 @@ class _LoginState extends State<Login> {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   SharedPreferences prefs;
   GoogleSignInAuthentication googleAuth;
-  bool isNotAdmin;
-  bool isSuperAdmin;
-  bool isNewAdmin;
 
   bool adminFound;
 
@@ -91,11 +88,11 @@ class _LoginState extends State<Login> {
     adminTempRef = FirebaseDatabase.instance.reference().child('admintemp');
 
     try {
+      prefs.setBool('isSuperAdmin', false);
+
       adminRef.once().then((snapshot) {
         if (snapshot.key != null) {
-          if (snapshot.value['role'] == 'Admin') {
-            prefs.setBool('isSuperAdmin', false);
-          } else if (snapshot.value['role'] == 'Superadmin') {
+          if (snapshot.value['role'] == 'Admin') {} else if (snapshot.value['role'] == 'Superadmin') {
             prefs.setBool('isSuperAdmin', true);
           }
           adminFound = true;
@@ -106,19 +103,18 @@ class _LoginState extends State<Login> {
         print(e);
       }).whenComplete(() {
         if (adminFound == true) {
-          signInToMainMenu();
+          signInToMainMenu(googleAccount);
         } else {
           adminTempRef.once().then((snapshot) {
             if (snapshot.value['email'] == googleAccount.email) {
               adminFound = true;
-              prefs.setBool('isSuperAdmin', false);
             } else {
               adminFound = false;
             }
           }).catchError((e) {
             print(e);
           }).whenComplete(() {
-            signInToMainMenu();
+            signInToMainMenu(googleAccount);
           });
         }
       });
@@ -136,9 +132,10 @@ class _LoginState extends State<Login> {
     checkAdmin(googleAccount);
   }
 
-  void signInToMainMenu() {
+  void signInToMainMenu(GoogleSignInAccount googleAccount) {
     print('Admin : $adminFound}');
     print('Super Admin : ${prefs.getBool('isSuperAdmin')}');
+    prefs.setString('userId', googleAccount.id);
 
     if (adminFound == true) {
       FirebaseAuth.instance.signInWithCredential(credential).whenComplete(() {
