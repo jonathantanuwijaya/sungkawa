@@ -14,17 +14,6 @@ class CRUD {
     adminRef.child(adminId).set(adminData);
   }
 
-  void addAdminTemp(String id, Map<String, dynamic> map) {
-    FirebaseDatabase.instance
-        .reference()
-        .child('admintemp')
-        .child(id)
-        .set(map)
-        .catchError((e) {
-      print(e);
-    });
-  }
-
   Future<void> addComment(postId, commentData) async {
     commentRef.child(postId).push().set(commentData).catchError((e) {
       print(e);

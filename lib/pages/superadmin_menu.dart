@@ -85,69 +85,76 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
             showDialog(
                 context: context,
                 builder: (context) {
-                  return Dialog(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: <Widget>[
-                            Center(
-                              child: Text(
-                                'Tambah Admin',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
-                            ),
-                            TextFormField(
-                              controller: _emailController,
-                              decoration: InputDecoration(labelText: 'Email'),
-                              keyboardType: TextInputType.emailAddress,
-                            ),
-                            TextFormField(
-                              controller: _tempatController,
-                              decoration: InputDecoration(labelText: 'Tempat'),
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                FlatButton(
-                                    onPressed: () {
-                                      _formKey.currentState.save();
-
-                                      FirebaseDatabase.instance
-                                          .reference()
-                                          .child('admintemp')
-                                          .push()
-                                          .set({
-                                        'email': _emailController.text,
-                                        'tempat': _tempatController.text,
-                                      }).whenComplete(() {
-                                        Navigator.pop(context);
-                                      });
-                                    },
-                                    child: Text('Tambah')),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: FlatButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('Batal')),
-                                )
-                              ],
-                            )
-                          ],
-                          mainAxisSize: MainAxisSize.min,
-                        ),
-                      ),
-                    ),
-                  );
+                  return buildAddAdminDialog(context);
                 });
           }),
+    );
+  }
+
+  CupertinoAlertDialog buildAddAdminDialog(BuildContext context) {
+    return CupertinoAlertDialog(
+      title: Text('Tambah Admin'),
+      content: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              CupertinoTextField(
+                controller: _emailController,
+                placeholder: 'Email',
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    shape: BoxShape.rectangle,
+                    border: Border.all(style: BorderStyle.solid)),
+                keyboardType: TextInputType.emailAddress,
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              CupertinoTextField(
+                controller: _tempatController,
+                placeholder: 'Tempat',
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    shape: BoxShape.rectangle,
+                    border: Border.all(style: BorderStyle.solid)),
+              ),
+            ],
+            mainAxisSize: MainAxisSize.min,
+          ),
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+            textColor: Colors.blue,
+            onPressed: () {
+              _formKey.currentState.save();
+
+              FirebaseDatabase.instance
+                  .reference()
+                  .child('admintemp')
+                  .push()
+                  .set({
+                'email': _emailController.text,
+                'tempat': _tempatController.text,
+              }).whenComplete(() {
+                _emailController.clear();
+                _tempatController.clear();
+                Navigator.pop(context);
+              });
+            },
+            child: Text('Tambah')),
+        FlatButton(
+            textColor: Colors.red,
+            onPressed: () {
+              _emailController.clear();
+              _tempatController.clear();
+
+              Navigator.pop(context);
+            },
+            child: Text('Batal'))
+      ],
     );
   }
 
@@ -166,15 +173,29 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
                         CupertinoAlertDialog(
                           title: Text('Hapus Admin?'),
                           content: Text(
-                              'Tindakan ini tidak dapat dipulihkan, lanjutkan>'),
+                              'Tindakan ini tidak dapat dipulihkan, lanjutkan?'),
                           actions: <Widget>[
                             CupertinoDialogAction(
                               child: Text('Hapus'),
-                              onPressed: () {},
+                              onPressed: () {
+                                FirebaseDatabase.instance
+                                    .reference()
+                                    .child('admins')
+                                    .child(_adminList[index].uid)
+                                    .remove();
+
+                                setState(() {
+                                  _adminList.removeAt(index);
+                                  Navigator.pop(context);
+                                });
+                              },
                             ),
                             CupertinoDialogAction(
                               child: Text('Batal'),
                               isDestructiveAction: true,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
                             )
                           ],
                         ));
@@ -199,11 +220,13 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
       return FlatButton.icon(
         icon: Icon(Icons.keyboard_arrow_down),
         onPressed: () {
-          FirebaseDatabase.instance
-              .reference()
-              .child('admins')
-              .child(uid)
-              .update({'role': 'Admun'});
+          setState(() {
+            FirebaseDatabase.instance
+                .reference()
+                .child('admins')
+                .child(uid)
+                .update({'role': 'Admin'});
+          });
         },
         label: Text('Turunkan'),
       );
@@ -211,11 +234,13 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
       return FlatButton.icon(
         icon: Icon(Icons.keyboard_arrow_up),
         onPressed: () {
-          FirebaseDatabase.instance
-              .reference()
-              .child('admins')
-              .child(uid)
-              .update({'role': 'Superadmin'});
+          setState(() {
+            FirebaseDatabase.instance
+                .reference()
+                .child('admins')
+                .child(uid)
+                .update({'role': 'Superadmin'});
+          });
         },
         label: Text('Naikkan'),
       );
@@ -252,7 +277,6 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
 
   void sortAdminList() {
     var userEntry = _adminList.singleWhere((entry) {
-      print('${entry.uid}==$currentUserId');
       return entry.uid == currentUserId;
     });
     print(_adminList.indexOf(userEntry));

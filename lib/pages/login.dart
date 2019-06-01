@@ -90,7 +90,8 @@ class _LoginState extends State<Login> {
     try {
       prefs.setBool('isSuperAdmin', false);
 
-      adminRef.once().then((snapshot) {
+      adminRef.orderByKey().once().then((snapshot) {
+        print('${snapshot.key}');
         if (snapshot.key != null) {
           if (snapshot.value['role'] == 'Admin') {} else
           if (snapshot.value['role'] == 'Superadmin') {
@@ -101,13 +102,21 @@ class _LoginState extends State<Login> {
           adminFound = false;
         }
       }).catchError((e) {
-        print(e);
+        print('hoi');
       }).whenComplete(() {
         if (adminFound == true) {
           signInToMainMenu(googleAccount);
         } else {
-          adminTempRef.once().then((snapshot) {
-            if (snapshot.value['email'] == googleAccount.email) {
+          print('pbe');
+          adminTempRef
+              .orderByValue()
+//              .orderByKey()
+//              .orderByValue()
+              .once()
+              .then((snapshot) {
+            print('${snapshot.value}');
+            print('${snapshot.value['email']}');
+            if (snapshot.value.value['email'] == googleAccount.email) {
               adminFound = true;
             } else {
               adminFound = false;
@@ -134,7 +143,7 @@ class _LoginState extends State<Login> {
   }
 
   void signInToMainMenu(GoogleSignInAccount googleAccount) {
-    print('Admin : $adminFound}');
+    print('Admin : $adminFound');
     print('Super Admin : ${prefs.getBool('isSuperAdmin')}');
     prefs.setString('userId', googleAccount.id);
 

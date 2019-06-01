@@ -94,188 +94,177 @@ class _PostAddState extends State<PostAdd> {
           ),
         ],
       ),
-      body: Container(
-        margin: EdgeInsets.all(16.0),
-        child: ListView(
-          padding: EdgeInsets.only(top: 8.0),
-          children: <Widget>[
-            Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Nama',
-                      alignLabelWithHint: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
+      body: buildForm(),
+    );
+  }
+
+  Container buildForm() {
+    return Container(
+      margin: EdgeInsets.all(16.0),
+      child: ListView(
+        padding: EdgeInsets.only(top: 8.0),
+        children: <Widget>[
+          Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Nama',
+                    alignLabelWithHint: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
-                    textInputAction: TextInputAction.next,
-                    maxLength: 50,
-                    maxLines: 1,
-                    controller: namaController,
-                    textCapitalization: TextCapitalization.words,
-                    validator: (value) =>
-                        value.isNotEmpty ? null : 'Nama wajib diisi',
                   ),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Usia',
-                      hintText: 'Tulis usia dalam satuan tahun',
-                      alignLabelWithHint: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
+                  textInputAction: TextInputAction.next,
+                  maxLength: 50,
+                  maxLines: 1,
+                  controller: namaController,
+                  textCapitalization: TextCapitalization.words,
+                  validator: (value) =>
+                  value.isNotEmpty ? null : 'Nama wajib diisi',
+                ),
+                SizedBox(
+                  height: 8.0,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Usia',
+                    hintText: 'Tulis usia dalam satuan tahun',
+                    alignLabelWithHint: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
-                    keyboardType: TextInputType.number,
-                    maxLength: 3,
-                    maxLines: 1,
-                    controller: umurController,
-                    textCapitalization: TextCapitalization.words,
-                    validator: (value) =>
-                        value.isNotEmpty ? null : 'Usia wajib diisi',
                   ),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  DropdownButtonFormField(
-                    decoration: InputDecoration(
-                        hintText: 'Agama',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5))),
-                    validator: (value) =>
-                        value != null ? null : 'Agama Wajib di isi',
-                    value: agama,
-                    items: Constants.agama.map((String value) {
-                      return DropdownMenuItem(
-                        child: Text(value),
-                        value: value,
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        agama = value;
-                        if (agama == 'Islam') {
-                          _prosesi = 'Dimakamkan';
-                        }
-                      });
-                    },
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  DateTimePickerFormField(
-                    inputType: InputType.date,
-                    editable: false,
-                    format: dateFormat,
-                    controller: tanggalMeninggalController,
-                    decoration: InputDecoration(
-                      labelText: 'Tanggal Meninggal',
+                  keyboardType: TextInputType.number,
+                  maxLength: 3,
+                  maxLines: 1,
+                  controller: umurController,
+                  textCapitalization: TextCapitalization.words,
+                  validator: (value) =>
+                  value.isNotEmpty ? null : 'Usia wajib diisi',
+                ),
+                SizedBox(
+                  height: 8.0,
+                ),
+                DropdownButtonFormField(
+                  decoration: InputDecoration(
+                      hintText: 'Agama',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
+                          borderRadius: BorderRadius.circular(5))),
+                  validator: (value) =>
+                  value != null ? null : 'Agama Wajib di isi',
+                  value: agama,
+                  items: Constants.agama.map((String value) {
+                    return DropdownMenuItem(
+                      child: Text(value),
+                      value: value,
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      agama = value;
+                      if (agama == 'Islam') {
+                        _prosesi = 'Dimakamkan';
+                      }
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                DateTimePickerFormField(
+                  inputType: InputType.date,
+                  editable: false,
+                  format: dateFormat,
+                  controller: tanggalMeninggalController,
+                  decoration: InputDecoration(
+                    labelText: 'Tanggal Meninggal',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
-                    validator: (value) {
-                      if (value.isAfter(tanggalSemayam) ||
-                          value.isAfter(tanggalDimakamkan))
-                        return "Urutan tanggal salah";
-                      else
-                        return null;
-                    },
-                    onChanged: (value) => tanggalMeninggal = value,
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  DateTimePickerFormField(
-                    inputType: InputType.date,
-                    editable: false,
-                    format: dateFormat,
-                    controller: tanggalDisemayamkanController,
-                    decoration: InputDecoration(
-                      labelText: 'Tanggal Disemayamkan',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
+                  validator: (value) {
+                    if (value.isAfter(tanggalSemayam) ||
+                        value.isAfter(tanggalDimakamkan))
+                      return "Urutan tanggal salah";
+                    else
+                      return null;
+                  },
+                  onChanged: (value) => tanggalMeninggal = value,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                DateTimePickerFormField(
+                  inputType: InputType.date,
+                  editable: false,
+                  format: dateFormat,
+                  controller: tanggalDisemayamkanController,
+                  decoration: InputDecoration(
+                    labelText: 'Tanggal Disemayamkan',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
-                    validator: (value) {
-                      if (value.isBefore(tanggalMeninggal) ||
-                          value.isAfter(tanggalDimakamkan))
-                        return 'Urutan Tanggal salah';
-                      else
-                        return null;
-                    },
-                    onChanged: (value) => tanggalSemayam = value,
                   ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Alamat',
-                      alignLabelWithHint: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
+                  validator: (value) {
+                    if (value.isBefore(tanggalMeninggal) ||
+                        value.isAfter(tanggalDimakamkan))
+                      return 'Urutan Tanggal salah';
+                    else
+                      return null;
+                  },
+                  onChanged: (value) => tanggalSemayam = value,
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Alamat',
+                    alignLabelWithHint: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
-                    validator: (value) =>
-                        value.isNotEmpty ? null : 'Alamat wajib diisi',
-                    maxLength: 50,
-                    maxLines: 1,
-                    controller: alamatController,
-                    textCapitalization: TextCapitalization.words,
                   ),
-                  Row(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 8.0,
-                      ),
-                      new Radio(
-                        value: 'Dimakamkan',
-                        onChanged: handleProsesi,
-                        activeColor: Colors.green,
-                        groupValue: _prosesi,
-                      ),
-                      Text('Dimakamkan'),
-                      SizedBox(
-                        height: 8.0,
-                      ),
-                      new Radio(
-                        value: 'Dikremasi',
-                        onChanged: (agama == 'Islam' ? null : handleProsesi),
-                        activeColor: Colors.green,
-                        groupValue: _prosesi,
-                      ),
-                      Text('Dikremasi'),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  TextFormField(
-                      enabled: false,
-                      decoration: InputDecoration(
-                        labelText: 'Tempat disemayamkan',
-                        alignLabelWithHint: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                      ),
-                      maxLength: 50,
-                      maxLines: 1,
-                      controller: tempatSemayamController,
-                      textCapitalization: TextCapitalization.words,
-                      validator: (value) => value.isNotEmpty
-                          ? null
-                          : 'Tempat persemayaman wajib diisi.'),
-                  TextFormField(
+                  validator: (value) =>
+                  value.isNotEmpty ? null : 'Alamat wajib diisi',
+                  maxLength: 50,
+                  maxLines: 1,
+                  controller: alamatController,
+                  textCapitalization: TextCapitalization.words,
+                ),
+                Row(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    new Radio(
+                      value: 'Dimakamkan',
+                      onChanged: handleProsesi,
+                      activeColor: Colors.green,
+                      groupValue: _prosesi,
+                    ),
+                    Text('Dimakamkan'),
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    new Radio(
+                      value: 'Dikremasi',
+                      onChanged: (agama == 'Islam' ? null : handleProsesi),
+                      activeColor: Colors.green,
+                      groupValue: _prosesi,
+                    ),
+                    Text('Dikremasi'),
+                  ],
+                ),
+                SizedBox(
+                  height: 8.0,
+                ),
+                TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Tempat Pemakaman/Kremasi',
+                      labelText: 'Tempat disemayamkan',
                       alignLabelWithHint: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
@@ -283,90 +272,105 @@ class _PostAddState extends State<PostAdd> {
                     ),
                     maxLength: 50,
                     maxLines: 1,
-                    controller: tempatProsesiController,
+                    controller: tempatSemayamController,
                     textCapitalization: TextCapitalization.words,
                     validator: (value) =>
-                        value.isNotEmpty ? null : 'Tempat Prosesi wajib diisi.',
-                  ),
-                  DateTimePickerFormField(
-                    onChanged: (value) => tanggalDimakamkan = value,
-                    inputType: InputType.date,
-                    editable: false,
-                    format: dateFormat,
-                    controller: tanggalDimakamkanController,
-                    validator: (value) {
-                      if (value.isBefore(tanggalSemayam) ||
-                          value.isBefore(tanggalMeninggal))
-                        return "Urutan tanggal salah";
-                      else
-                        return null;
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Tanggal Pemakaman/Kremasi',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
+                    value.isNotEmpty
+                        ? null
+                        : 'Tempat persemayaman wajib diisi.'),
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Tempat Pemakaman/Kremasi',
+                    alignLabelWithHint: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
                   ),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  DateTimePickerFormField(
-                    inputType: InputType.time,
-                    editable: false,
-                    format: timeFormat,
-                    validator: (value) =>
-                        value != null ? null : 'Jam wajib diisi',
-                    controller: waktuDimakamkanController,
-                    decoration: InputDecoration(
-                      labelText: 'Jam Pemakaman/Kremasi',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
+                  maxLength: 50,
+                  maxLines: 1,
+                  controller: tempatProsesiController,
+                  textCapitalization: TextCapitalization.words,
+                  validator: (value) =>
+                  value.isNotEmpty ? null : 'Tempat Prosesi wajib diisi.',
+                ),
+                DateTimePickerFormField(
+                  onChanged: (value) => tanggalDimakamkan = value,
+                  inputType: InputType.date,
+                  editable: false,
+                  format: dateFormat,
+                  controller: tanggalDimakamkanController,
+                  validator: (value) {
+                    if (value.isBefore(tanggalSemayam) ||
+                        value.isBefore(tanggalMeninggal))
+                      return "Urutan tanggal salah";
+                    else
+                      return null;
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Tanggal Pemakaman/Kremasi',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
                   ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Keterangan',
-                      hintText: 'Tulis keterangan (Optional)',
-                      alignLabelWithHint: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
+                ),
+                SizedBox(
+                  height: 8.0,
+                ),
+                DateTimePickerFormField(
+                  inputType: InputType.time,
+                  editable: false,
+                  format: timeFormat,
+                  validator: (value) =>
+                  value != null ? null : 'Jam wajib diisi',
+                  controller: waktuDimakamkanController,
+                  decoration: InputDecoration(
+                    labelText: 'Jam Pemakaman/Kremasi',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
-                    maxLength: 200,
-                    maxLines: 6,
-                    controller: keteranganController,
-                    textCapitalization: TextCapitalization.sentences,
                   ),
-                  Row(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          Icons.camera_alt,
-                          color: Colors.grey,
-                        ),
-                        onPressed: getImageCamera,
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.image,
-                          color: Colors.grey,
-                        ),
-                        onPressed: getImageGallery,
-                      ),
-                      buildProgressBar(),
-                    ],
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: 'Keterangan',
+                    hintText: 'Tulis keterangan (Optional)',
+                    alignLabelWithHint: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
                   ),
-                  imageFile != null ? buildImage() : Text(''),
-                ],
-              ),
+                  maxLength: 200,
+                  maxLines: 6,
+                  controller: keteranganController,
+                  textCapitalization: TextCapitalization.sentences,
+                ),
+                Row(
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(
+                        Icons.camera_alt,
+                        color: Colors.grey,
+                      ),
+                      onPressed: getImageCamera,
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.image,
+                        color: Colors.grey,
+                      ),
+                      onPressed: getImageGallery,
+                    ),
+                    buildProgressBar(),
+                  ],
+                ),
+                imageFile != null ? buildImage() : Text(''),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -457,7 +461,6 @@ class _PostAddState extends State<PostAdd> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _prosesi = 'Dimakamkan';
     checkAdminPlaceInfo();
