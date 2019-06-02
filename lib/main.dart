@@ -8,6 +8,7 @@ import 'package:admin_sungkawa/pages/post_add.dart';
 import 'package:admin_sungkawa/pages/superadmin_menu.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,20 +47,27 @@ class MyApp extends StatelessWidget {
             TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
           })),
       home: Opening(),
+      routes: {
+        'loginScreen': (BuildContext context) => Login(),
+        'postAdd': (context) => PostAdd(),
+      },
     );
   }
 }
 
-enum Pilihan { about, signOut }
-
 class _DashboardScreenState extends State<DashboardScreen> {
   AuthStatus _authStatus;
   var connectionStatus;
+  GoogleSignInAccount gsa;
   SharedPreferences prefs;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final List<Notifikasi> notif = [];
+  DatabaseReference currentAdminRef;
 
   bool isSuperAdmin;
+
+  StreamSubscription<Event> _onAdminStatusChangeSub;
+  StreamSubscription<Event> _onAdminStatusRemoveSub;
 
   @override
   // ignore: missing_return
@@ -109,6 +117,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   CupertinoActionSheet buildCupertinoActionSheet(BuildContext context) {
+    isSuperAdmin = prefs.getBool('isSuperAdmin');
     return CupertinoActionSheet(
         title: const Text(
           'Pilihan menu',
@@ -146,6 +155,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
             )));
   }
 
+  Future checkSuperAdmin() async {
+    prefs = await SharedPreferences.getInstance();
+    var userId = prefs.getString('userId') ?? '';
+    currentAdminRef =
+        FirebaseDatabase.instance.reference().child('admins').child(userId);
+    _onAdminStatusChangeSub =
+        currentAdminRef.onChildChanged.listen(_onAdminStatusChange);
+    _onAdminStatusRemoveSub =
+        currentAdminRef.onChildChanged.listen(_onAdminStatusRemove);
+  }
+
+  void _onAdminStatusChange(Event event) {
+    String userRole = event.snapshot.value;
+    print('User Role : $userRole');
+    if (userRole == 'Admin') {
+      setState(() {
+        prefs.setBool('isSuperAdmin', false);
+      });
+    } else if (userRole == 'Superadmin') {
+      setState(() {
+        prefs.setBool('isSuperAdmin', true);
+      });
+    }
+  }
+
   Future<String> getCurrentUser() async {
     try {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
@@ -154,21 +188,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       print('Error: $e');
       return null;
     }
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    checkConnectivity();
-    getCurrentUser().then((userId) {
-      setState(() {
-        _authStatus =
-            userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
-      });
-    });
-    initFCM();
-    checkSuperAdmin();
-    super.initState();
   }
 
   void initFCM() {
@@ -203,6 +222,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    checkConnectivity();
+    getCurrentUser().then((userId) {
+      setState(() {
+        _authStatus =
+        userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+      });
+    });
+    initFCM();
+    checkSuperAdmin();
+    super.initState();
+  }
+
   void sendTokenToServer(String fcm) {
     print('Token : $fcm');
   }
@@ -216,6 +250,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     prefs.remove('nama');
     prefs.remove('email');
 
+    _onAdminStatusChangeSub.cancel();
+    _onAdminStatusRemoveSub.cancel();
 //    Navigator.pop(context);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (BuildContext context) => Login()));
@@ -235,8 +271,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  Future checkSuperAdmin() async {
-    prefs = await SharedPreferences.getInstance();
-    isSuperAdmin = prefs.getBool('isSuperAdmin');
+  void _onAdminStatusRemove(Event event) {
+    if (event.snapshot == null) {
+      signOut();
+    }
   }
 }

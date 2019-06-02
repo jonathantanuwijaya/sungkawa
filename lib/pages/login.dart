@@ -125,7 +125,7 @@ class _LoginState extends State<Login> {
               });
               adminFound = true;
               result =
-              'Selamat Datang di Sungkawa, ${googleAccount.displayName}';
+                  'Selamat Datang di Sungkawa, ${googleAccount.displayName}';
             } else {
               adminFound = false;
             }

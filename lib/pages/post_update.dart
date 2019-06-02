@@ -14,16 +14,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UpdatePost extends StatefulWidget {
+class PostUpdate extends StatefulWidget {
   final Post post;
 
-  UpdatePost(this.post);
+  PostUpdate(this.post);
 
   @override
-  _UpdatePostState createState() => _UpdatePostState();
+  _PostUpdateState createState() => _PostUpdateState();
 }
 
-class _UpdatePostState extends State<UpdatePost> {
+class _PostUpdateState extends State<PostUpdate> {
   String userId,
       nama,
       agama,

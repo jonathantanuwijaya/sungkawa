@@ -54,191 +54,193 @@ class _HomePageState extends State<HomePage> {
                       builder: (context) => Detail(_postList[index])));
             },
             onLongPress: () {
-              showCupertinoModalPopup(
-                context: context,
-                builder: (context) =>
-                    CupertinoActionSheet(
-                      title: Text("Apa yang ingin anda lakukan?"),
-                      actions: <Widget>[
-                        CupertinoActionSheetAction(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          UpdatePost(_postList[index])));
-                            },
-                            child: Text('Update')),
-                        CupertinoActionSheetAction(
-                          isDestructiveAction: true,
-                          child: Text('Delete'),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            showCupertinoDialog(
-                              context: context,
-                              builder: (context) =>
-                                  CupertinoAlertDialog(
-                                    content:
-                                    Text('Anda yakin dengan pilihan ini'),
-                                    actions: <Widget>[
-                                      FlatButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text(
-                                            'Batal',
-                                            style: TextStyle(
-                                                color: Colors.blue,
-                                                fontWeight: FontWeight.bold),
-                                          )),
-                                      FlatButton(
-                                        onPressed: () {
-                                          crud.deletePost(_postList[index].key);
-                                          setState(() {
-                                            _postList.removeAt(index);
-                                            Navigator.pop(context);
-                                          });
-                                        },
-                                        child: Text(
-                                          'Ya',
-                                          style: TextStyle(
-                                            color: Colors.red,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                            );
-                          },
-                        )
-                      ],
-                    ),
-              );
+              buildPostActionDialog(index);
             },
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16.0,
-                      right: 16.0,
-                      top: 10.0,
-                      bottom: 10.0,
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Flexible(
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                             _postList[index].nama,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.0,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          flex: 3,
-                          fit: FlexFit.tight,
-                        ),
-//                        Expanded(
-//                          child: SizedBox(),
-//                        ),
-                        Text(
-                          util.convertPostTimestamp(
-                            _postList[index].timestamp,
-                          ),
-                          style: TextStyle(fontSize: 14.0, color: Colors.grey),
-                        )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16.0,
-                      right: 16.0,
-                      bottom: 10.0,
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          'Usia : ${_postList[index].usia} tahun',
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        Expanded(
-                          child: SizedBox(),
-                        ),
-                        buildStatusText(_postList[index])
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16.0,
-                      right: 16.0,
-                      bottom: 10.0,
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                    Flexible(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Alamat : ' + _postList[index].alamat,
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.grey,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    flex: 3,
-                    fit: FlexFit.tight,
-                  ),
-                        Flexible(
-                          fit: FlexFit.tight,
-                          flex: 2,
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              "Agama : ${_postList[index].agama}",
-                              style:
-                              TextStyle(fontSize: 14.0, color: Colors.grey),
-                            ),
-                          ),
-                        ),
-
-
-                      ],
-                    ),
-                  ),
-                  Center(
-                    child: CachedNetworkImage(
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      imageUrl: _postList[index].photo,
-                      height: 240.0,
-                      width: double.infinity,
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  )
-                ],
-              ),
-            ),
+            child: buildPostCard(index),
           ),
         );
       },
+    );
+  }
+
+  Card buildPostCard(int index) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 16.0,
+              right: 16.0,
+              top: 10.0,
+              bottom: 10.0,
+            ),
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      _postList[index].nama,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  flex: 3,
+                  fit: FlexFit.tight,
+                ),
+//                        Expanded(
+//                          child: SizedBox(),
+//                        ),
+                Text(
+                  util.convertPostTimestamp(
+                    _postList[index].timestamp,
+                  ),
+                  style: TextStyle(fontSize: 14.0, color: Colors.grey),
+                )
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 16.0,
+              right: 16.0,
+              bottom: 10.0,
+            ),
+            child: Row(
+              children: <Widget>[
+                Text(
+                  'Usia : ${_postList[index].usia} tahun',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: Colors.grey,
+                  ),
+                ),
+                Expanded(
+                  child: SizedBox(),
+                ),
+                buildStatusText(_postList[index])
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 16.0,
+              right: 16.0,
+              bottom: 10.0,
+            ),
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Alamat : ' + _postList[index].alamat,
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.grey,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  flex: 3,
+                  fit: FlexFit.tight,
+                ),
+                Flexible(
+                  fit: FlexFit.tight,
+                  flex: 2,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      "Agama : ${_postList[index].agama}",
+                      style: TextStyle(fontSize: 14.0, color: Colors.grey),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Center(
+            child: CachedNetworkImage(
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              imageUrl: _postList[index].photo,
+              height: 240.0,
+              width: double.infinity,
+              fit: BoxFit.fitWidth,
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          )
+        ],
+      ),
+    );
+  }
+
+  Future buildPostActionDialog(int index) {
+    return showCupertinoModalPopup(
+      context: context,
+      builder: (context) =>
+          CupertinoActionSheet(
+            title: Text("Apa yang ingin anda lakukan?"),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                PostUpdate(_postList[index])));
+                  },
+                  child: Text('Update')),
+              CupertinoActionSheetAction(
+                isDestructiveAction: true,
+                child: Text('Delete'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  showCupertinoDialog(
+                    context: context,
+                    builder: (context) =>
+                        CupertinoAlertDialog(
+                          content: Text('Anda yakin dengan pilihan ini'),
+                          actions: <Widget>[
+                            FlatButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  'Batal',
+                                  style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold),
+                                )),
+                            FlatButton(
+                              onPressed: () {
+                                crud.deletePost(_postList[index].key);
+                                setState(() {
+                                  _postList.removeAt(index);
+                                  Navigator.pop(context);
+                                });
+                              },
+                              child: Text(
+                                'Ya',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                  );
+                },
+              )
+            ],
+          ),
     );
   }
 
