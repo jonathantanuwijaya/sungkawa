@@ -66,8 +66,8 @@ class _PostUpdateState extends State<PostUpdate> {
                 icon: Icon(Icons.check),
                 onPressed: (isLoading != true)
                     ? () {
-                  validateAndSubmit();
-                }
+                        validateAndSubmit();
+                      }
                     : null,
               );
             },
@@ -88,7 +88,7 @@ class _PostUpdateState extends State<PostUpdate> {
                       placeholder: (context, url) =>
                           CircularProgressIndicator(),
                       errorWidget: (context, url, error) => Icon(Icons.warning),
-                fit: BoxFit.fill,
+                      fit: BoxFit.fill,
                     )
                   : buildImage(),
               SizedBox(
@@ -134,8 +134,7 @@ class _PostUpdateState extends State<PostUpdate> {
               ),
               TextFormField(
                 initialValue: usia,
-                validator: (value) =>
-                (value.isEmpty || int.parse(value) == 0)
+                validator: (value) => (value.isEmpty || int.parse(value) == 0)
                     ? 'Umur tidak boleh kosong'
                     : null,
                 onSaved: (value) => usia = value,
@@ -498,12 +497,10 @@ class _PostUpdateState extends State<PostUpdate> {
   }
 
   Future<String> uploadImage(var imageFile) async {
-    timestamp = DateTime
-        .now()
-        .millisecondsSinceEpoch;
+    timestamp = DateTime.now().millisecondsSinceEpoch;
     String fileName = timestamp.toString() + 'jpg';
     StorageReference storageRef =
-    FirebaseStorage.instance.ref().child('image').child(fileName);
+        FirebaseStorage.instance.ref().child('image').child(fileName);
     StorageUploadTask task = storageRef.putFile(image);
 
     task.events.listen((event) {

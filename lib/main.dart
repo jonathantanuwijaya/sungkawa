@@ -166,20 +166,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         currentAdminRef.onChildChanged.listen(_onAdminStatusRemove);
   }
 
-  void _onAdminStatusChange(Event event) {
-    String userRole = event.snapshot.value;
-    print('User Role : $userRole');
-    if (userRole == 'Admin') {
-      setState(() {
-        prefs.setBool('isSuperAdmin', false);
-      });
-    } else if (userRole == 'Superadmin') {
-      setState(() {
-        prefs.setBool('isSuperAdmin', true);
-      });
-    }
-  }
-
   Future<String> getCurrentUser() async {
     try {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
@@ -257,6 +243,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
         context, MaterialPageRoute(builder: (BuildContext context) => Login()));
   }
 
+  void _onAdminStatusChange(Event event) {
+    print(event.snapshot.toString());
+    String userRole = event.snapshot.value;
+    print('User Role : $userRole');
+    if (userRole == 'Admin') {
+      setState(() {
+        prefs.setBool('isSuperAdmin', false);
+      });
+    } else if (userRole == 'Superadmin') {
+      setState(() {
+        prefs.setBool('isSuperAdmin', true);
+      });
+    } else if (event.snapshot == null) {
+      signOut();
+    }
+  }
+
+  void _onAdminStatusRemove(Event event) {
+    print(event.snapshot);
+    if (event.snapshot == null) {
+      signOut();
+    }
+  }
+
   static Future<bool> checkConnectivity() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile) {
@@ -268,12 +278,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     } else {
       print('Connectivity Result: not connected');
       return false;
-    }
-  }
-
-  void _onAdminStatusRemove(Event event) {
-    if (event.snapshot == null) {
-      signOut();
     }
   }
 }

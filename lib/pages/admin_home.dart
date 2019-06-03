@@ -185,8 +185,7 @@ class _HomePageState extends State<HomePage> {
   Future buildPostActionDialog(int index) {
     return showCupertinoModalPopup(
       context: context,
-      builder: (context) =>
-          CupertinoActionSheet(
+      builder: (context) => CupertinoActionSheet(
             title: Text("Apa yang ingin anda lakukan?"),
             actions: <Widget>[
               CupertinoActionSheetAction(
@@ -205,8 +204,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                   showCupertinoDialog(
                     context: context,
-                    builder: (context) =>
-                        CupertinoAlertDialog(
+                    builder: (context) => CupertinoAlertDialog(
                           content: Text('Anda yakin dengan pilihan ini'),
                           actions: <Widget>[
                             FlatButton(
