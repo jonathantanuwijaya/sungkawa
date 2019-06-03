@@ -163,7 +163,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _onAdminStatusChangeSub =
         currentAdminRef.onChildChanged.listen(_onAdminStatusChange);
     _onAdminStatusRemoveSub =
-        currentAdminRef.onChildChanged.listen(_onAdminStatusRemove);
+        currentAdminRef.onChildRemoved.listen(_onAdminStatusRemove);
   }
 
   Future<String> getCurrentUser() async {
@@ -244,7 +244,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _onAdminStatusChange(Event event) {
-    print(event.snapshot.toString());
     String userRole = event.snapshot.value;
     print('User Role : $userRole');
     if (userRole == 'Admin') {
@@ -255,16 +254,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       setState(() {
         prefs.setBool('isSuperAdmin', true);
       });
-    } else if (event.snapshot == null) {
-      signOut();
     }
   }
 
   void _onAdminStatusRemove(Event event) {
-    print(event.snapshot);
-    if (event.snapshot == null) {
-      signOut();
-    }
+    signOut();
   }
 
   static Future<bool> checkConnectivity() async {
