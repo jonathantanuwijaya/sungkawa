@@ -1,19 +1,15 @@
-import 'package:firebase_database/firebase_database.dart'
-import 'package:flutter/material.dart'
+include ':app'
 
-class SuperAdminMenu extends StatefulWidget {
-  @override
-  _SuperAdminMenuState createState() => _SuperAdminMenuState();
+def flutterProjectRoot = rootProject.projectDir.parentFile.toPath()
+
+def plugins = new Properties()
+def pluginsFile = new File(flutterProjectRoot.toFile(), '.flutter-plugins')
+if (pluginsFile.exists()) {
+    pluginsFile.withReader('UTF-8') { reader -> plugins.load(reader) }
 }
 
-class _SuperAdminMenuState extends State<SuperAdminMenu> {
-  List<dynamic> list
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Super Admin Menu'),
-      ),
-      body: StreamBuilder(
-   
+plugins.each { name, path ->
+    def pluginDirectory = flutterProjectRoot.resolve(path).resolve('android').toFile()
+    include ":$name"
+    project(":$name").projectDir = pluginDirectory
+}
