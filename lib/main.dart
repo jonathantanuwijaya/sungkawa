@@ -66,11 +66,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   bool isSuperAdmin;
 
-  StreamSubscription<Event> _onAdminStatusChangeSub;
-  StreamSubscription<Event> _onAdminStatusRemoveSub;
+  StreamSubscription<Event> _checkAdminStatusSub;
 
   @override
-  // ignore: missing_return
   Widget build(BuildContext context) {
     switch (_authStatus) {
       case AuthStatus.notSignedIn:
@@ -160,10 +158,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     var userId = prefs.getString('userId') ?? '';
     currentAdminRef =
         FirebaseDatabase.instance.reference().child('admins').child(userId);
-    _onAdminStatusChangeSub =
-        currentAdminRef.onChildChanged.listen(_onAdminStatusChange);
-    _onAdminStatusRemoveSub =
-        currentAdminRef.onChildRemoved.listen(_onAdminStatusRemove);
+    _checkAdminStatusSub = currentAdminRef.onValue.listen(_checkAdminStatus);
   }
 
   Future<String> getCurrentUser() async {
@@ -236,29 +231,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
     prefs.remove('nama');
     prefs.remove('email');
 
-    _onAdminStatusChangeSub.cancel();
-    _onAdminStatusRemoveSub.cancel();
-//    Navigator.pop(context);
+    _checkAdminStatusSub.cancel();
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (BuildContext context) => Login()));
   }
 
-  void _onAdminStatusChange(Event event) {
-    String userRole = event.snapshot.value;
-    print('User Role : $userRole');
-    if (userRole == 'Admin') {
+  void _checkAdminStatus(Event event) {
+    print('Current User Role : ${event.snapshot.value['role'].toString()}');
+
+    if (event.snapshot.key == null) {
+      signOut();
+    } else if (event.snapshot.value['role'] == 'Admin') {
       setState(() {
         prefs.setBool('isSuperAdmin', false);
       });
-    } else if (userRole == 'Superadmin') {
+    } else if (event.snapshot.value['role'] == 'Superadmin') {
       setState(() {
         prefs.setBool('isSuperAdmin', true);
       });
     }
-  }
-
-  void _onAdminStatusRemove(Event event) {
-    signOut();
   }
 
   static Future<bool> checkConnectivity() async {

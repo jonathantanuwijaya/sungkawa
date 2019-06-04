@@ -169,8 +169,7 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
               onPressed: () {
                 showDialog(
                     context: context,
-                    builder: (context) =>
-                        CupertinoAlertDialog(
+                    builder: (context) => CupertinoAlertDialog(
                           title: Text('Hapus Admin?'),
                           content: Text(
                               'Tindakan ini tidak dapat dipulihkan, lanjutkan?'),
@@ -206,10 +205,7 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
       );
     } else {
       return SizedBox(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width - 28,
+        width: MediaQuery.of(context).size.width - 28,
       );
     }
   }
