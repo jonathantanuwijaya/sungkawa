@@ -30,10 +30,10 @@ class _DetailState extends State<Detail> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      body: CustomScrollView(
+      body: CustomScrollView(shrinkWrap: false,
         slivers: <Widget>[
           SliverAppBar(
-            expandedHeight: 240.0,
+            expandedHeight: 200.0,
             floating: true,
             pinned: true,
             snap: true,
