@@ -237,9 +237,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _checkAdminStatus(Event event) {
-    print('Current User Role : ${event.snapshot.value['role'].toString()}');
-
-    if (event.snapshot.key == null) {
+    if (event.snapshot == null) {
       signOut();
     } else if (event.snapshot.value['role'] == 'Admin') {
       setState(() {

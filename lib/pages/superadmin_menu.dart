@@ -33,48 +33,13 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Super Admin Menu'),
+        title: Text('Kelola Admin'),
       ),
       body: ListView.builder(
         itemBuilder: (context, index) {
           sortAdminList();
 
-          return Padding(
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          _adminList[index].nama,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text('Role : ${_adminList[index].role}'),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Text('Tempat : ${_adminList[index].tempat}'),
-                        buildButtonRow(index)
-                      ],
-                    ),
-                    padding: EdgeInsets.all(5),
-                  ),
-                ],
-              ),
-            ),
-          );
+          return buildAdminCard(index);
         },
         itemCount: _adminList.length,
       ),
@@ -88,6 +53,47 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
                   return buildAddAdminDialog(context);
                 });
           }),
+    );
+  }
+
+  Padding buildAdminCard(int index) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 5, right: 5),
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    _adminList[index].nama,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text('Email : ${_adminList[index].email}'),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  Text('Role : ${_adminList[index].role}'),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  Text('Tempat : ${_adminList[index].tempat}'),
+                  buildButtonRow(index)
+                ],
+              ),
+              padding: EdgeInsets.all(5),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -139,23 +145,24 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
                 'email': _emailController.text,
                 'tempat': _tempatController.text,
               }).whenComplete(() {
-                _emailController.clear();
-                _tempatController.clear();
-                Navigator.pop(context);
+                clearTextField(context);
               });
             },
             child: Text('Tambah')),
         FlatButton(
             textColor: Colors.red,
             onPressed: () {
-              _emailController.clear();
-              _tempatController.clear();
-
-              Navigator.pop(context);
+              clearTextField(context);
             },
             child: Text('Batal'))
       ],
     );
+  }
+
+  void clearTextField(BuildContext context) {
+    _emailController.clear();
+    _tempatController.clear();
+    Navigator.pop(context);
   }
 
   Widget buildButtonRow(int index) {
@@ -230,13 +237,34 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
       return FlatButton.icon(
         icon: Icon(Icons.keyboard_arrow_up),
         onPressed: () {
-          setState(() {
-            FirebaseDatabase.instance
-                .reference()
-                .child('admins')
-                .child(uid)
-                .update({'role': 'Superadmin'});
-          });
+          CupertinoAlertDialog(
+            title: Text('Naikkan ke Super Admin?'),
+            content: Text(
+                'Superadmin memiliki akses program yang lebih tinggi daripada admin biasa, tindakan ini dapat berbahaya.\n Lanjutkan?'),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                  onPressed: () {
+                    setState(() {
+                      FirebaseDatabase.instance
+                          .reference()
+                          .child('admins')
+                          .child(uid)
+                          .update({'role': 'Superadmin'});
+                    });
+                  },
+                  child: Text(
+                    'Lanjut',
+                  )),
+              CupertinoDialogAction(
+                  isDestructiveAction: true,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Batal',
+                  ))
+            ],
+          );
         },
         label: Text('Naikkan'),
       );
@@ -260,15 +288,17 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
   void initState() {
     _adminList.clear();
     getPrefs();
+    subscribeStream();
+    _adminList.sort((a, b) => b.role.compareTo(a.role));
+    super.initState();
+  }
 
+  void subscribeStream() {
     _onAdminAddedSubscription = _adminRef.onChildAdded.listen(_onAdminAdded);
     _onAdminChangedSubscription =
         _adminRef.onChildChanged.listen(_onAdminChanged);
     _onAdminRemovedSubscription =
         _adminRef.onChildRemoved.listen(_onAdminRemoved);
-
-    _adminList.sort((a, b) => b.role.compareTo(a.role));
-    super.initState();
   }
 
   void sortAdminList() {
