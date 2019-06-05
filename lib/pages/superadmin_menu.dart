@@ -56,47 +56,6 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
     );
   }
 
-  Padding buildAdminCard(int index) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 5, right: 5),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    _adminList[index].nama,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text('Email : ${_adminList[index].email}'),
-                  SizedBox(
-                    height: 3,
-                  ),
-                  Text('Role : ${_adminList[index].role}'),
-                  SizedBox(
-                    height: 3,
-                  ),
-                  Text('Tempat : ${_adminList[index].tempat}'),
-                  buildButtonRow(index)
-                ],
-              ),
-              padding: EdgeInsets.all(5),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   CupertinoAlertDialog buildAddAdminDialog(BuildContext context) {
     return CupertinoAlertDialog(
       title: Text('Tambah Admin'),
@@ -159,10 +118,45 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
     );
   }
 
-  void clearTextField(BuildContext context) {
-    _emailController.clear();
-    _tempatController.clear();
-    Navigator.pop(context);
+  Padding buildAdminCard(int index) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 5, right: 5),
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    _adminList[index].nama,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text('Email : ${_adminList[index].email}'),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  Text('Role : ${_adminList[index].role}'),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  Text('Tempat : ${_adminList[index].tempat}'),
+                  buildButtonRow(index)
+                ],
+              ),
+              padding: EdgeInsets.all(5),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget buildButtonRow(int index) {
@@ -217,7 +211,6 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
     }
   }
 
-  // ignore: missing_return
   Widget buildChangeStatusButton(role, String uid) {
     if (role == 'Superadmin' && currentUserId != uid) {
       return FlatButton.icon(
@@ -270,6 +263,13 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
       );
   }
 
+  // ignore: missing_return
+  void clearTextField(BuildContext context) {
+    _emailController.clear();
+    _tempatController.clear();
+    Navigator.pop(context);
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -293,14 +293,6 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
     super.initState();
   }
 
-  void subscribeStream() {
-    _onAdminAddedSubscription = _adminRef.onChildAdded.listen(_onAdminAdded);
-    _onAdminChangedSubscription =
-        _adminRef.onChildChanged.listen(_onAdminChanged);
-    _onAdminRemovedSubscription =
-        _adminRef.onChildRemoved.listen(_onAdminRemoved);
-  }
-
   void sortAdminList() {
     var userEntry = _adminList.singleWhere((entry) {
       return entry.uid == currentUserId;
@@ -308,6 +300,14 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
     print(_adminList.indexOf(userEntry));
     _adminList.removeAt(_adminList.indexOf(userEntry));
     _adminList.insert(0, userEntry);
+  }
+
+  void subscribeStream() {
+    _onAdminAddedSubscription = _adminRef.onChildAdded.listen(_onAdminAdded);
+    _onAdminChangedSubscription =
+        _adminRef.onChildChanged.listen(_onAdminChanged);
+    _onAdminRemovedSubscription =
+        _adminRef.onChildRemoved.listen(_onAdminRemoved);
   }
 
   _onAdminAdded(Event event) {
