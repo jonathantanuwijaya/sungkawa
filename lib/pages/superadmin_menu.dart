@@ -230,34 +230,39 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
       return FlatButton.icon(
         icon: Icon(Icons.keyboard_arrow_up),
         onPressed: () {
-          CupertinoAlertDialog(
-            title: Text('Naikkan ke Super Admin?'),
-            content: Text(
-                'Superadmin memiliki akses program yang lebih tinggi daripada admin biasa, tindakan ini dapat berbahaya.\n Lanjutkan?'),
-            actions: <Widget>[
-              CupertinoDialogAction(
-                  onPressed: () {
-                    setState(() {
-                      FirebaseDatabase.instance
-                          .reference()
-                          .child('admins')
-                          .child(uid)
-                          .update({'role': 'Superadmin'});
-                    });
-                  },
-                  child: Text(
-                    'Lanjut',
-                  )),
-              CupertinoDialogAction(
-                  isDestructiveAction: true,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    'Batal',
-                  ))
-            ],
-          );
+          showDialog(
+              context: context,
+              builder: (context) => CupertinoAlertDialog(
+                    title: Text('Naikkan ke Super Admin?'),
+                    content: Text(
+                        'Superadmin memiliki akses program yang lebih tinggi daripada admin biasa, tindakan ini dapat berbahaya.\n Lanjutkan?'),
+                    actions: <Widget>[
+                      CupertinoDialogAction(
+                          onPressed: () {
+                            setState(() {
+                              FirebaseDatabase.instance
+                                  .reference()
+                                  .child('admins')
+                                  .child(uid)
+                                  .update({'role': 'Superadmin'}).whenComplete(
+                                      () {
+                                Navigator.pop(context);
+                              });
+                            });
+                          },
+                          child: Text(
+                            'Lanjut',
+                          )),
+                      CupertinoDialogAction(
+                          isDestructiveAction: true,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            'Batal',
+                          ))
+                    ],
+                  ));
         },
         label: Text('Naikkan'),
       );
