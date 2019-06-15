@@ -5,6 +5,29 @@ import 'package:flutter/material.dart';
 class About extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var textShadow = <Shadow>[
+      Shadow(
+          blurRadius: 5,
+          color: Color.fromARGB(255, 0, 0, 0),
+          offset: Offset(1, 1))
+    ];
+    var textColor = Colors.yellow;
+    var bigText = TextStyle(
+      shadows: textShadow,
+      color: textColor,
+      fontSize: 16.0,
+    );
+    var smallText = TextStyle(
+      shadows: textShadow,
+      color: textColor,
+    );
+
+    var headerText = TextStyle(
+      shadows: textShadow,
+      color: textColor,
+      fontWeight: FontWeight.bold,
+      fontSize: 20.0,
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text('Tentang Aplikasi'),
@@ -34,42 +57,38 @@ class About extends StatelessWidget {
                   width: 280,
                 ),
                 SizedBox(height: 20),
-                Text("Jalan Rajawali No 14, Palembang"),
+                Text(
+                  "Jalan Rajawali No 14, Palembang",
+                  style: smallText,
+                ),
                 SizedBox(
                   height: 5,
                 ),
-                Text('www.mdp.ac.id'),
+                Text(
+                  'www.mdp.ac.id',
+                  style: smallText,
+                ),
                 SizedBox(
                   height: 20,
                 ),
                 Text(
                   'MDP Application Incubator',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                  ),
+                  style: headerText,
                 ),
                 Text(
                   'Copyright \u00A9 2019',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                  ),
+                  style: bigText,
                 ),
                 SizedBox(
                   height: 30.0,
                 ),
                 Text(
                   'Sungkawa',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                  ),
+                  style: headerText,
                 ),
                 Text(
                   'Version 1.0',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                  ),
+                  style: bigText,
                 ),
                 SizedBox(
                   height: 60.0,
@@ -78,38 +97,38 @@ class About extends StatelessWidget {
                     color: Colors.green,
                   ),
                 ),
-                Text(
-                  'Developers',
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-                ),
+                Text('Developers', style: headerText),
                 Text(
                   '1. Jonathan Tanuwijaya',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                  ),
+                  style: bigText,
                 ),
                 Text(
                   '2. Stephen Suhendra Kohar',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                  ),
+                  style: bigText,
                 ),
                 Text(
                   '3. Alvin Leonardo Djoni',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                  ),
+                  style: bigText,
                 ),
                 Text(
                   '4. Ericco Andreas',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                  ),
+                  style: bigText,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Contact',
+                  style: headerText,
+                ),
+                Text(
+                  'Email : mdpic@mdp.ac.id',
+                  style: smallText,
                 )
               ],
             ),
           ),
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
         ),
       ),
     );

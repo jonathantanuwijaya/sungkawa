@@ -216,13 +216,34 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
       return FlatButton.icon(
         icon: Icon(Icons.keyboard_arrow_down),
         onPressed: () {
-          setState(() {
-            FirebaseDatabase.instance
-                .reference()
-                .child('admins')
-                .child(uid)
-                .update({'role': 'Admin'});
-          });
+          showDialog(
+              context: context,
+              builder: (context) => CupertinoAlertDialog(
+                    title: Text('Turunkan ke Admin?'),
+                    content: Text(
+                        'Superadmin ini akan kehilangan akses untuk mengelola admin yang ada. Lanjutkan?'),
+                    actions: <Widget>[
+                      CupertinoDialogAction(
+                        child: Text('Lanjut'),
+                        onPressed: () {
+                          setState(() {
+                            FirebaseDatabase.instance
+                                .reference()
+                                .child('admins')
+                                .child(uid)
+                                .update({'role': 'Admin'});
+                          });
+                        },
+                      ),
+                      CupertinoDialogAction(
+                        child: Text('Batal'),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        isDestructiveAction: true,
+                      )
+                    ],
+                  ));
         },
         label: Text('Turunkan'),
       );
@@ -268,7 +289,6 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
       );
   }
 
-  // ignore: missing_return
   void clearTextField(BuildContext context) {
     _emailController.clear();
     _tempatController.clear();
