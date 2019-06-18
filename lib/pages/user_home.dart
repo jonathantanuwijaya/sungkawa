@@ -146,12 +146,10 @@ class _HomePageState extends State<HomePage> {
                             child: Text(
                               "Agama : ${_postList[index].agama}",
                               style:
-                              TextStyle(fontSize: 14.0, color: Colors.grey),
+                                  TextStyle(fontSize: 14.0, color: Colors.grey),
                             ),
                           ),
                         ),
-
-
                       ],
                     ),
                   ),
@@ -179,7 +177,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildStatusText(Post post) {
-    final dateFormat = DateFormat('dd/MM/yyyy');
+    final dateFormat = DateFormat('dd-MM-yyyy');
 
     DateTime tanggalMeninggal = dateFormat.parse(post.tanggalMeninggal);
     DateTime tanggalSemayam = dateFormat.parse(post.tanggalSemayam);
