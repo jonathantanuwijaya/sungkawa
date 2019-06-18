@@ -206,7 +206,6 @@ class _DetailState extends State<Detail> {
         _commentRef.onChildRemoved.listen(_onCommentRemoved);
     _onCommentRemovedSubscription =
         _commentRef.onChildRemoved.listen(_onCommentRemoved);
-//    keterangancontroller = widget.post.keterangan;
   }
 
   Widget sampleComment() {
