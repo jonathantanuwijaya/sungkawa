@@ -216,7 +216,7 @@ class _DetailState extends State<Detail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(_commentList[0].userName,
+            Text(_commentList[0].displayName,
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
             Text(_commentList[0].comment, style: TextStyle(fontSize: 16.0)),
           ],
