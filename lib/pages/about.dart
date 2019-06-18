@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -28,6 +29,21 @@ class About extends StatelessWidget {
       fontWeight: FontWeight.bold,
       fontSize: 20.0,
     );
+
+    Timer(Duration(seconds: 60), () {
+      print('60 secs has passed');
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text('The Journey'),
+                content: Text('Death is not a hunter unbeknowst to its prey.\n'
+                    'One is always aware that it lies in wait.\n'
+                    'Though life is merely a journey to the grave, it must not be undertaken without hope.\n'
+                    'Only then will a traveler\'s story live on, treasured by those who bid him farewell.\n'
+                    'But alas, my guest\'s life has now ended, his tale left unwritten...'),
+              ));
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Tentang Aplikasi'),
@@ -124,7 +140,7 @@ class About extends StatelessWidget {
                 Text(
                   'Email : mdpic@mdp.ac.id',
                   style: smallText,
-                )
+                ),
               ],
             ),
           ),
