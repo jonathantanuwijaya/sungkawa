@@ -7,10 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sungkawa/model/user.dart';
 
 class Profil extends StatefulWidget {
-  final User pengguna;
+  final User user;
   final String currentUserId;
 
-  Profil({this.pengguna, this.currentUserId});
+  Profil({this.user, this.currentUserId});
 
   @override
   _ProfilState createState() => _ProfilState();
@@ -48,15 +48,12 @@ class _ProfilState extends State<Profil> {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 22.0),
-                    child: Container(
-                      width: 70.0,
-                      height: 20.0,
-                      child: Text(
-                        'Nama : ',
-                        style: TextStyle(fontSize: 20.0),
-                      ),
+                  Container(alignment: Alignment.center,
+                    width: 70.0,
+                    height: 20.0,
+                    child: Text(
+                      'Nama : ',
+                      style: TextStyle(fontSize: 20.0),
                     ),
                   ),
                   Expanded(
@@ -73,14 +70,11 @@ class _ProfilState extends State<Profil> {
               ),
               Row(
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 22.0),
-                    child: Container(
-                      width: 70.0,
-                      child: Text(
-                        'Email :',
-                        style: TextStyle(fontSize: 20.0),
-                      ),
+                  Container(
+                    width: 70.0,
+                    child: Text(
+                      'Email :',
+                      style: TextStyle(fontSize: 20.0),
                     ),
                   ),
                   Expanded(
