@@ -74,39 +74,36 @@ class _CommentPageState extends State<CommentPage> {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: ListTile(
-              title: CupertinoTextField(
-                controller: commentController,
-                textInputAction: TextInputAction.send,
-                onEditingComplete: sendComment,
-                placeholder: 'Tuliskan Komentarmu disini',
-                focusNode: commentNode,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                        width: 0.0, color: CupertinoColors.activeBlue)),
-              ),
-              trailing: IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () {
-//                    if(googleSignIn.isSignedIn()){
-//                      sendComment();
-//                    }
-//                    else{
-//                      SignInAndComment();
-//                    }
-                    switch (_authStatus) {
-                      case AuthStatus.notSignedIn:
-                        signInAndComment();
-                        break;
-                      case AuthStatus.signedIn:
-                        sendComment();
-                    }
-                  }),
-            ),
+            child: buildCommentField(),
           )
         ],
       ),
+    );
+  }
+
+  ListTile buildCommentField() {
+    return ListTile(
+      title: CupertinoTextField(
+        controller: commentController,
+        textInputAction: TextInputAction.send,
+        onEditingComplete: sendComment,
+        placeholder: 'Tuliskan Komentarmu disini',
+        focusNode: commentNode,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+            border: Border.all(width: 0.0, color: CupertinoColors.activeBlue)),
+      ),
+      trailing: IconButton(
+          icon: Icon(Icons.send),
+          onPressed: () {
+            switch (_authStatus) {
+              case AuthStatus.notSignedIn:
+                signInAndComment();
+                break;
+              case AuthStatus.signedIn:
+                sendComment();
+            }
+          }),
     );
   }
 
@@ -116,7 +113,7 @@ class _CommentPageState extends State<CommentPage> {
       itemBuilder: (context, index) {
         return ListTile(
           title: Text(
-            _commentList[index].userName,
+            _commentList[index].displayName,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           trailing:
@@ -159,7 +156,7 @@ class _CommentPageState extends State<CommentPage> {
     getCurrentUser().then((userId) {
       setState(() {
         _authStatus =
-        userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+            userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
       });
     });
     _commentList.clear();
@@ -180,7 +177,6 @@ class _CommentPageState extends State<CommentPage> {
     fullName = prefs.getString('nama');
     userId = prefs.getString('userId');
   }
-
 
   void sendComment() async {
     String fullName, userId;
