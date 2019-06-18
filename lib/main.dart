@@ -13,7 +13,7 @@ import 'package:sungkawa/pages/login.dart';
 import 'package:sungkawa/pages/profil.dart';
 import 'package:sungkawa/pages/user_home.dart';
 
-import 'model/Notifikasi.dart';
+import 'package:sungkawa/model/Notifikasi.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])

@@ -8,7 +8,7 @@ class CRUD {
   DatabaseReference commentRef =
   FirebaseDatabase.instance.reference().child('comments');
   DatabaseReference userRef =
-  FirebaseDatabase.instance.reference().child('admins');
+  FirebaseDatabase.instance.reference().child('users');
 
   Future<void> addUser(String userId, userData) async {
     userRef.child(userId).set(userData);
