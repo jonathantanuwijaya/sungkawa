@@ -243,7 +243,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildStatusText(Post post) {
-    final dateFormat = DateFormat('dd/MM/yyyy');
+    final dateFormat = DateFormat('dd-MM-yyyy');
 
     DateTime tanggalMeninggal = dateFormat.parse(post.tanggalMeninggal);
     DateTime tanggalSemayam = dateFormat.parse(post.tanggalSemayam);

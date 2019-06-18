@@ -49,8 +49,8 @@ class _PostUpdateState extends State<PostUpdate> {
   bool isLoading = false;
   bool isUploading = false;
 
-  final dateFormat = DateFormat('dd/MM/yyyy');
-  final timeFormat = DateFormat('hh:mm a');
+  final dateFormat = DateFormat('dd-MM-yyyy');
+  final timeFormat = DateFormat('HH.mm');
 
   final formKey = GlobalKey<FormState>();
 
