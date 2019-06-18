@@ -38,12 +38,13 @@ class MyApp extends StatelessWidget {
       title: 'Sungkawa',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          primaryTextTheme: TextTheme(title: TextStyle(color: Colors.white)),
           primarySwatch: Colors.lightBlue,
           pageTransitionsTheme: PageTransitionsTheme(builders: {
             TargetPlatform.android: CupertinoPageTransitionsBuilder(),
             TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
           })),
-      home: Opening(),
+      home: IntroSlider(),
     );
   }
 }
@@ -95,56 +96,50 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onPressed: () {
               showCupertinoModalPopup(
                   context: context,
-                  builder: (context) =>
-                      CupertinoActionSheet(
-                          title: const Text(
-                            'Pilihan menu',
-                          ),
-                          actions: <Widget>[
-                            CupertinoActionSheetAction(
-                              onPressed: () {
-                                switch (_authStatus) {
-                                  case AuthStatus.notSignedIn:
-                                    handleSignIn().then((_) {
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Profil()));
-                                    });
-                                    break;
-                                  case AuthStatus.signedIn:
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Profil()));
-                                    break;
-                                }
-                              },
-                              child: Text('Profil'),
-                            ),
-                            CupertinoActionSheetAction(
-                                onPressed: () {
+                  builder: (context) => CupertinoActionSheet(
+                      title: const Text(
+                        'Pilihan menu',
+                      ),
+                      actions: <Widget>[
+                        CupertinoActionSheetAction(
+                          onPressed: () {
+                            switch (_authStatus) {
+                              case AuthStatus.notSignedIn:
+                                handleSignIn().then((_) {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => About()));
-                                },
-                                child: Text('Tentang Kami')),
-                            CupertinoActionSheetAction(
-                                isDestructiveAction: true,
-                                onPressed: signOut,
-                                child: Text(
-                                  'Sign Out',
-                                )),
-                          ],
-                          cancelButton: CupertinoActionSheetAction(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                'Cancel',
-                                style: TextStyle(color: Colors.red),
-                              ))));
+                                          builder: (context) => Profil()));
+                                });
+                                break;
+                              case AuthStatus.signedIn:
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Profil()));
+                                break;
+                            }
+                          },
+                          child: Text('Profil'),
+                        ),
+                        CupertinoActionSheetAction(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => About()));
+                            },
+                            child: Text('Tentang Kami')),
+                        buildAuthButton(),
+                      ],
+                      cancelButton: CupertinoActionSheetAction(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            'Cancel',
+                            style: TextStyle(color: Colors.red),
+                          ))));
             },
           )
         ],
@@ -152,6 +147,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       body: HomePage(),
     );
+  }
+
+  CupertinoActionSheetAction buildAuthButton() {
+    if (_authStatus == AuthStatus.signedIn) {
+      return CupertinoActionSheetAction(
+          isDestructiveAction: true,
+          onPressed: signOut,
+          child: Text(
+            'Sign Out',
+          ));
+    } else if (_authStatus == AuthStatus.notSignedIn) {
+      return CupertinoActionSheetAction(
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Login(),
+              ),
+            );
+          },
+          child: Text('Sign In'));
+    } else
+      return null;
   }
 
   void checkConnectivity() async {
@@ -211,7 +230,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     getCurrentUser().then((userId) {
       setState(() {
         _authStatus =
-        userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+            userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
       });
     });
 //        .whenComplete(() {

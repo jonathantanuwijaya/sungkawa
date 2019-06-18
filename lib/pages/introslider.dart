@@ -15,9 +15,9 @@ class IntroSliderScreen extends StatefulWidget {
   _IntroSliderScreenState createState() => _IntroSliderScreenState();
 }
 
-class Opening extends StatefulWidget {
+class IntroSlider extends StatefulWidget {
   @override
-  _OpeningState createState() => _OpeningState();
+  _IntroSliderState createState() => _IntroSliderState();
 }
 
 class _IntroSliderScreenState extends State<IntroSliderScreen> {
@@ -83,7 +83,7 @@ class _IntroSliderScreenState extends State<IntroSliderScreen> {
   }
 }
 
-class _OpeningState extends State<Opening> {
+class _IntroSliderState extends State<IntroSlider> {
   @override
   Widget build(BuildContext context) {
     return Container();
