@@ -10,13 +10,15 @@ class Comment {
   User _user;
   String _displayName;
 
-  Comment(this._key, this._comment, this._userId, this._timestamp, this._user);
+  Comment(this._key, this._comment, this._userId, this._timestamp, this._user,
+      this._displayName);
 
   Comment.fromSnapshot(DataSnapshot snapshot) {
     _key = snapshot.key;
     _comment = snapshot.value['comment'];
     _timestamp = snapshot.value['timestamp'];
     _userId = snapshot.value['userId'];
+    _displayName = snapshot.value['fullName'];
   }
 
   String get comment => _comment;

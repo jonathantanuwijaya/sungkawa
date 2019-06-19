@@ -7,13 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sungkawa/model/Notifikasi.dart';
 import 'package:sungkawa/pages/about.dart';
 import 'package:sungkawa/pages/introslider.dart';
 import 'package:sungkawa/pages/login.dart';
 import 'package:sungkawa/pages/profil.dart';
 import 'package:sungkawa/pages/user_home.dart';
-
-import 'package:sungkawa/model/Notifikasi.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -38,12 +37,16 @@ class MyApp extends StatelessWidget {
       title: 'Sungkawa',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primaryTextTheme: TextTheme(title: TextStyle(color: Colors.white)),
-          primarySwatch: Colors.lightBlue,
-          pageTransitionsTheme: PageTransitionsTheme(builders: {
+        primaryTextTheme: TextTheme(title: TextStyle(color: Colors.white)),
+        primaryIconTheme: IconThemeData(color: Colors.white),
+        primarySwatch: Colors.lightBlue,
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
             TargetPlatform.android: CupertinoPageTransitionsBuilder(),
             TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-          })),
+          },
+        ),
+      ),
       home: IntroSlider(),
     );
   }
@@ -133,12 +136,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         buildAuthButton(),
                       ],
                       cancelButton: CupertinoActionSheetAction(
+                          isDestructiveAction: true,
                           onPressed: () {
                             Navigator.pop(context);
                           },
                           child: Text(
                             'Cancel',
-                            style: TextStyle(color: Colors.red),
                           ))));
             },
           )
@@ -222,36 +225,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    checkConnectivity();
-    getCurrentUser().then((userId) {
-      setState(() {
-        _authStatus =
-            userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
-      });
-    });
-//        .whenComplete(() {
-//      String displayName = googleSignIn.currentUser.displayName;
-//      Scaffold.of(context).showSnackBar(
-//          SnackBar(content: Text('User $displayName is signed in!')));
-//    });
+  void initFCM() {
     _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
     _firebaseMessaging.getToken();
     _firebaseMessaging.subscribeToTopic('all');
     _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-        final notification = message['notification'];
-        setState(() {
-          notif.add(Notifikasi(
-            title: notification['title'],
-            nama: notification['body'],
-          ));
-        });
-      },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
 
@@ -263,10 +241,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ));
         });
       },
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        final notification = message['notification'];
+        setState(() {
+          notif.add(Notifikasi(
+            title: notification['title'],
+            nama: notification['body'],
+          ));
+        });
+      },
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");
       },
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkConnectivity();
+    getCurrentUser().then((userId) {
+      setState(() {
+        _authStatus =
+            userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+      });
+    });
+    initFCM();
   }
 
   void sendTokenToServer(String fcm) {

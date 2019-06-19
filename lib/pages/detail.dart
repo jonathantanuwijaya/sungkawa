@@ -20,7 +20,7 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> {
   List<Comment> _commentList = new List();
   var _commentRef;
-  var displayName;
+  TextEditingController keterangancontroller;
   Utilities util = new Utilities();
   StreamSubscription<Event> _onCommentAddedSubscription;
   StreamSubscription<Event> _onCommentChangedSubscription;
@@ -28,7 +28,6 @@ class _DetailState extends State<Detail> {
 
   @override
   Widget build(BuildContext context) {
-    var mediumText = TextStyle(fontSize: 16.0);
     return Scaffold(
       backgroundColor: Colors.grey[200],
       body: SafeArea(
@@ -77,37 +76,37 @@ class _DetailState extends State<Detail> {
                     ),
                     Text(
                       "Nama : " + widget.post.nama,
-                      style: mediumText,
+                      style: TextStyle(fontSize: 16.0),
                     ),
                     Text(
                       "Alamat : " + widget.post.alamat,
-                      style: mediumText,
+                      style: TextStyle(fontSize: 16.0),
                     ),
                     Text(
-                      "Usia : ${widget.post.usia} tahun",
-                      style: mediumText,
+                      "Usia : " + widget.post.usia + " tahun",
+                      style: TextStyle(fontSize: 16.0),
                     ),
                     Text(
                       "Agama : ${widget.post.agama}",
-                      style: mediumText,
+                      style: TextStyle(fontSize: 16.0),
                     ),
                     Divider(
                       color: Colors.green,
                     ),
                     Text(
-                      "Tanggal Meninggal : ${widget.post.tanggalMeninggal}",
-                      style: mediumText,
+                      "Tanggal Meninggal : " + widget.post.tanggalMeninggal,
+                      style: TextStyle(fontSize: 16.0),
                     ),
                     Divider(
                       color: Colors.green,
                     ),
                     Text(
                       'Disemayamkan di ' + widget.post.lokasiSemayam,
-                      style: mediumText,
+                      style: TextStyle(fontSize: 16.0),
                     ),
                     Text(
                       "Tanggal disemayamkan : " + widget.post.tanggalSemayam,
-                      style: mediumText,
+                      style: TextStyle(fontSize: 16.0),
                     ),
                     Divider(
                       color: Colors.green,
@@ -120,7 +119,7 @@ class _DetailState extends State<Detail> {
                           widget.post.tanggalDimakamkan +
                           ' pukul ' +
                           widget.post.waktuDimakamkan,
-                      style: mediumText,
+                      style: TextStyle(fontSize: 16.0),
                     ),
                     Divider(
                       color: Colors.green,
@@ -205,6 +204,8 @@ class _DetailState extends State<Detail> {
         _commentRef.onChildChanged.listen(_onCommentChanged);
     _onCommentRemovedSubscription =
         _commentRef.onChildRemoved.listen(_onCommentRemoved);
+    _onCommentRemovedSubscription =
+        _commentRef.onChildRemoved.listen(_onCommentRemoved);
   }
 
   Widget sampleComment() {
@@ -215,7 +216,8 @@ class _DetailState extends State<Detail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            buildDisplayName(),
+            Text(_commentList[0].displayName,
+                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
             Text(_commentList[0].comment, style: TextStyle(fontSize: 16.0)),
           ],
         ),
@@ -223,15 +225,9 @@ class _DetailState extends State<Detail> {
     }
   }
 
-  Text buildDisplayName() {
-    return Text(displayName,
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold));
-  }
-
   _onCommentAdded(Event event) {
     setState(() {
       _commentList.add(Comment.fromSnapshot(event.snapshot));
-      displayName = getDisplayName(_commentList[0].userId);
     });
   }
 
@@ -254,29 +250,5 @@ class _DetailState extends State<Detail> {
     setState(() {
       _commentList.remove(deletedEntry);
     });
-  }
-
-  String getDisplayName(String userId) {
-    String displayName;
-    print('Comment Key : ${_commentList[0].key}');
-    FirebaseDatabase.instance
-        .reference()
-        .child('users')
-        .child(userId)
-        .once()
-        .then((snapshot) {
-      var username = snapshot.value['username'];
-      if (username == null) {
-        print('true');
-        displayName = snapshot.value['nama'];
-      } else {
-        print('false');
-        displayName = username;
-      }
-    }).whenComplete(() {
-      print('Searching Complete...');
-      print('Display Name : $displayName');
-    });
-    return displayName;
   }
 }
