@@ -15,19 +15,19 @@
       },
       "oauth_client": [
         {
+          "client_id": "1041227975257-bh030hqjb89miafuq6q43mhfddvgd1jd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.admin_sungkawa",
+            "certificate_hash": "d48648aedffdf555992457913c92dd3e1f0a3a1d"
+          }
+        },
+        {
           "client_id": "1041227975257-f4ib5qvl0va2thsg97j5l2fj5aluu7q6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.admin_sungkawa",
             "certificate_hash": "cfc383dea68a3448d723eedfee4f0ea3146398a2"
-          }
-        },
-        {
-          "client_id": "1041227975257-gghmonjk1gtcq05dc704h3bgvkdg5o8a.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.admin_sungkawa",
-            "certificate_hash": "80a06e97d15962d7206a6f14103ec73365d172c6"
           }
         },
         {
@@ -120,6 +120,35 @@
             "certificate_hash": "80a06e97d15962d7206a6f14103ec73365d172c6"
           }
         },
+        {
+          "client_id": "1041227975257-6iihptosq6bn7abggc9cm12ot7hhaj6a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe4WrQd4JHuTM37P-ZtIbt2_D_nw4LWpw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1041227975257-6iihptosq6bn7abggc9cm12ot7hhaj6a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1041227975257:android:e28d7ebd4102f1ed",
+        "android_client_info": {
+          "package_name": "id.ac.mdp.sungkawa_admin"
+        }
+      },
+      "oauth_client": [
         {
           "client_id": "1041227975257-6iihptosq6bn7abggc9cm12ot7hhaj6a.apps.googleusercontent.com",
           "client_type": 3
