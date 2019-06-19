@@ -15,11 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "1041227975257-rdn1nrdlpqrhh6sol9l6a7ukv3up50c0.apps.googleusercontent.com",
+          "client_id": "1041227975257-f4ib5qvl0va2thsg97j5l2fj5aluu7q6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.admin_sungkawa",
-            "certificate_hash": "b406cabae02e99d783215413b17466c749aa2219"
+            "certificate_hash": "cfc383dea68a3448d723eedfee4f0ea3146398a2"
+          }
+        },
+        {
+          "client_id": "1041227975257-gghmonjk1gtcq05dc704h3bgvkdg5o8a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.admin_sungkawa",
+            "certificate_hash": "80a06e97d15962d7206a6f14103ec73365d172c6"
           }
         },
         {
@@ -52,11 +60,64 @@
       },
       "oauth_client": [
         {
-          "client_id": "1041227975257-q601sbbvkddu6gopktd3bj7cbrapfclf.apps.googleusercontent.com",
+          "client_id": "1041227975257-c0i751nu8hp0c9lqhka8s7kp5uvus7f9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.sungkawa",
+            "certificate_hash": "80a06e97d15962d7206a6f14103ec73365d172c6"
+          }
+        },
+        {
+          "client_id": "1041227975257-6iihptosq6bn7abggc9cm12ot7hhaj6a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe4WrQd4JHuTM37P-ZtIbt2_D_nw4LWpw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1041227975257-6iihptosq6bn7abggc9cm12ot7hhaj6a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1041227975257:android:a06007ffa6948031",
+        "android_client_info": {
+          "package_name": "id.ac.mdp.sungkawa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1041227975257-f7f7df6drfdj3frkf5ifv5rme72i4n1d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.ac.mdp.sungkawa",
+            "certificate_hash": "b406cabae02e99d783215413b17466c749aa2219"
+          }
+        },
+        {
+          "client_id": "1041227975257-b02o4publ4aphp7ue15kmras5vitq1pv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.ac.mdp.sungkawa",
             "certificate_hash": "cfc383dea68a3448d723eedfee4f0ea3146398a2"
+          }
+        },
+        {
+          "client_id": "1041227975257-jipr9vtiqh3bou5d9ilrdofrbca1thd8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.ac.mdp.sungkawa",
+            "certificate_hash": "80a06e97d15962d7206a6f14103ec73365d172c6"
           }
         },
         {
