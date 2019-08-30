@@ -1,17 +1,15 @@
 import 'dart:async';
 
+import 'package:admin_sungkawa/crud.dart';
 import 'package:admin_sungkawa/model/posting.dart';
 import 'package:admin_sungkawa/pages/detail.dart';
 import 'package:admin_sungkawa/pages/post_update.dart';
-import 'package:admin_sungkawa/utilities/crud.dart';
 import 'package:admin_sungkawa/utilities/utilities.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-CRUD crud = new CRUD();
 
 Utilities util = new Utilities();
 final _postRef = FirebaseDatabase.instance
@@ -186,59 +184,57 @@ class _HomePageState extends State<HomePage> {
     return showCupertinoModalPopup(
       context: context,
       builder: (context) => CupertinoActionSheet(
-            title: Text("Apa yang ingin anda lakukan?"),
-            actions: <Widget>[
-              CupertinoActionSheetAction(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                PostUpdate(_postList[index])));
-                  },
-                  child: Text('Update')),
-              CupertinoActionSheetAction(
-                isDestructiveAction: true,
-                child: Text('Delete'),
-                onPressed: () {
-                  Navigator.pop(context);
-                  showCupertinoDialog(
-                    context: context,
-                    builder: (context) => CupertinoAlertDialog(
-                          content: Text('Anda yakin dengan pilihan ini'),
-                          actions: <Widget>[
-                            FlatButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  'Batal',
-                                  style: TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.bold),
-                                )),
-                            FlatButton(
-                              onPressed: () {
-                                crud.deletePost(_postList[index].key);
-                                setState(() {
-                                  _postList.removeAt(index);
-                                  Navigator.pop(context);
-                                });
-                              },
-                              child: Text(
-                                'Ya',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                ),
-                              ),
-                            ),
-                          ],
+        title: Text("Apa yang ingin anda lakukan?"),
+        actions: <Widget>[
+          CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PostUpdate(_postList[index])));
+              },
+              child: Text('Update')),
+          CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            child: Text('Delete'),
+            onPressed: () {
+              Navigator.pop(context);
+              showCupertinoDialog(
+                context: context,
+                builder: (context) => CupertinoAlertDialog(
+                  content: Text('Anda yakin dengan pilihan ini'),
+                  actions: <Widget>[
+                    FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'Batal',
+                          style: TextStyle(
+                              color: Colors.blue, fontWeight: FontWeight.bold),
+                        )),
+                    FlatButton(
+                      onPressed: () {
+                        rtdbService.deletePost(_postList[index].key);
+                        setState(() {
+                          _postList.removeAt(index);
+                          Navigator.pop(context);
+                        });
+                      },
+                      child: Text(
+                        'Ya',
+                        style: TextStyle(
+                          color: Colors.red,
                         ),
-                  );
-                },
-              )
-            ],
-          ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          )
+        ],
+      ),
     );
   }
 

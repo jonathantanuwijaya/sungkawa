@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:admin_sungkawa/crud.dart';
 import 'package:admin_sungkawa/model/posting.dart';
 import 'package:admin_sungkawa/utilities/constants.dart';
-import 'package:admin_sungkawa/utilities/crud.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -36,7 +36,6 @@ class _PostUpdateState extends State<PostUpdate> {
   double _progress;
   bool isChanged = false;
   var postRef;
-  CRUD crud = new CRUD();
   SharedPreferences prefs;
 
   DateTime tanggalDimakamkan, waktuDimakamkan, tanggalMeninggal, tanggalSemayam;
@@ -177,7 +176,7 @@ class _PostUpdateState extends State<PostUpdate> {
               SizedBox(
                 height: 12.0,
               ),
-              DateTimePickerFormField(
+              DateTimeField(
                 validator: (value) {
                   if (value.isAfter(tanggalSemayam) ||
                       value.isAfter(tanggalDimakamkan))
@@ -186,8 +185,6 @@ class _PostUpdateState extends State<PostUpdate> {
                     return null;
                 },
                 initialValue: tanggalMeninggal,
-                inputType: InputType.date,
-                editable: false,
                 format: dateFormat,
                 onChanged: (value) => tanggalMeninggal = value,
                 decoration: InputDecoration(
@@ -196,9 +193,16 @@ class _PostUpdateState extends State<PostUpdate> {
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                 ),
+                onShowPicker: (BuildContext context, DateTime currentValue) {
+                  return showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2100));
+                },
               ),
               SizedBox(height: 15),
-              DateTimePickerFormField(
+              DateTimeField(
                 validator: (value) {
                   if (value.isBefore(tanggalMeninggal) ||
                       value.isAfter(tanggalDimakamkan))
@@ -207,8 +211,6 @@ class _PostUpdateState extends State<PostUpdate> {
                     return null;
                 },
                 initialValue: tanggalSemayam,
-                inputType: InputType.date,
-                editable: false,
                 format: dateFormat,
                 decoration: InputDecoration(
                   labelText: 'Tanggal Disemayamkan',
@@ -217,6 +219,13 @@ class _PostUpdateState extends State<PostUpdate> {
                   ),
                 ),
                 onChanged: (value) => tanggalSemayam = value,
+                onShowPicker: (BuildContext context, DateTime currentValue) {
+                  return showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2100));
+                },
               ),
               SizedBox(
                 height: 10.0,
@@ -297,7 +306,7 @@ class _PostUpdateState extends State<PostUpdate> {
                 onSaved: (value) => tempatMakam = value,
                 textCapitalization: TextCapitalization.words,
               ),
-              DateTimePickerFormField(
+              DateTimeField(
                 validator: (value) {
                   if (value.isBefore(tanggalSemayam) ||
                       value.isBefore(tanggalMeninggal))
@@ -305,8 +314,6 @@ class _PostUpdateState extends State<PostUpdate> {
                   else
                     return null;
                 },
-                inputType: InputType.date,
-                editable: false,
                 format: dateFormat,
                 initialValue: tanggalDimakamkan,
                 onChanged: (value) => tanggalDimakamkan = value,
@@ -316,14 +323,19 @@ class _PostUpdateState extends State<PostUpdate> {
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                 ),
+                onShowPicker: (BuildContext context, DateTime currentValue) {
+                  return showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2100));
+                },
               ),
               SizedBox(
                 height: 10.0,
               ),
-              DateTimePickerFormField(
+              DateTimeField(
                 validator: (value) => value != null ? null : 'Jam wajib diisi',
-                inputType: InputType.time,
-                editable: false,
                 format: timeFormat,
                 initialValue: waktuDimakamkan,
                 onChanged: (value) => waktuDimakamkan = value,
@@ -333,6 +345,14 @@ class _PostUpdateState extends State<PostUpdate> {
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                 ),
+                onShowPicker: (BuildContext context, DateTime currentValue) {
+                  return showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(DateTime.now()))
+                      .then((time) {
+                    return DateTimeField.convert(time);
+                  });
+                },
               ),
               SizedBox(
                 height: 10.0,
@@ -451,7 +471,7 @@ class _PostUpdateState extends State<PostUpdate> {
   void pushData(_url) {
     try {
       print('Updating ....');
-      crud.updatePost(widget.post.key, {
+      rtdbService.updatePost(widget.post.key, {
         'nama': nama,
         'usia': usia,
         'agama': agama,

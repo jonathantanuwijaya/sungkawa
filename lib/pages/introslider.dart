@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:admin_sungkawa/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intro_views_flutter/Models/page_view_model.dart';
 import 'package:intro_views_flutter/intro_views_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../dashboard.dart';
 
 SharedPreferences prefs;
 

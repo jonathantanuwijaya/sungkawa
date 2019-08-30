@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:admin_sungkawa/crud.dart';
 import 'package:admin_sungkawa/model/comment.dart';
 import 'package:admin_sungkawa/model/posting.dart';
-import 'package:admin_sungkawa/utilities/crud.dart';
 import 'package:admin_sungkawa/utilities/utilities.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,7 +21,6 @@ class CommentPage extends StatefulWidget {
 
 class _CommentPageState extends State<CommentPage> {
   String fullName, userId;
-  CRUD crud = new CRUD();
   Utilities util = new Utilities();
   var _commentRef;
   var isEmpty;
@@ -64,7 +63,7 @@ class _CommentPageState extends State<CommentPage> {
 //                    InputDecoration(hintText: 'Tuliskan Komentarmu disini'),
               ),
               trailing:
-              IconButton(icon: Icon(Icons.send), onPressed: sendComment),
+                  IconButton(icon: Icon(Icons.send), onPressed: sendComment),
             ),
           )
         ],
@@ -88,7 +87,7 @@ class _CommentPageState extends State<CommentPage> {
           ),
           direction: DismissDirection.startToEnd,
           onDismissed: (direction) {
-            crud.deleteComment(widget.post.key, _commentList[index].key);
+            rtdbService.deleteComment(widget.post.key, _commentList[index].key);
 //              setState(() {
 //                _commentList.removeAt(index);
 //              });
@@ -142,7 +141,7 @@ class _CommentPageState extends State<CommentPage> {
     _onCommentRemovedSubscription =
         _commentRef.onChildRemoved.listen(_onCommentRemoved);
 
-    isEmpty = crud.checkCommentEmpty(widget.post.key);
+    isEmpty = rtdbService.checkCommentEmpty(widget.post.key);
     print(isEmpty);
   }
 
@@ -168,12 +167,10 @@ class _CommentPageState extends State<CommentPage> {
           fontSize: 16.0);
     } else {
       setState(() {
-        crud.addComment(widget.post.key, {
+        rtdbService.addComment(widget.post.key, {
           'fullName': fullName,
           'comment': commentController.text,
-          'timestamp': DateTime
-              .now()
-              .millisecondsSinceEpoch,
+          'timestamp': DateTime.now().millisecondsSinceEpoch,
           'userId': userId,
         }).whenComplete(() {
           commentController.clear();

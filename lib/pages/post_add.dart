@@ -2,11 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:admin_sungkawa/API/ApiService.dart';
-import 'package:admin_sungkawa/main.dart';
+import 'package:admin_sungkawa/crud.dart';
+import 'package:admin_sungkawa/dashboard.dart';
 import 'package:admin_sungkawa/utilities/constants.dart';
-import 'package:admin_sungkawa/utilities/crud.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +23,6 @@ class PostAdd extends StatefulWidget {
 class _PostAddState extends State<PostAdd> {
   double _progress;
   String userId;
-  InputType inputType = InputType.date;
   bool editable = true;
   bool isUploading = false;
   int timestamp;
@@ -56,7 +54,6 @@ class _PostAddState extends State<PostAdd> {
   var imageFile, _prosesi;
   bool isLoading = false;
   String kubur, agama;
-  CRUD crud = new CRUD();
   String tuhan;
   Constants constants = new Constants();
   var radioValue;
@@ -174,9 +171,7 @@ class _PostAddState extends State<PostAdd> {
                 SizedBox(
                   height: 10,
                 ),
-                DateTimePickerFormField(
-                  inputType: InputType.date,
-                  editable: false,
+                DateTimeField(
                   format: dateFormat,
                   controller: tanggalMeninggalController,
                   decoration: InputDecoration(
@@ -193,13 +188,18 @@ class _PostAddState extends State<PostAdd> {
                       return null;
                   },
                   onChanged: (value) => tanggalMeninggal = value,
+                  onShowPicker: (BuildContext context, DateTime currentValue) {
+                    return showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2100));
+                  },
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                DateTimePickerFormField(
-                  inputType: InputType.date,
-                  editable: false,
+                DateTimeField(
                   format: dateFormat,
                   controller: tanggalDisemayamkanController,
                   decoration: InputDecoration(
@@ -216,6 +216,13 @@ class _PostAddState extends State<PostAdd> {
                       return null;
                   },
                   onChanged: (value) => tanggalSemayam = value,
+                  onShowPicker: (BuildContext context, DateTime currentValue) {
+                    return showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2100));
+                  },
                 ),
                 SizedBox(
                   height: 10.0,
@@ -292,10 +299,8 @@ class _PostAddState extends State<PostAdd> {
                   validator: (value) =>
                       value.isNotEmpty ? null : 'Tempat Prosesi wajib diisi.',
                 ),
-                DateTimePickerFormField(
+                DateTimeField(
                   onChanged: (value) => tanggalDimakamkan = value,
-                  inputType: InputType.date,
-                  editable: false,
                   format: dateFormat,
                   controller: tanggalDimakamkanController,
                   validator: (value) {
@@ -311,13 +316,18 @@ class _PostAddState extends State<PostAdd> {
                       borderRadius: BorderRadius.circular(5.0),
                     ),
                   ),
+                  onShowPicker: (BuildContext context, DateTime currentValue) {
+                    return showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2100));
+                  },
                 ),
                 SizedBox(
                   height: 8.0,
                 ),
-                DateTimePickerFormField(
-                  inputType: InputType.time,
-                  editable: false,
+                DateTimeField(
                   format: timeFormat,
                   validator: (value) =>
                       value != null ? null : 'Jam wajib diisi',
@@ -328,6 +338,14 @@ class _PostAddState extends State<PostAdd> {
                       borderRadius: BorderRadius.circular(5.0),
                     ),
                   ),
+                  onShowPicker: (BuildContext context, DateTime currentValue) {
+                    return showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.fromDateTime(DateTime.now()))
+                        .then((time) {
+                      return DateTimeField.convert(time);
+                    });
+                  },
                 ),
                 SizedBox(
                   height: 10.0,
@@ -462,32 +480,7 @@ class _PostAddState extends State<PostAdd> {
   void initState() {
     super.initState();
     _prosesi = 'Dimakamkan';
-    checkAdminPlaceInfo();
-  }
-
-  Future checkAdminPlaceInfo() async {
-    prefs = await SharedPreferences.getInstance();
-
-    userId = prefs.getString('userId');
-    print(userId);
-
-    FirebaseDatabase.instance
-        .reference()
-        .child('admins')
-        .child(userId)
-        .once()
-        .then((snapshot) {
-      if (snapshot.value['tempat'] != null)
-        setState(() {
-          tempat = snapshot.value['tempat'];
-          tempatSemayamController = TextEditingController(text: tempat);
-        });
-      else
-        setState(() {
-          tempat = ' ';
-        });
-      print(tempat);
-    });
+    initTextField();
   }
 
   void savePost() async {
@@ -500,7 +493,7 @@ class _PostAddState extends State<PostAdd> {
         uploadImage(image).then((_url) {
           try {
             print('Posting ....');
-            crud.addPost({
+            rtdbService.addPost({
               'nama': namaController.text,
               'usia': umurController.text,
               'agama': agama,
@@ -582,5 +575,10 @@ class _PostAddState extends State<PostAdd> {
     String _url = downloadUrl.toString();
 
     return _url;
+  }
+
+  Future initTextField() async {
+    tempatSemayamController =
+        TextEditingController(text: await rtdbService.checkAdminPlaceInfo());
   }
 }
