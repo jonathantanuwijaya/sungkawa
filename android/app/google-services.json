@@ -15,19 +15,19 @@
       },
       "oauth_client": [
         {
+          "client_id": "1041227975257-qq0ttka6dqe3bjds9kdltavqodmil7ci.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.admin_sungkawa",
+            "certificate_hash": "cfc383dea68a3448d723eedfee4f0ea3146398a2"
+          }
+        },
+        {
           "client_id": "1041227975257-bh030hqjb89miafuq6q43mhfddvgd1jd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.admin_sungkawa",
             "certificate_hash": "d48648aedffdf555992457913c92dd3e1f0a3a1d"
-          }
-        },
-        {
-          "client_id": "1041227975257-f4ib5qvl0va2thsg97j5l2fj5aluu7q6.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.admin_sungkawa",
-            "certificate_hash": "cfc383dea68a3448d723eedfee4f0ea3146398a2"
           }
         },
         {
@@ -149,6 +149,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1041227975257-lq0r2m2f4p9bmug3ef9gtrobakjmil46.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.ac.mdp.sungkawa_admin",
+            "certificate_hash": "cfc383dea68a3448d723eedfee4f0ea3146398a2"
+          }
+        },
+        {
+          "client_id": "1041227975257-69i7ma9apehcc29if7qhga5j7p21ivjg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.ac.mdp.sungkawa_admin",
+            "certificate_hash": "b32682f96012c5e6bf4bdcc965f5775eaca6a35f"
+          }
+        },
         {
           "client_id": "1041227975257-6iihptosq6bn7abggc9cm12ot7hhaj6a.apps.googleusercontent.com",
           "client_type": 3
