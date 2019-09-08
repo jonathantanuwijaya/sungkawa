@@ -1,14 +1,8 @@
-import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:admin_sungkawa/auth.dart';
+import 'package:admin_sungkawa/crud.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../dashboard.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -16,24 +10,10 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final GoogleSignIn googleSignIn = GoogleSignIn();
-  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   SharedPreferences prefs;
-  GoogleSignInAuthentication googleAuth;
-  String result;
-  DatabaseReference adminTempRef;
-  DatabaseReference adminRef;
-
-  bool adminFound;
-
-  AuthCredential get credential => GoogleAuthProvider.getCredential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       body: new Padding(
         padding: const EdgeInsets.all(20.0),
@@ -65,7 +45,7 @@ class _LoginState extends State<Login> {
                 ),
                 color: Colors.blue,
                 onPressed: () {
-                  signInToMainMenu();
+                  handleLogin(context);
                 }),
             SizedBox(
               height: 200,
@@ -77,20 +57,18 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Future signInToMainMenu() async {
-    if (adminFound == true) {
-      adminTempRef.remove();
-
-      FirebaseAuth.instance
-          .signInWithCredential(credential)
-          .then((AuthResult user) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => DashboardScreen()),
-            result: result);
-      });
-    } else {
-      Fluttertoast.showToast(msg: 'Anda tidak terdaftar sebagai admin');
-      googleSignIn.signOut();
-    }
+  Future handleLogin(BuildContext context) async {
+    await authService.googleSignIn().then(
+          (u) => rtdbService.checkAdminExist(u).then(
+            (exists) {
+              if (!exists) {
+                authService.signOut();
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text('Tidak ada admin'),
+                ));
+              }
+            },
+          ),
+        );
   }
 }

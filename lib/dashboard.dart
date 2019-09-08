@@ -85,7 +85,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Text('Super Admin Menu')),
           CupertinoActionSheetAction(
               isDestructiveAction: true,
-              onPressed: authService.signOut,
+              onPressed: () {
+                authService.signOut();
+                Navigator.of(context).pop();
+              },
               child: Text(
                 'Sign Out',
               )),

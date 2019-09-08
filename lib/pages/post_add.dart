@@ -493,7 +493,7 @@ class _PostAddState extends State<PostAdd> {
         uploadImage(image).then((_url) {
           try {
             print('Posting ....');
-            rtdbService.addPost({
+            rtdbService.addPost(postData: {
               'nama': namaController.text,
               'usia': umurController.text,
               'agama': agama,

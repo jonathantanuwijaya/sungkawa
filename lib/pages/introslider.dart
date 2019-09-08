@@ -1,11 +1,10 @@
 import 'dart:async';
 
+import 'package:admin_sungkawa/landing.dart';
 import 'package:flutter/material.dart';
 import 'package:intro_views_flutter/Models/page_view_model.dart';
 import 'package:intro_views_flutter/intro_views_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../dashboard.dart';
 
 SharedPreferences prefs;
 
@@ -72,10 +71,8 @@ class _IntroSliderScreenState extends State<IntroSliderScreen> {
                 pages,
                 onTapDoneButton: () {
                   prefs.setBool('cek', true);
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DashboardScreen()));
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => Landing()));
                 },
                 pageButtonTextStyles:
                     TextStyle(color: Colors.white, fontSize: 18.0),
@@ -97,7 +94,7 @@ class _OpeningState extends State<Opening> {
 
     if (_cek) {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => DashboardScreen()));
+          context, MaterialPageRoute(builder: (context) => Landing()));
     } else {
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => IntroSliderScreen()));

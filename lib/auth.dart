@@ -15,24 +15,22 @@ class AuthService {
     return _auth.onAuthStateChanged.map((u) => u?.uid);
   }
 
-  void signOut() async {
+  Future<void> signOut() async {
     _auth.signOut();
   }
 
-  Future<AuthCredential> _signInWithGoogle() async {
+  Future<AuthCredential> getGoogleCredential() async {
     GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     GoogleSignInAuthentication googleSignInAuthentication =
         await googleUser.authentication;
 
-    AuthCredential credential = GoogleAuthProvider.getCredential(
+    return GoogleAuthProvider.getCredential(
         idToken: googleSignInAuthentication.idToken,
         accessToken: googleSignInAuthentication.accessToken);
-    return credential;
   }
 
-  Future googleSignIn() async {
-    AuthCredential credential = await _signInWithGoogle();
-    FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
-    return user;
+  Future<FirebaseUser> googleSignIn() async {
+    AuthCredential credential = await getGoogleCredential();
+    return (await _auth.signInWithCredential(credential)).user;
   }
 }

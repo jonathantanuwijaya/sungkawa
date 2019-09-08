@@ -1,10 +1,35 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:soundpool/soundpool.dart';
+
+Soundpool pool = Soundpool(streamType: StreamType.music);
+int soundId;
+int streamId;
 
 class About extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Timer(Duration(seconds: 10), () async {
+      print('10 secs has passed');
+      playMusic();
+      await showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('The Journey'),
+              content: Text('''Death is not a hunter unbeknowst to its prey.
+                  One is always aware that it lies in wait.
+                  Though life is merely a journey to the grave, it must not be undertaken without hope.
+                  Only then will a traveler's story live on, treasured by those who bid him farewell.
+                  But alas, my guest's life has now ended, his tale left unwritten...'''),
+            );
+          }).whenComplete(() {
+        pool.stop(streamId);
+      });
+    });
     var textShadow = <Shadow>[
       Shadow(
           blurRadius: 5,
@@ -132,5 +157,14 @@ class About extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void playMusic() async {
+    soundId = await rootBundle
+        .load("assets/velvet_room.mp3")
+        .then((ByteData soundData) {
+      return pool.load(soundData);
+    });
+    streamId = await pool.play(soundId);
   }
 }

@@ -28,6 +28,8 @@ dependencies:
   firebase_database: ^3.0.7
   firebase_storage: ^3.0.6
   firebase_messaging: ^5.1.4
+  soundpool: ^0.5.3
+
   #  cloud_functions: ^0.3.0
   connectivity: ^0.4.4
   intl: ^0.15.8
@@ -73,6 +75,7 @@ flutter:
     - assets/images/icon1024.png
     - assets/images/logo_mdp.png
     - assets/images/icon_android.png
+    - assets/velvet_room.mp3
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -8,86 +8,37 @@ import 'package:shared_preferences/shared_preferences.dart';
 final RTDBService rtdbService = RTDBService();
 
 class RTDBService {
-  SharedPreferences prefs;
   static DatabaseReference _db = FirebaseDatabase.instance.reference();
+  SharedPreferences prefs;
   var currentAdminRef;
-
-  Future checkSuperAdmin() async {
-    prefs = await SharedPreferences.getInstance();
-    String userId = (await authService.currentUser).uid;
-    currentAdminRef =
-        _db.child('admins').child(userId).onValue.listen(_checkAdminStatus);
-  }
 
   DatabaseReference _postRef = _db.child('posts');
   DatabaseReference _commentRef = _db.child('comments');
   DatabaseReference _adminRef = _db.child('admins');
 
-  Future<void> addAdmin(String adminId, adminData) async {
+  StreamSubscription<Event> _adminStream;
+
+  Future<void> addAdmin(
+      {String adminId, Map<String, dynamic> adminData}) async {
     _adminRef.child(adminId).set(adminData);
   }
 
-  Future<void> addComment(postId, commentData) async {
+  Future<void> addComment(
+      {String postId, Map<String, dynamic> commentData}) async {
     _commentRef.child(postId).push().set(commentData).catchError((e) {
       print(e);
     });
   }
 
-  Future<void> addPost(postData) async {
+  Future<void> addPost({Map<String, dynamic> postData}) async {
     _postRef.push().set(postData).catchError((e) {
       print(e);
     });
   }
 
   // ignore: missing_return
-  Future<bool> checkCommentEmpty(postId) async {
-    bool isEmpty;
-    _commentRef.child(postId).orderByKey().once().then((snapshot) {
-      if (snapshot.value == null)
-        isEmpty = true;
-      else
-        isEmpty = false;
-    }).whenComplete(() {
-      print(isEmpty);
-      return isEmpty;
-    });
-  }
-
-  checkPostEmpty() {
-    bool isEmpty;
-    _postRef.orderByKey().once().then((snapshot) {
-      if (snapshot.value == null)
-        isEmpty = true;
-      else
-        isEmpty = false;
-    }).whenComplete(() {
-      print(isEmpty);
-      return isEmpty;
-    });
-  }
-
-  deleteComment(postId, commentId) {
-    _commentRef.child(postId).child(commentId).remove().catchError((e) {
-      print(e);
-    });
-  }
-
-  deletePost(postId) {
-    _postRef.child(postId).remove().catchError((e) {
-      print(e);
-    });
-  }
-
-  updateComment(commentId, commentData) {
-    _commentRef.child(commentId).update(commentData).catchError((e) {
-      print(e);
-    });
-  }
-
-  updatePost(postId, postData) async {
-    _postRef.child(postId).update(postData).catchError((e) {
-      print(e);
-    });
+  Future checkAdmin({FirebaseUser user}) async {
+    _adminStream = _adminRef.child('${user.uid}').onValue.listen(onData);
   }
 
   Future checkAdminPlaceInfo() async {
@@ -100,6 +51,36 @@ class RTDBService {
         .once()
         .then((snapshot) {
       return snapshot.value['tempat'] ?? '';
+    });
+  }
+
+  checkCommentEmpty(postId) => _commentRef
+      .child(postId)
+      .orderByKey()
+      .once()
+      .then((snapshot) => snapshot.value == null ? true : false);
+
+  checkPostEmpty() => _postRef
+      .orderByKey()
+      .once()
+      .then((snapshot) => snapshot.value == null ? true : false);
+
+  Future checkSuperAdmin() async {
+    prefs = await SharedPreferences.getInstance();
+    String userId = (await authService.currentUser).uid;
+    currentAdminRef =
+        _db.child('admins').child(userId).onValue.listen(_checkAdminRole);
+  }
+
+  deleteComment({String postId, String commentId}) {
+    _commentRef.child(postId).child(commentId).remove().catchError((e) {
+      print(e);
+    });
+  }
+
+  deletePost(String postId) {
+    _postRef.child(postId).remove().catchError((e) {
+      print(e);
     });
   }
 
@@ -164,13 +145,25 @@ class RTDBService {
 //    }
 //  }
 
-  StreamSubscription<Event> _adminStream;
+  void onData(Event event) {
+    event.snapshot != null
+        ? print('Snapshot Exists')
+        : print('Snapshot doesn\'t exists');
 
-  Future<bool> checkAdmin(FirebaseUser user) async {
-    _adminStream = _adminRef.child('${user.uid}').onValue.listen(onData);
+    _adminStream.cancel();
   }
 
-  void _checkAdminStatus(Event event) {
+  void updateComment(commentId, commentData) =>
+      _commentRef.child(commentId).update(commentData).catchError((e) {
+        print(e);
+      });
+
+  void updatePost(postId, postData) async =>
+      _postRef.child(postId).update(postData).catchError((e) {
+        print(e);
+      });
+
+  void _checkAdminRole(Event event) {
     if (event.snapshot == null) {
       authService.signOut();
     } else if (event.snapshot.value['role'] == 'Admin') {
@@ -180,11 +173,24 @@ class RTDBService {
     }
   }
 
-  void onData(Event event) {
-    event.snapshot != null
-        ? print('Snapshot Exists')
-        : print('Snapshot doesn\'t exists');
+  Future<bool> checkAdminExist(FirebaseUser user) {
+    Query adminRef = _adminRef.orderByChild('email').equalTo('${user.email}');
+    return adminRef.once().then((doc) {
+      print('''Document Key : ${doc.key}
+        Document Value : ${doc.value}''');
+      if (doc.key != user.uid) {
+        _adminRef.child('${user.uid}').set({
+          'email': user.email,
+          'nama': user.displayName,
+          'role': 'Admin',
+          'tempat': doc.value['tempat'],
+          'userid': user.uid
+        });
+      }
 
-    _adminStream.cancel();
+      return doc != null ? true : false;
+    });
   }
+
+  convertAdmin({FirebaseUser user, DataSnapshot doc}) {}
 }

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:admin_sungkawa/crud.dart';
 import 'package:admin_sungkawa/model/comment.dart';
 import 'package:admin_sungkawa/model/posting.dart';
@@ -22,16 +20,12 @@ class CommentPage extends StatefulWidget {
 class _CommentPageState extends State<CommentPage> {
   String fullName, userId;
   Utilities util = new Utilities();
-  var _commentRef;
-  var isEmpty;
+  Query _commentRef;
+  bool isEmpty;
   final commentController = new TextEditingController();
   final commentNode = new FocusNode();
 
   SharedPreferences prefs;
-  List<Comment> _commentList = new List();
-  StreamSubscription<Event> _onCommentAddedSubscription;
-  StreamSubscription<Event> _onCommentChangedSubscription;
-  StreamSubscription<Event> _onCommentRemovedSubscription;
 
   @override
   Widget build(BuildContext context) {
@@ -39,88 +33,64 @@ class _CommentPageState extends State<CommentPage> {
       appBar: AppBar(
         title: Text('Komentar'),
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: Container(
-              child: buildCommentPage(),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: ListTile(
-              title: CupertinoTextField(
-                controller: commentController,
-                textInputAction: TextInputAction.send,
-                onEditingComplete: sendComment,
-                placeholder: 'Tuliskan Komentarmu disini',
-                focusNode: commentNode,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                        width: 0.0, color: CupertinoColors.activeBlue)),
-//                decoration:
-//                    InputDecoration(hintText: 'Tuliskan Komentarmu disini'),
-              ),
-              trailing:
-                  IconButton(icon: Icon(Icons.send), onPressed: sendComment),
-            ),
-          )
-        ],
+      body: StreamBuilder(
+        stream:
+            _commentRef.onValue.map((e) => Comment.fromSnapshot(e.snapshot)),
+        builder: (context, AsyncSnapshot<Comment> snapshot) {
+          print('Snapshot Data : ${snapshot.data}');
+          return Text('${snapshot.data.key}');
+        },
       ),
     );
   }
 
-  Widget buildCommentPage() {
-    return ListView.builder(
-      itemCount: _commentList.length,
-      itemBuilder: (context, index) {
-        return Dismissible(
-          background: Container(
-            color: Colors.red,
-            child: Align(
-                alignment: Alignment.centerLeft,
-                child: Icon(
-                  Icons.delete_forever,
-                  color: Colors.white,
-                )),
-          ),
-          direction: DismissDirection.startToEnd,
-          onDismissed: (direction) {
-            rtdbService.deleteComment(widget.post.key, _commentList[index].key);
-//              setState(() {
-//                _commentList.removeAt(index);
-//              });
-
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Comment Removed'),
-                duration: Duration(seconds: 2),
-              ),
-            );
-          },
-          child: ListTile(
-            title: Text(
-              _commentList[index].fullName,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            trailing: Text(
-                util.convertCommentTimestamp(_commentList[index].timestamp)),
-            subtitle: Text(_commentList[index].comment),
-          ),
-          key: Key(_commentList[index].key),
-        );
-      },
-    );
-  }
+//  return Column(
+//  mainAxisSize: MainAxisSize.max,
+//  children: <Widget>[
+//  if (snapshot.connectionState == ConnectionState.done)
+//  Expanded(
+//  child: Container(
+//  child: snapshot.hasData
+//  ? ListTile(
+//  title: Text(
+//  comment.fullName,
+//  style: TextStyle(fontWeight: FontWeight.bold),
+//  ),
+//  trailing: Text(util
+//      .convertCommentTimestamp(comment.timestamp)),
+//  subtitle: Text(comment.comment),
+//  )
+//      : Center(
+//  child: Text('No Comment'),
+//  ),
+//  ),
+//  ),
+//  Align(
+//  alignment: Alignment.bottomCenter,
+//  child: ListTile(
+//  title: CupertinoTextField(
+//  controller: commentController,
+//  textInputAction: TextInputAction.send,
+//  onEditingComplete: sendComment,
+//  placeholder: 'Tuliskan Komentarmu disini',
+//  focusNode: commentNode,
+//  decoration: BoxDecoration(
+//  borderRadius: BorderRadius.circular(5.0),
+//  border: Border.all(
+//  width: 0.0, color: CupertinoColors.activeBlue)),
+////                decoration:
+////                    InputDecoration(hintText: 'Tuliskan Komentarmu disini'),
+//  ),
+//  trailing: IconButton(
+//  icon: Icon(Icons.send), onPressed: sendComment),
+//  ),
+//  )
+//  ],
+//  );
 
   @override
   void dispose() {
     super.dispose();
-    _commentList.clear();
-    _onCommentAddedSubscription.cancel();
-    _onCommentChangedSubscription.cancel();
-    _onCommentRemovedSubscription.cancel();
   }
 
   @override
@@ -129,20 +99,8 @@ class _CommentPageState extends State<CommentPage> {
     _commentRef = FirebaseDatabase.instance
         .reference()
         .child('comments')
-        .child(widget.post.key)
-        .orderByChild('timestamp');
+        .child(widget.post.key);
     readLocal();
-    _commentList.clear();
-
-    _onCommentAddedSubscription =
-        _commentRef.onChildAdded.listen(_onCommentAdded);
-    _onCommentChangedSubscription =
-        _commentRef.onChildChanged.listen(_onCommentChanged);
-    _onCommentRemovedSubscription =
-        _commentRef.onChildRemoved.listen(_onCommentRemoved);
-
-    isEmpty = rtdbService.checkCommentEmpty(widget.post.key);
-    print(isEmpty);
   }
 
   void readLocal() async {
@@ -167,7 +125,7 @@ class _CommentPageState extends State<CommentPage> {
           fontSize: 16.0);
     } else {
       setState(() {
-        rtdbService.addComment(widget.post.key, {
+        rtdbService.addComment(postId: widget.post.key, commentData: {
           'fullName': fullName,
           'comment': commentController.text,
           'timestamp': DateTime.now().millisecondsSinceEpoch,
@@ -178,32 +136,5 @@ class _CommentPageState extends State<CommentPage> {
         });
       });
     }
-  }
-
-  _onCommentAdded(Event event) {
-    setState(() {
-      _commentList.add(Comment.fromSnapshot(event.snapshot));
-    });
-  }
-
-  _onCommentChanged(Event event) {
-    var oldEntry = _commentList.singleWhere((entry) {
-      return entry.key == event.snapshot.key;
-    });
-
-    setState(() {
-      _commentList[_commentList.indexOf(oldEntry)] =
-          Comment.fromSnapshot(event.snapshot);
-    });
-  }
-
-  _onCommentRemoved(Event event) {
-    var deletedEntry = _commentList.singleWhere((entry) {
-      return entry.key == event.snapshot.key;
-    });
-    print('on child removed called');
-    setState(() {
-      _commentList.remove(deletedEntry);
-    });
   }
 }

@@ -99,7 +99,7 @@ class _SuperAdminMenuState extends State<SuperAdminMenu> {
               FirebaseDatabase.instance
                   .reference()
                   .child('admintemp')
-                  .child(_emailController.text.hashCode.toString())
+                  .push()
                   .set({
                 'email': _emailController.text,
                 'tempat': _tempatController.text,
