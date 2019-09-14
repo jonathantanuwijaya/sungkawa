@@ -1,5 +1,7 @@
 import 'package:intl/intl.dart';
 
+Utilities util = new Utilities();
+
 class Utilities {
   String convertPostTimestamp(int timestamp) {
     var now = new DateTime.now();

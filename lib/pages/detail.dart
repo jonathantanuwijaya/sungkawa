@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:admin_sungkawa/model/comment.dart';
-import 'package:admin_sungkawa/model/posting.dart';
+import 'package:admin_sungkawa/model/post.dart';
 import 'package:admin_sungkawa/pages/comment_page.dart';
 import 'package:admin_sungkawa/utilities/utilities.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -30,7 +30,8 @@ class _DetailState extends State<Detail> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      body: CustomScrollView(shrinkWrap: false,
+      body: CustomScrollView(
+        shrinkWrap: false,
         slivers: <Widget>[
           SliverAppBar(
             expandedHeight: 200.0,
@@ -38,7 +39,11 @@ class _DetailState extends State<Detail> {
             pinned: true,
             snap: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(widget.post.nama,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
+              title: Text(
+                widget.post.nama,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+              ),
               centerTitle: true,
               background: CachedNetworkImage(
                 imageUrl: widget.post.photo,
@@ -62,7 +67,7 @@ class _DetailState extends State<Detail> {
                     'Telah Meninggal Dunia',
                     textAlign: TextAlign.center,
                     style:
-                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     height: 30,

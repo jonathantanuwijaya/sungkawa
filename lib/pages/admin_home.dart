@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:admin_sungkawa/crud.dart';
-import 'package:admin_sungkawa/model/posting.dart';
+import 'package:admin_sungkawa/model/post.dart';
 import 'package:admin_sungkawa/pages/detail.dart';
 import 'package:admin_sungkawa/pages/post_update.dart';
 import 'package:admin_sungkawa/utilities/utilities.dart';

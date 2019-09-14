@@ -1,7 +1,6 @@
 import 'package:admin_sungkawa/crud.dart';
 import 'package:admin_sungkawa/model/comment.dart';
-import 'package:admin_sungkawa/model/posting.dart';
-import 'package:admin_sungkawa/utilities/utilities.dart';
+import 'package:admin_sungkawa/model/post.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,6 @@ class CommentPage extends StatefulWidget {
 
 class _CommentPageState extends State<CommentPage> {
   String fullName, userId;
-  Utilities util = new Utilities();
   Query _commentRef;
   bool isEmpty;
   final commentController = new TextEditingController();
@@ -33,60 +31,9 @@ class _CommentPageState extends State<CommentPage> {
       appBar: AppBar(
         title: Text('Komentar'),
       ),
-      body: StreamBuilder(
-        stream:
-            _commentRef.onValue.map((e) => Comment.fromSnapshot(e.snapshot)),
-        builder: (context, AsyncSnapshot<Comment> snapshot) {
-          print('Snapshot Data : ${snapshot.data}');
-          return Text('${snapshot.data.key}');
-        },
-      ),
+      body: StreamBuilder(stream: _commentRef.onValue, builder: _builder),
     );
   }
-
-//  return Column(
-//  mainAxisSize: MainAxisSize.max,
-//  children: <Widget>[
-//  if (snapshot.connectionState == ConnectionState.done)
-//  Expanded(
-//  child: Container(
-//  child: snapshot.hasData
-//  ? ListTile(
-//  title: Text(
-//  comment.fullName,
-//  style: TextStyle(fontWeight: FontWeight.bold),
-//  ),
-//  trailing: Text(util
-//      .convertCommentTimestamp(comment.timestamp)),
-//  subtitle: Text(comment.comment),
-//  )
-//      : Center(
-//  child: Text('No Comment'),
-//  ),
-//  ),
-//  ),
-//  Align(
-//  alignment: Alignment.bottomCenter,
-//  child: ListTile(
-//  title: CupertinoTextField(
-//  controller: commentController,
-//  textInputAction: TextInputAction.send,
-//  onEditingComplete: sendComment,
-//  placeholder: 'Tuliskan Komentarmu disini',
-//  focusNode: commentNode,
-//  decoration: BoxDecoration(
-//  borderRadius: BorderRadius.circular(5.0),
-//  border: Border.all(
-//  width: 0.0, color: CupertinoColors.activeBlue)),
-////                decoration:
-////                    InputDecoration(hintText: 'Tuliskan Komentarmu disini'),
-//  ),
-//  trailing: IconButton(
-//  icon: Icon(Icons.send), onPressed: sendComment),
-//  ),
-//  )
-//  ],
-//  );
 
   @override
   void dispose() {
@@ -99,7 +46,8 @@ class _CommentPageState extends State<CommentPage> {
     _commentRef = FirebaseDatabase.instance
         .reference()
         .child('comments')
-        .child(widget.post.key);
+        .child(widget.post.key)
+        .orderByChild('timestamp');
     readLocal();
   }
 
@@ -112,9 +60,7 @@ class _CommentPageState extends State<CommentPage> {
   void sendComment() {
     print('Comment : ' + commentController.text);
 
-    if (commentController.text == ' ' ||
-        commentController.text == '' ||
-        commentController.text == '  ') {
+    if (commentController.text.isEmpty) {
       Fluttertoast.showToast(
           msg: "Ucapan tidak boleh kosong",
           toastLength: Toast.LENGTH_SHORT,
@@ -136,5 +82,39 @@ class _CommentPageState extends State<CommentPage> {
         });
       });
     }
+  }
+
+  List<Comment> _commentList = [];
+
+  Widget _builder(BuildContext context, AsyncSnapshot<Event> snap) {
+    if (snap.hasData && !snap.hasError && snap.data.snapshot.value != null) {
+      DataSnapshot ss = snap.data.snapshot;
+
+      print('SS Value : ${ss.key}');
+
+      ss.value.forEach((val) {
+        print('${val.toString()}');
+        if (val != null) {
+          Comment comment = Comment.fromSnapshot(val);
+          _commentList.add(comment);
+        }
+      });
+
+      return Column(
+        children: <Widget>[
+          Expanded(
+              child: ListView.builder(
+            itemBuilder: _buildCommentTile,
+            itemCount: _commentList.length,
+          ))
+        ],
+      );
+    }
+  }
+
+  Widget _buildCommentTile(context, index) {
+    return ListTile(
+      title: Text('${_commentList[index].fullName}'),
+    );
   }
 }

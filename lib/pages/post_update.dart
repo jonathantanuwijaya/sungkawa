@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:admin_sungkawa/crud.dart';
-import 'package:admin_sungkawa/model/posting.dart';
+import 'package:admin_sungkawa/model/post.dart';
 import 'package:admin_sungkawa/utilities/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
